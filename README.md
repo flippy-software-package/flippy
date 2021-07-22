@@ -1,6 +1,7 @@
 # flippy
-c++ package for dynamically triangulated membrane simmulations.
-<img src="assets/flippy.png" alt="flippy" width="200"/>
+c++ package for dynamically triangulated membrane simulations.
+
+<img src="assets/flippy.png" alt="flippy" width="300"/>
 
 ## licence 
 
