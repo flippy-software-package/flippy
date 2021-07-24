@@ -1,3 +1,4 @@
+![coverage](https://gitlab.tudelft.nl/idema-group/flippy/badges/%{default_branch}/coverage.svg)
 # flippy
 c++ package for dynamically triangulated membrane simulations.
 
