@@ -1,0 +1,12 @@
+stages:
+  - buildMacOS
+  - test
+build:
+  stage: buildMacOS
+  script:
+    - echo "nothing to build"
+
+test:
+  stage: test
+  script:
+    - echo "nothing to test"
