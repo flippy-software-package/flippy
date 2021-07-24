@@ -1,12 +1,16 @@
 stages:
-  - buildMacOS
+  - build_tests_MacOS
   - test
 build:
-  stage: buildMacOS
+  stage: build_tests_MacOS
   script:
-    - echo "nothing to build"
+    - cd tests/
+    - bash build_tests
+    - echo "done building tests"
 
 test:
   stage: test
   script:
-    - echo "nothing to test"
+    - cd cmake-build-default
+    - ./flippy_test
+    - echo "done testing"
