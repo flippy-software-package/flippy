@@ -1,8 +1,8 @@
 stages:
-  - tests_MacOS
+  - build
   - test
 build:
-  stage: tests_MacOS
+  stage: build
   script:
     - echo "nothing to build"
 
