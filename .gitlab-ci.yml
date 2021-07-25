@@ -13,6 +13,7 @@ test:
     - bash build_tests
     - cd cmake-build-default
     - ./flippy_test
+    - cd ..
     - ./do_tests
     - echo "done testing"
 
