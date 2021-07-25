@@ -1,7 +1,6 @@
 stages:
   - tests_MacOS
   - test
-  - coverage
 build:
   stage: tests_MacOS
   script:
@@ -17,13 +16,3 @@ test:
     - ./do_tests
     - echo "done testing"
 
-deploy_prod:
-  stage: deploy
-  script:
-    - echo "Deploy to production server"
-  environment:
-    name: production
-    url: https://example.com
-  when: manual
-  only:
-    - master
