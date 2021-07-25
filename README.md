@@ -1,4 +1,5 @@
-![coverage](https://gitlab.tudelft.nl/idema-group/flippy/badges/%{default_branch}/coverage.svg)
+[![pipeline status](https://gitlab.tudelft.nl/idema-group/flippy/badges/master/pipeline.svg)](https://gitlab.tudelft.nl/idema-group/flippy/-/commits/master)
+[![coverage report](https://gitlab.tudelft.nl/idema-group/flippy/badges/master/coverage.svg)](https://gitlab.tudelft.nl/idema-group/flippy/-/commits/master)
 # flippy
 c++ package for dynamically triangulated membrane simulations.
 

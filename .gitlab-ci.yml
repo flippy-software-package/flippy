@@ -1,6 +1,7 @@
 stages:
   - tests_MacOS
   - test
+  - coverage
 build:
   stage: tests_MacOS
   script:
@@ -13,4 +14,16 @@ test:
     - bash build_tests
     - cd cmake-build-default
     - ./flippy_test
+    - ./do_tests
     - echo "done testing"
+
+deploy_prod:
+  stage: deploy
+  script:
+    - echo "Deploy to production server"
+  environment:
+    name: production
+    url: https://example.com
+  when: manual
+  only:
+    - master

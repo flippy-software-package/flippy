@@ -6,4 +6,4 @@ fi
 mkdir cmake-build-default
 cd $cmakeDir || exit
 cmake ..
-make
+make VERBOSE=1
