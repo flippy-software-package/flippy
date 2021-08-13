@@ -73,7 +73,7 @@ TEST_CASE("Test Geometry Container")
 TEST_CASE("Sphere geometry test")
 {
     double R = 1000.;
-    auto all_data = json_read("../../demo/init_files/egg_it_4.json");
+    auto all_data = json_read("../../tests/init_files/egg_it_4.json");
     Triangulation<double, long> sphere(all_data["nodes"], R, 0);
 
     auto ACCEPTABLE_ERROR = 0.01;
@@ -122,7 +122,7 @@ TEST_CASE("Sphere geometry test")
 TEST_CASE("Ellipse geometry test")
 {
     double R = 2.;
-    auto all_data = json_read("../../demo/init_files/egg_it_4.json");
+    auto all_data = json_read("../../tests/init_files/egg_it_4.json");
     double x_stretch = 1.4;
     Triangulation<double, long> ellipse(all_data["nodes"], R, 0);
     ellipse.ellipse_fy_cell(x_stretch);
