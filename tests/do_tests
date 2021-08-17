@@ -1,6 +1,7 @@
 #! /bin/bash
+cmakeDir="cmake-build-default"
 reportDir=cmake-build-default/CMakeFiles/flippy_test.dir
-cd cmake-build-default
+cd ${cmakeDir} || exit
 ctest
 cd ..
 lcov --zerocounters
@@ -8,6 +9,6 @@ lcov --base-directory . --directory ${reportDir} -c -o test.info
 lcov --remove test.info "/Library/*" -o test.info # remove output for external libraries
 lcov --remove test.info "*/flippy/tests*" -o test.info # remove output for external libraries
 lcov --remove test.info "*/flippy/flippy/external*" -o test.info # remove output for external libraries
-#lcov --summary test.info
-#genhtml test.info --output-directory=res
-#open res/index.html
+lcov --summary test.info
+genhtml test.info --output-directory=res
+open res/index.html

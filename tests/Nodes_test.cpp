@@ -88,3 +88,90 @@ TEST_CASE("get_distance_to test"){
         CHECK(single_node.get_distance_vector_to(2)==exp_dist);
     }
 }
+
+TEST_CASE("getter and setter tests for Nodes"){
+    using idx = short;
+    using real = double;
+    Nodes<real, idx> icosa_nodes(ICOSA_DATA, 0);
+
+    SECTION("nn_ids"){
+        CHECK(icosa_nodes.nn_ids(0) ==std::vector<idx>{4,3,2,1,5});
+        CHECK(icosa_nodes.nn_ids(1) ==std::vector<idx>{7,6,2,5,0});
+        CHECK(icosa_nodes.nn_ids(2) ==std::vector<idx>{8,7,3,1,0});
+        CHECK(icosa_nodes.nn_ids(3) ==std::vector<idx>{9,8,4,2,0});
+        CHECK(icosa_nodes.nn_ids(4) ==std::vector<idx>{9,10,3,5,0});
+        CHECK(icosa_nodes.nn_ids(5) ==std::vector<idx>{6,10,4,1,0});
+        CHECK(icosa_nodes.nn_ids(6) ==std::vector<idx>{11,7,10,1,5});
+        CHECK(icosa_nodes.nn_ids(7) ==std::vector<idx>{11,8,6,2,1});
+        CHECK(icosa_nodes.nn_ids(8) ==std::vector<idx>{11,9,7,3,2});
+        CHECK(icosa_nodes.nn_ids(9) ==std::vector<idx>{11,8,10,4,3});
+        CHECK(icosa_nodes.nn_ids(10)==std::vector<idx>{11,9,6,4,5});
+        CHECK(icosa_nodes.nn_ids(11)==std::vector<idx>{9,8,7,6,10});
+    }
+
+    SECTION("nn_id"){
+        for(int i = 0; i<12;++i){
+            for (int j = 0; j<icosa_nodes.nn_ids(i).size(); ++j) {
+                CHECK(icosa_nodes.nn_id(i, j)==icosa_nodes.nn_ids(i)[j]);
+            }
+        }
+
+    }
+
+    SECTION("pos"){
+        CHECK(icosa_nodes.pos(0) ==vec3<real>{0.0,0.0,100.0});
+        CHECK(icosa_nodes.pos(1) ==vec3<real>{89.44271909999158,0.0,44.721359549995796});
+        CHECK(icosa_nodes.pos(2) ==vec3<real>{27.639320225002102,85.06508083520399,44.721359549995796});
+        CHECK(icosa_nodes.pos(3) ==vec3<real>{-72.36067977499789,52.57311121191337,44.7213595499958});
+        CHECK(icosa_nodes.pos(4) ==vec3<real>{-72.3606797749979,-52.57311121191336,44.7213595499958});
+        CHECK(icosa_nodes.pos(5) ==vec3<real>{27.639320225002088,-85.065080835204,44.7213595499958});
+        CHECK(icosa_nodes.pos(6) ==vec3<real>{72.36067977499789,-52.57311121191336,-44.72135954999579});
+        CHECK(icosa_nodes.pos(7) ==vec3<real>{72.36067977499789,52.57311121191336,-44.72135954999579});
+        CHECK(icosa_nodes.pos(8) ==vec3<real>{-27.639320225002095,85.06508083520399,-44.72135954999579});
+        CHECK(icosa_nodes.pos(9) ==vec3<real>{-89.44271909999158,1.0953573965284053e-14,-44.72135954999579});
+        CHECK(icosa_nodes.pos(10)==vec3<real>{-27.639320225002113,-85.06508083520399,-44.72135954999579});
+        CHECK(icosa_nodes.pos(11)==vec3<real>{1.2246467991473532e-14,0.0,-100.0});
+    }
+
+    SECTION("displ"){
+        for (idx i = 0; i<12; ++i) {
+            icosa_nodes.displace(i, vec3<real>{1,1,1});
+            icosa_nodes.displace(i, vec3<real>{-1,-1,-1});
+        }
+        auto zero = Approx(0).margin(1e-6);
+        CHECK((icosa_nodes.pos(0) -vec3<real>{0.0,0.0,100.0}).norm()==zero);
+        CHECK((icosa_nodes.pos(1) -vec3<real>{89.44271909999158,0.0,44.721359549995796}).norm()==zero);
+        CHECK((icosa_nodes.pos(2) -vec3<real>{27.639320225002102,85.06508083520399,44.721359549995796}).norm()==zero);
+        CHECK((icosa_nodes.pos(3) -vec3<real>{-72.36067977499789,52.57311121191337,44.7213595499958}).norm()==zero);
+        CHECK((icosa_nodes.pos(4) -vec3<real>{-72.3606797749979,-52.57311121191336,44.7213595499958}).norm()==zero);
+        CHECK((icosa_nodes.pos(5) -vec3<real>{27.639320225002088,-85.065080835204,44.7213595499958}).norm()==zero);
+        CHECK((icosa_nodes.pos(6) -vec3<real>{72.36067977499789,-52.57311121191336,-44.72135954999579}).norm()==zero);
+        CHECK((icosa_nodes.pos(7) -vec3<real>{72.36067977499789,52.57311121191336,-44.72135954999579}).norm()==zero);
+        CHECK((icosa_nodes.pos(8) -vec3<real>{-27.639320225002095,85.06508083520399,-44.72135954999579}).norm()==zero);
+        CHECK((icosa_nodes.pos(9) -vec3<real>{-89.44271909999158,1.0953573965284053e-14,-44.72135954999579}).norm()==zero);
+        CHECK((icosa_nodes.pos(10)-vec3<real>{-27.639320225002113,-85.06508083520399,-44.72135954999579}).norm()==zero);
+        CHECK((icosa_nodes.pos(11)-vec3<real>{1.2246467991473532e-14,0.0,-100.0}).norm()==zero);
+    }
+
+
+    SECTION("set_nn_ids"){
+        Nodes<double, int> icosa_nodes_loc(ICOSA_DATA, 0);
+        for(int i = 0; i<12;++i){
+            for (int j = 0; j<5; ++j) {
+                icosa_nodes_loc.set_nn_id(i, j, 120);
+            }
+        }
+        for(int i = 0; i<12;++i){
+            for (int j = 0; j<5; ++j) {
+                CHECK(icosa_nodes_loc.nn_id(i,j) == 120);
+            }
+        }
+
+        for(int i = 0; i<12;++i){
+            icosa_nodes_loc.set_nn_ids(i, std::vector<int>{120,12,11});
+        }
+        for(int i = 0; i<12;++i){
+            CHECK(icosa_nodes_loc.nn_ids(i)==std::vector<int>{120,12,11});
+        }
+    }
+}

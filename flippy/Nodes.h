@@ -30,19 +30,6 @@ struct Node
   std::vector<Index> verlet_list;
   std::vector<vec3<Real>> nn_distances;
 
-  //Todo  unittest
-  void pop_verlet_neighbor(Index const& to_pop_vn_id)
-  {
-      // finds the element with the id to_pop_nn_id in the nn_id vector and deletes it.
-      // this will lead to resizing of the vector!
-      auto pop_pos = std::find(nn_ids.begin(), nn_ids.end(), to_pop_vn_id);
-
-      if (pop_pos!=nn_ids.end()) {
-          // I checked that this would work on example code on cppreference https://godbolt.org/z/6qf8c9nTz
-          verlet_list.erase(pop_pos);
-      }
-  }
-
   // unit-tested
   void pop_nn(Index const& to_pop_nn_id)
   {
@@ -157,6 +144,7 @@ struct Nodes
         }
     }
 
+    //Todo unittest
     void make_verlet_list()
     {
         for (auto& node: data) {
@@ -175,13 +163,18 @@ struct Nodes
     }
 
     // getters and setters
-    const vec3<Real>& pos(Index node_id)const{return data[node_id].pos;}
+    //unit-tested
+    const vec3<Real>& pos(Index node_id) const {return data[node_id].pos;}
+    //unit-tested
     void displace(Index node_id, vec3<Real>displ){data[node_id].pos+=displ;}
     Real area(Index node_id)const{return data[node_id].area;}
-    Index nn_number(Index node_id)const{return data[node_id].nn_number;}
+    //unit-tested
     const auto& nn_ids(Index node_id)const{return data[node_id].nn_ids;}
+    //unit-tested
     void set_nn_ids(Index node_id, std::vector<Index>const& new_nn_ids){data[node_id].nn_ids = new_nn_ids;}
+    //unit-tested
     Index nn_id(Index node_id, Index loc_nn_index)const{return data[node_id].nn_ids[loc_nn_index];}
+    //unit-tested
     void set_nn_id(Index node_id, Index loc_nn_index, Index nn_id){data[node_id].nn_ids[loc_nn_index]=nn_id;}
 
     const auto& nn_distances(Index node_id)const{return data[node_id].nn_distances;}
