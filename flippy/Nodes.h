@@ -1,5 +1,5 @@
-#ifndef EXPERIMENT_H__NODES_H_
-#define EXPERIMENT_H__NODES_H_
+#ifndef EXPERIMENT_H_NODES_H_
+#define EXPERIMENT_H_NODES_H_
 
 #include <vector>
 #include <unordered_set>
@@ -7,19 +7,10 @@
 #include "external/json.hpp"
 
 #include "vec3.hpp"
-#include "utilities/utils.h"
+#include "utilities/debug_utils.h"
 
 namespace fp {
 using Json = nlohmann::json;
-
-template<typename T>
-static bool is_member(std::vector<T> const& v, T const& el)
-{
-    /***
-     * if the function returns true than el is contained in v (at least once).
-     */
-    return (std::find(v.begin(), v.end(), el)!=v.end());
-}
 
 template<typename Real, typename Index>
 struct Node
@@ -80,6 +71,7 @@ struct Node
       }
   }
 
+  //unit-tested
   vec3<Real> const& get_distance_vector_to(const Index& nn_id) const
   {
       auto id_pos = std::find(nn_ids.begin(), nn_ids.end(), nn_id);
@@ -160,7 +152,7 @@ struct Nodes
 
             nn_ids_temp = std::vector<Index>(node_dict[node_id]["nn_ids"]);
             std::vector<vec3<Real>>
-            nn_distances;
+                    nn_distances;
 
             data[node_index] = (Node<Real, Index>{
                     .id{node_index},
@@ -216,4 +208,4 @@ private:
     Real verlet_radius_squared;
 };
 }
-#endif //EXPERIMENT_H__NODES_H_
+#endif //EXPERIMENT_H_NODES_H_
