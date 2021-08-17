@@ -35,7 +35,7 @@ TEST_CASE("proper initiation for vec3"){
 
   SECTION("check that copying works"){
 	fp::vec3<double> v0{1.2, 4, 3};
-	fp::vec3<double> v1;
+	fp::vec3<double> v1{};
 	v1=v0;
 	CHECK(v1==v0);
   }
