@@ -11,6 +11,7 @@
 
 #include "Nodes.h"
 #include "vec3.hpp"
+#include "utilities/debug_utils.h"
 #include "utilities/utils.h"
 
 namespace fp {
@@ -93,7 +94,6 @@ public:
         make_global_geometry();
         initiate_real_mass_center();
         make_verlet_list();
-//        pre_move_nodes = nodes_;
     }
 
     //unit tested
@@ -160,7 +160,6 @@ public:
         for (Real phi = -1. + 1./(nNodes - 1.); auto& pos: positions) {
             pos = rS2(phi*(0.1 + 1.2*nNodes), M_PI*(1 - sgn(phi)*(1 - sqrt(1 - abs(phi))))/2.);
             phi += (2. - 2./(nNodes - 1.))/(nNodes - 1.);
-//            print(pos, M_PI*(1 - (1 - sqrt(1 - abs(phi))))/2., abs(phi));
         }
         return positions;
     }
@@ -191,15 +190,7 @@ public:
             print(e.p0.id, e.p1.id);
             nnList[e.p0.id].push_back(e.p1.id);
             nnList[e.p1.id].push_back(e.p0.id);
-//            nnList[e.p0.id].push_back(e.p1.id);
-//            nnList[e.p1.id].push_back(e.p0.id);
-//            if(not is_member(nnList[e.p0.id], (Index)e.p1.id)){nnList[e.p0.id].push_back(e.p1.id);}
-//            if(not is_member(nnList[e.p1.id], (Index)e.p0.id)){nnList[e.p1.id].push_back(e.p0.id);}
         }
-//        for (auto const& e : plugTriangulation.edges) {
-//            if(!is_member(nnList[nodePos.size() - 6 + e.p0.id], (Index)e.p1.id)){nnList[nodePos.size() - 6 + e.p0.id].push_back(nodePos.size() - 6 +e.p1.id);}
-//            if(!is_member(nnList[nodePos.size() - 6 + e.p1.id], (Index)e.p0.id)){nnList[nodePos.size() - 6 + e.p1.id].push_back(nodePos.size() - 6 +e.p0.id);}
-//        }
         return nnList;
     }
 
@@ -227,33 +218,6 @@ public:
         for (Index i = 0; i<nodes_.size(); ++i) { mass_center_ += nodes_[i].pos; }
         mass_center_ = mass_center_/nodes_.size();
     }
-
-    //todo unittest
-    //depricated
-//    void unmove_node()
-//    {
-//        copy_back_node_and_its_neighbours();
-//        update_global_geometry(post_update_geometry, pre_update_geometry);
-////        mass_center_ -= displacement_vector/nodes_.size();
-//        mass_center_=old_mass_center_;
-////        mass_center_ -= nodes_[node_id].pos*nodes_[node_id].area/global_geometry_.area;
-//    };
-
-//    void copy_node_and_its_neighbours(Index const& node_id)
-//    {
-//        pre_move_node = nodes_[node_id];
-//        for (auto const& nn_id: nodes_[node_id].nn_ids) {
-//            pre_move_nodes[nn_id] = nodes_[nn_id];
-//        }
-//    }
-
-//    void copy_back_node_and_its_neighbours()
-//    {
-//        nodes_[pre_move_node.id] = pre_move_node;
-//        for (auto const& nn_id: pre_move_node.nn_ids) {
-//            nodes_[nn_id] = pre_move_nodes[nn_id];
-//        }
-//    }
 
     //unit tested
     void move_node(Index node_id, vec3<Real> const& displacement_vector)
@@ -311,25 +275,6 @@ public:
         }
         return bfd;
     }
-
-//    BondFlipData<Index> flip_bond(Index const& node_id, Index const& nn_id)
-//    {
-//        BondFlipData<Index> bfd{};
-//        if (nodes_[node_id].nn_ids.size()>BOND_DONATION_CUTOFF) {
-//            if (nodes_[nn_id].nn_ids.size()>BOND_DONATION_CUTOFF) {
-//                Neighbors<Index> common_nns = previous_and_next_neighbour_global_ids(node_id, nn_id);
-//                copy_diamond(node_id, nn_id, common_nns.j_m_1, common_nns.j_p_1);
-//                pre_update_geometry = get_diamond_geometry(node_id, nn_id, common_nns.j_m_1,
-//                        common_nns.j_p_1);
-//                bfd = make_the_flip(node_id, nn_id, common_nns.j_m_1, common_nns.j_p_1);
-//                update_diamond_geometry(node_id, nn_id, common_nns.j_m_1, common_nns.j_p_1);
-//                post_update_geometry = get_diamond_geometry(node_id, nn_id, common_nns.j_m_1,
-//                        common_nns.j_p_1);
-//                update_global_geometry(pre_update_geometry, post_update_geometry);
-//            }
-//        }
-//        return bfd;
-//    }
 
 //    void unflip_bond(Index const& node_id, Index const& nn_id, Index const& cnn0_id, Index const& cnn1_id)
     void unflip_bond(Index const& node_id, Index const& nn_id, BondFlipData<Index> const& common_nns)
@@ -479,16 +424,12 @@ public:
     const Nodes<Real, Index>& nodes() const { return nodes_; }
     [[nodiscard]] Json egg_data() const { return nodes_.make_data(); }
     [[nodiscard]] const Geometry<Real, Index>& global_geometry() const { return global_geometry_; }
-//	[[nodiscard]] const Geometry<Real, Index> & current_node_geometry(Index const& node_id) const { return current_node_geometry_[node_id]; }
 
 private:
     Real R_initial;
     Nodes<Real, Index> nodes_;
     vec3<Real> mass_center_;
-//    vec3<Real> old_mass_center_;
     Geometry<Real, Index> global_geometry_;
-//    Node<Real, Index> pre_move_node, pre_flip_node, pre_flip_nn;
-//    Nodes<Real, Index> pre_move_nodes;//, pre_flip_node, pre_flip_nn;
     Geometry<Real, Index> pre_update_geometry, post_update_geometry;
     mutable vec3<Real> l0_, l1_;
 
@@ -540,60 +481,6 @@ private:
     }
 
     //unit tested
-    // depricated
-//    static std::tuple<Real, vec3<Real>> partial_voronoi_area_and_volume_of_node(vec3<Real> const& lij,
-//            vec3<Real> const& lij_p_1)
-//    {
-//        /** This function returns values of eqn.'s (82) & (84) from the paper [1]
-//         * Every node has its associated voronoi area and each voronoi area can be subdivided into parts that are
-//         * associated to each triangle that the node is part of. This function returns that sub-area and the face normal
-//         * of that triangle.
-//         */
-//        Real area, face_normal_norm;
-//        vec3<Real> un_noremd_face_normal;
-//        //precalculating this normal and its norm, will be needed in area calc. If all triangles are oriented as right
-//        // handed then this normal will point outwards
-//        un_noremd_face_normal = lij.cross(lij_p_1);
-//        face_normal_norm = un_noremd_face_normal.norm();
-//        area = mixed_area(lij, lij_p_1, face_normal_norm/2.);
-//        return std::make_tuple(area, (area/face_normal_norm)*un_noremd_face_normal);
-//    }
-
-    //unit tested
-    //depricated
-//    static Real mixed_area(vec3<Real> const& lij, vec3<Real> const& lij_p_1, Real const& triangle_area)
-//    {
-//        /** This function returns values of eqn.'s (82) (and two unnamed formulas in the following paragraph) from [1]
-//         *
-//         * Every node has its associated voronoi area and each voronoi area can be subdivided into parts that are
-//         * associated to each triangle that the node is part of. This function returns that sub-area. If the large triangle
-//         * (that the voronoi sub element is part of), is not obtuse. If it is obtuse, then the return value is either half,
-//         * or quarter of the large triangle. Depending where it is obtuse.
-//         *
-//         */
-//        vec3<Real> ljj_p_1 = lij_p_1 - lij;
-//        Real cos_at_j = cos_between_vectors(lij, (-1.)*ljj_p_1);
-//        Real angle_at_j = acos(cos_at_j);
-//        Real cos_at_j_p_1 = cos_between_vectors(lij_p_1, ljj_p_1);
-//        Real angle_at_j_p_1 = acos(cos_at_j_p_1);
-//
-////	return ((cos_at_j/sin(angle_at_j))*lij.dot(lij) + (cos_at_j_p_1/sin(angle_at_j_p_1))*lij_p_1.dot(lij_p_1))/8.; //todo implement sub functions
-//        if ((angle_at_j<M_PI/2.) && (angle_at_j_p_1<M_PI/2.)) {
-//            if (angle_at_j + angle_at_j_p_1>M_PI/2.) {
-//                return ((cos_at_j/sin(angle_at_j))*lij.dot(lij)
-//                        + (cos_at_j_p_1/sin(angle_at_j_p_1))*lij_p_1.dot(lij_p_1))/8.; //todo implement sub functions
-//            }
-//            else {//obtuse at node i.
-//                return triangle_area/2.;
-//            }
-//        }
-//        else {//obtuse at node j or j+1.
-//            return triangle_area/4.;
-//        }
-//
-//    }
-
-    //unit tested
     Real cot_alphas_sum(Index const& node_id, Index const& nn_id) const
     {
         /**
@@ -616,50 +503,6 @@ private:
     {
         return v1.dot(v2)/(v1.cross(v2).norm());
     };
-
-//     unit tested
-//    Real cot_alphas_sum(Index const& node_id, Index const& nn_id) const
-//    {
-//        auto[cos_alpha_1, cos_alpha_2] = cos_bond_opposite_angles(node_id, nn_id);
-//        return cos_to_cot(cos_alpha_1) + cos_to_cot(cos_alpha_2);
-//    }
-
-    // unit tested
-    //depricated
-//    std::tuple<Real, Real> cos_bond_opposite_angles(Index const& node_id, Index const& nn_id) const
-//    {
-//        /**
-//         * given a node i and its neighbor j, they will share two common neighbor nodes p and m.
-//         * This function finds the angles at p & m opposite of i-j link.
-//         * This function implements the alpha_ij and beta_ij from fig. (6c) from [1].
-//         * The order of these neighbours does not matter for the correct sign of the angles.
-//         */
-//        auto common_nn_ids = two_common_neighbours(node_id, nn_id);
-//        vec3<Real> lpi = nodes_[node_id].pos - nodes_[common_nn_ids[0]].pos;
-//        vec3<Real> lmi = nodes_[node_id].pos - nodes_[common_nn_ids[1]].pos;
-//        vec3<Real> lpj = nodes_[nn_id].pos - nodes_[common_nn_ids[0]].pos;
-//        vec3<Real> lmj = nodes_[nn_id].pos - nodes_[common_nn_ids[1]].pos;
-//        return std::make_tuple(cos_between_vectors(lpi, lpj), cos_between_vectors(lmi, lmj));
-//    }
-
-    //unit tested
-    //depricated
-//    static Real cos_between_vectors(vec3<Real> const& lij, vec3<Real> const& lik)
-//    {
-////        return lij.dot(lik)/sqrt(lij.norm_square()*lik.norm_square());
-//        return lij.dot(lik)/(lij.norm()*lik.norm());
-//    }
-
-    //unit tested
-//    depricated
-//    static Real cos_to_cot(Real const& cos_alpha)
-//    {
-//        /**
-//         * This function only works if the alpha is between 0 and Pi but that's fine since, all our angles are
-//         * angles inside a triangle and they must be between 0 and Pi
-//         */
-//        return cos_alpha/sin(acos(cos_alpha));
-//    }
 
     //unit tested
     [[nodiscard]] std::vector<Index> order_nn_ids(Index const& node_id) const
@@ -737,7 +580,6 @@ private:
     //unit tested
     std::array<Index, 2> two_common_neighbours(Index const& node_id_0, Index const& node_id_1) const
     {
-//        std::array<Index, 2> res{-1, -1};
         std::array<Index, 2> res{-1, -1};
 
         for (auto res_p = res.begin(); auto const& n0_nn_id: nodes_[node_id_0].nn_ids) {
@@ -824,7 +666,6 @@ private:
     //Todo unittest
     void make_global_geometry()
     {
-//	Geometry<Real> ng{};
         const Geometry<Real, Index> empty{};
         global_geometry_ = empty;
         for (auto const& node: nodes_.data) {
