@@ -1,7 +1,7 @@
 #include "external/catch.hpp"
 #include "json.hpp"
 #include <iostream>
-#include "utilities/utils.h"
+#include "utilities/debug_utils.h"
 #include "vec3.hpp"
 #include "Nodes.h"
 
@@ -91,28 +91,28 @@ TEST_CASE("pop emplace test"){
 }
 
 
-//TEST_CASE("get_distance_to test"){
-//    using real = double;
-//    using idx = short;
-//    Node<real, idx> single_node{.id=1, .pos={1,1,1}, .nn_ids={1,3,2}, .nn_distances{vec3<real>{1,0,0}, vec3<real>{0,1,0}, vec3<real>{0,0, 1}}};
-//    SECTION("simple get test 1"){
-//        auto exp_dist = vec3<real>{1,0,0};
-//        CHECK(single_node.get_distance_to(1)==exp_dist);
-//        exp_dist = vec3<real>{0,1,0};
-//        CHECK(single_node.get_distance_to(3)==exp_dist);
-//        exp_dist = vec3<real>{0,0,1};
-//        CHECK(single_node.get_distance_to(2)==exp_dist);
-//    }
-//
-//    SECTION("simple get after empl test 1"){
-//        single_node.emplace_nn_id(7,vec3<real>{0,1,1},2);
-//        auto exp_dist = vec3<real>{0,0,1};
-//        CHECK(single_node.get_distance_to(2)==exp_dist);
-//    }
-//
-//    SECTION("simple get after pop test 1"){
-//        single_node.pop_nn(3);
-//        auto exp_dist = vec3<real>{0,0,1};
-//        CHECK(single_node.get_distance_to(2)==exp_dist);
-//    }
-//}
+TEST_CASE("get_distance_to test"){
+    using real = double;
+    using idx = short;
+    Node<real, idx> single_node{.id=1, .pos={1,1,1}, .nn_ids={1,3,2}, .nn_distances{vec3<real>{1,0,0}, vec3<real>{0,1,0}, vec3<real>{0,0, 1}}};
+    SECTION("simple get test 1"){
+        auto exp_dist = vec3<real>{1,0,0};
+        CHECK(single_node.get_distance_vector_to(1)==exp_dist);
+        exp_dist = vec3<real>{0,1,0};
+        CHECK(single_node.get_distance_vector_to(3)==exp_dist);
+        exp_dist = vec3<real>{0,0,1};
+        CHECK(single_node.get_distance_vector_to(2)==exp_dist);
+    }
+
+    SECTION("simple get after empl test 1"){
+        single_node.emplace_nn_id(7,vec3<real>{0,1,1},2);
+        auto exp_dist = vec3<real>{0,0,1};
+        CHECK(single_node.get_distance_vector_to(2)==exp_dist);
+    }
+
+    SECTION("simple get after pop test 1"){
+        single_node.pop_nn(3);
+        auto exp_dist = vec3<real>{0,0,1};
+        CHECK(single_node.get_distance_vector_to(2)==exp_dist);
+    }
+}

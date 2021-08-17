@@ -2,7 +2,7 @@
 #include <array>
 #include <iostream>
 #include "json.hpp"
-#include "utilities/utils.h"
+#include "utilities/debug_utils.h"
 
 #define private public // please don't do this at home!
 #include "vec3.hpp"

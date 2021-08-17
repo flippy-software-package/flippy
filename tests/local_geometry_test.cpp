@@ -1,7 +1,6 @@
 #include "external/catch.hpp"
 #include <iostream>
 #include "json.hpp"
-#include "utilities/utils.h"
 #include "vec3.hpp"
 #include "Nodes.h"
 
