@@ -28,14 +28,14 @@ private:
     vec3<Real> pos_{};
 };
 template<typename Type, typename Index, int size>
-class Swarm
+class Particles
 {
 public:
     std::array<Particle<Type>, size> data;
 
-    Swarm() = default;
+    Particles() = default;
 
-    Swarm(Type const& R_inp, vec3<Type> const& origin, Type const& inner_shell_distance, Type const& middle_phi)
+    Particles(Type const& R_inp, vec3<Type> const& origin, Type const& inner_shell_distance, Type const& middle_phi)
             :
             R_(R_inp)
     {
@@ -52,7 +52,7 @@ public:
         }
     }
 
-    Swarm(Type const& R_inp, std::array<vec3<Type>, size> const& positions)
+    Particles(Type const& R_inp, std::array<vec3<Type>, size> const& positions)
             :R_(R_inp)
     {
         for (std::size_t i = 0; i<size; ++i) {
@@ -70,9 +70,6 @@ public:
 
 private:
     Type R_;
-//    std::uniform_real_distribution<Type> uniform_01_distr;
-//    std::mt19937_64 random_engine;
-
 };
 }
 #endif //SYNC_BACK_WATCHER_PY_SWARM_HPP
