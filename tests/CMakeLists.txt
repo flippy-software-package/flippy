@@ -3,9 +3,9 @@ project(flippy_test DESCRIPTION "flippy test framework")
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_BUILD_TYPE Coverage)
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} --coverage -Wall -Wextra -Wpedantic")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --coverage -Wall -Wextra -Wpedantic")
-
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --coverage")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} -g")
 
 include_directories(.)
 include_directories(external)
@@ -19,11 +19,11 @@ set_source_files_properties(../external
 
 add_executable(${PROJECT_NAME} main.cpp
         vec3_test.cpp
-        local_geometry_test.cpp
         Nodes_test.cpp
+        local_geometry_test.cpp
         Triangulation_test.cpp
         )
 
 enable_testing()
 add_test(${PROJECT_NAME} ${PROJECT_NAME})
-target_link_libraries(${PROJECT_NAME} --coverage)
+#target_link_libraries(${PROJECT_NAME} --coverage)
