@@ -111,7 +111,7 @@ TEST_CASE("getter and setter tests for Nodes"){
 
     SECTION("nn_id"){
         for(int i = 0; i<12;++i){
-            for (int j = 0; j<icosa_nodes.nn_ids(i).size(); ++j) {
+            for (int j = 0; j < 5; ++j) {
                 CHECK(icosa_nodes.nn_id(i, j)==icosa_nodes.nn_ids(i)[j]);
             }
         }
