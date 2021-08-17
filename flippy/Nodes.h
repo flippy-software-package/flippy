@@ -85,16 +85,6 @@ struct Node
       }
   }
 
-  void copy_only_geometry(Node<Real, Index> const& node_to_copy)
-  {
-      area = node_to_copy.area;
-      volume = node_to_copy.volume;
-      scaled_curvature_energy = node_to_copy.scaled_curvature_energy;
-      pos = node_to_copy.pos;
-      curvature_vec = node_to_copy.curvature_vec;
-      nn_distances = node_to_copy.nn_distances;
-  }
-
   bool operator==(Node<Real, Index> const& other_node) const = default;
 
   friend std::ostream& operator<<(std::ostream& os, Node<Real, Index> const& node1)
@@ -183,6 +173,19 @@ struct Nodes
         }
 
     }
+
+    // getters and setters
+    const vec3<Real>& pos(Index node_id)const{return data[node_id].pos;}
+    void displace(Index node_id, vec3<Real>displ){data[node_id].pos+=displ;}
+    Real area(Index node_id)const{return data[node_id].area;}
+    Index nn_number(Index node_id)const{return data[node_id].nn_number;}
+    const auto& nn_ids(Index node_id)const{return data[node_id].nn_ids;}
+    void set_nn_ids(Index node_id, std::vector<Index>const& new_nn_ids){data[node_id].nn_ids = new_nn_ids;}
+    Index nn_id(Index node_id, Index loc_nn_index)const{return data[node_id].nn_ids[loc_nn_index];}
+    void set_nn_id(Index node_id, Index loc_nn_index, Index nn_id){data[node_id].nn_ids[loc_nn_index]=nn_id;}
+
+    const auto& nn_distances(Index node_id)const{return data[node_id].nn_distances;}
+    void set_nn_distance(Index node_id, Index loc_nn_index, vec3<Real>&& dist){data[node_id].nn_distances[loc_nn_index]=dist;}
 
     [[nodiscard]] Index size() const { return data.size(); }
     Node<Real, Index>& operator[](Index const& idx) { return data[idx]; }

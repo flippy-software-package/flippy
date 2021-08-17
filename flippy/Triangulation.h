@@ -444,8 +444,7 @@ private:
     }
 
     //unit tested
-    std::vector<vec3<Real>> all_nn_distance_vectors(
-    Index const& node_id
+    std::vector<vec3<Real>> all_nn_distance_vectors(Index const& node_id
     ) const
     {
         /**
@@ -455,8 +454,7 @@ private:
          *  order as th provided list of neighbor ids.
          */
 
-        std::vector<vec3<Real>>
-        res;
+        std::vector<vec3<Real>>res;
         res.reserve(nodes_[node_id].nn_ids.size());
 
         for (auto const& nn_id: nodes_[node_id].nn_ids) { res.push_back(nodes_[nn_id].pos - nodes_[node_id].pos); }
