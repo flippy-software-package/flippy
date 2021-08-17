@@ -9,6 +9,6 @@ lcov --base-directory . --directory ${reportDir} -c -o test.info
 lcov --remove test.info "/Library/*" -o test.info # remove output for external libraries
 lcov --remove test.info "*/flippy/tests*" -o test.info # remove output for external libraries
 lcov --remove test.info "*/flippy/flippy/external*" -o test.info # remove output for external libraries
-#lcov --summary test.info
+lcov --summary test.info
 #genhtml test.info --output-directory=res
 #open res/index.html
