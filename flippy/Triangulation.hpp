@@ -10,8 +10,8 @@
 
 #include "Nodes.hpp"
 #include "vec3.hpp"
-#include "utilities/debug_utils.h"
-#include "utilities/utils.h"
+#include "utilities/debug_utils.hpp"
+#include "utilities/utils.hpp"
 
 namespace fp {
 
