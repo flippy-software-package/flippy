@@ -7,7 +7,12 @@ c++ package for dynamically triangulated membrane simulations.
 
 <img src="assets/flippy.png" alt="flippy" width="300"/>
 
-## Release Version
+## Current Version
+
+current release [![release version](https://img.shields.io/badge/dynamic/json?url=https://gitlab.tudelft.nl/idema-group/flippy/-/raw/master/VERSION.json&query=$.*&color=blue&label=version)](https://gitlab.tudelft.nl/idema-group/flippy/-/releases) is experimental. 
+
+
+## Release Version Nomenclature
 
 This repository follows [Semantic Versioning](https://semver.org/) guidelines.
 
