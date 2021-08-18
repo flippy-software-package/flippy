@@ -3,7 +3,7 @@
 #include <iostream>
 #include "utilities/debug_utils.h"
 #include "vec3.hpp"
-#include "Nodes.h"
+#include "Nodes.hpp"
 
 using json = nlohmann::json;
 using namespace fp;

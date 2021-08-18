@@ -2,10 +2,10 @@
 #include <iostream>
 #include "json.hpp"
 #include "vec3.hpp"
-#include "Nodes.h"
+#include "Nodes.hpp"
 
 #define private public // please don't do this at home!
-#include "Triangulation.h"
+#include "Triangulation.hpp"
 using json = nlohmann::json;
 using namespace fp;
 const double EPSILON = 1e-9;

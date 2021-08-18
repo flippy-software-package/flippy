@@ -35,7 +35,7 @@ public:
 
     Particles() = default;
 
-    Particles(Type const& R_inp, vec3<Type> const& origin, Type const& inner_shell_distance, Type const& middle_phi)
+    Particles(Type const& R_inp, vec3<Type> const& origin, Type inner_shell_distance, Type middle_phi)
             :
             R_(R_inp)
     {

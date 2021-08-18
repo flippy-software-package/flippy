@@ -31,7 +31,7 @@ struct Node
   std::vector<vec3<Real>> nn_distances;
 
   // unit-tested
-  void pop_nn(Index const& to_pop_nn_id)
+  void pop_nn(Index to_pop_nn_id)
   {
       // finds the element with the id to_pop_nn_id in the nn_id vector and deletes it.
       // this will lead to resizing of the vector!
@@ -46,20 +46,20 @@ struct Node
   }
 
   // unit-tested
-  void emplace_nn_id(Index const& to_emplace_nn_id, vec3<Real> const& to_emplace_nn_pos, Index const& to_emplace_pos)
+  void emplace_nn_id(Index to_emplace_nn_id, vec3<Real> const& to_emplace_nn_pos, Index loc_idx)
   {
       /** this constructs to_emplace_nn_id right before to_emplace_pos
        * ie if to_emplace_nn_id is 3, to_emplace_nn_id will be constructed right before the
        * 3rd element and will become the new 3rd element.
        */
-      if (to_emplace_pos<(Index) nn_ids.size()) {
-          nn_ids.emplace(nn_ids.begin() + to_emplace_pos, to_emplace_nn_id);
-          nn_distances.emplace(nn_distances.begin() + to_emplace_pos, to_emplace_nn_pos - pos);
+      if (loc_idx<(Index) nn_ids.size()) {
+          nn_ids.emplace(nn_ids.begin() + loc_idx, to_emplace_nn_id);
+          nn_distances.emplace(nn_distances.begin() + loc_idx, to_emplace_nn_pos - pos);
       }
   }
 
   //unit-tested
-  vec3<Real> const& get_distance_vector_to(const Index& nn_id) const
+  vec3<Real> const& get_distance_vector_to(Index nn_id) const
   {
       auto id_pos = std::find(nn_ids.begin(), nn_ids.end(), nn_id);
       if (id_pos!=nn_ids.end()) {
@@ -103,9 +103,9 @@ struct Nodes
 {
     std::vector<Node<Real, Index>> data;
     Nodes() = default;
-    Nodes(std::vector<Node<Real, Index>> data_inp, Real const& verlet_radius_inp)
+    Nodes(std::vector<Node<Real, Index>> data_inp, Real verlet_radius_inp)
             :data(data_inp), verlet_radius(verlet_radius_inp), verlet_radius_squared(verlet_radius*verlet_radius) { }
-    explicit Nodes(Json const& node_dict, Real const& verlet_radius_inp)
+    explicit Nodes(Json const& node_dict, Real verlet_radius_inp)
             :verlet_radius(verlet_radius_inp)
     {
         /*
@@ -166,8 +166,24 @@ struct Nodes
     //unit-tested
     const vec3<Real>& pos(Index node_id) const {return data[node_id].pos;}
     //unit-tested
-    void displace(Index node_id, vec3<Real>displ){data[node_id].pos+=displ;}
+    void set_pos(Index node_id, vec3<Real> const& new_pos){data[node_id].pos=new_pos;}
+    void set_pos(Index node_id, vec3<Real> && new_pos){data[node_id].pos=new_pos;}
+    void displace(Index node_id, vec3<Real>const& displ){data[node_id].pos+=displ;}
+    void displace(Index node_id, vec3<Real>&& displ){data[node_id].pos+=displ;}
+
+    const vec3<Real>& curvature_vec(Index node_id) const {return data[node_id].curvature_vec;}
+    void set_curvature_vec(Index node_id, vec3<Real> const& new_cv) {data[node_id].curvature_vec=new_cv;}
+    void set_curvature_vec(Index node_id, vec3<Real> && new_cv) {data[node_id].curvature_vec=new_cv;}
+
     Real area(Index node_id)const{return data[node_id].area;}
+    void set_area(Index node_id, Real new_area){data[node_id].area = new_area;}
+
+    Real volume(Index node_id)const{return data[node_id].volume;}
+    void set_volume(Index node_id, Real new_volume){data[node_id].volume = new_volume;}
+
+    Real scaled_curvature_energy(Index node_id)const{return data[node_id].scaled_curvature_energy;}
+    void set_scaled_curvature_energy(Index node_id, Real new_sce){data[node_id].scaled_curvature_energy=new_sce;}
+
     //unit-tested
     const auto& nn_ids(Index node_id)const{return data[node_id].nn_ids;}
     //unit-tested
@@ -176,13 +192,18 @@ struct Nodes
     Index nn_id(Index node_id, Index loc_nn_index)const{return data[node_id].nn_ids[loc_nn_index];}
     //unit-tested
     void set_nn_id(Index node_id, Index loc_nn_index, Index nn_id){data[node_id].nn_ids[loc_nn_index]=nn_id;}
+    void emplace_nn_id(Index node_id, Index to_emplace_nn_id, Index loc_idx)
+    {data[node_id].emplace_nn_id(to_emplace_nn_id, pos(to_emplace_nn_id), loc_idx);}
 
     const auto& nn_distances(Index node_id)const{return data[node_id].nn_distances;}
+    const auto& get_nn_distance_vector_between(Index node_id, Index nn_id) const{
+        return data[node_id].get_distance_vector_to(nn_id);
+    }
     void set_nn_distance(Index node_id, Index loc_nn_index, vec3<Real>&& dist){data[node_id].nn_distances[loc_nn_index]=dist;}
 
     [[nodiscard]] Index size() const { return data.size(); }
-    Node<Real, Index>& operator[](Index const& idx) { return data[idx]; }
-    const Node<Real, Index>& operator[](Index const& idx) const { return data.at(idx); }
+    Node<Real, Index>& operator[](Index idx) { return data[idx]; }
+    const Node<Real, Index>& operator[](Index idx) const { return data.at(idx); }
 
     [[nodiscard]] Json make_data() const
     {

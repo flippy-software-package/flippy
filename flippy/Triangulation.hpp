@@ -9,7 +9,7 @@
 #include "external/delaunay-cpp-master/delaunay.hpp"
 #include "external/json.hpp"
 
-#include "Nodes.h"
+#include "Nodes.hpp"
 #include "vec3.hpp"
 #include "utilities/debug_utils.h"
 #include "utilities/utils.h"
@@ -86,7 +86,7 @@ class Triangulation
 public:
     Triangulation() = default;
     //unit tested
-    explicit Triangulation(Json const& nodes_input, Real const& verlet_radius)
+    explicit Triangulation(Json const& nodes_input, Real verlet_radius)
             :nodes_(nodes_input, verlet_radius), mass_center_({0., 0., 0.}), global_geometry_()
     {
         initiate_simple_mass_center();
@@ -97,7 +97,7 @@ public:
     }
 
     //unit tested
-    Triangulation(Json const& nodes_input, Real R_initial_input, Real const& verlet_radius)
+    Triangulation(Json const& nodes_input, Real R_initial_input, Real verlet_radius)
             :
             R_initial(R_initial_input), nodes_(nodes_input, verlet_radius), mass_center_({0., 0., 0.}),
             global_geometry_()
@@ -112,7 +112,7 @@ public:
 //        pre_move_nodes = nodes_;
     }
 
-    Triangulation(Index const& nNodes, Real const& R_initial_input, Real const& verlet_radius_inp)
+    Triangulation(Index nNodes, Real R_initial_input, Real verlet_radius_inp)
             :
             R_initial(R_initial_input), nodes_(), mass_center_({0., 0., 0.}), global_geometry_()
     {
@@ -137,7 +137,7 @@ public:
         make_verlet_list();
     }
 
-    vec3<Real> rS2(Real const& phi, Real const& theta)
+    vec3<Real> rS2(Real phi, Real theta)
     {
         return {cos(phi)*sin(theta), sin(phi)*sin(theta), cos(theta)};
     }
@@ -176,8 +176,7 @@ public:
         return projectedPoints;
     }
 
-    std::vector<std::vector<Index>> find_nns(std::vector<vec3<Real>>
-    const& nodePos){
+    std::vector<std::vector<Index>> find_nns(std::vector<vec3<Real>>const& nodePos){
         std::vector<std::vector<Index>> nnList(nodePos.size());
         std::vector<delaunay::Point<float>> projectedPoints = stereographic_projecttion(nodePos);
 
@@ -187,7 +186,7 @@ public:
         const auto plugTriangulation = delaunay::triangulate(projectedPoints);
 
         for (auto const& e : triangulation.edges) {
-            print(e.p0.id, e.p1.id);
+//            print(e.p0.id, e.p1.id);
             nnList[e.p0.id].push_back(e.p1.id);
             nnList[e.p1.id].push_back(e.p0.id);
         }
@@ -207,7 +206,7 @@ public:
     void initiate_real_mass_center()
     {
         mass_center_ = vec3<Real>{0, 0, 0};
-        for (Index i = 0; i<nodes_.size(); ++i) { mass_center_ += nodes_[i].pos*nodes_[i].area; }
+        for (Index i = 0; i<nodes_.size(); ++i) { mass_center_ += nodes_.pos(i)*nodes_.area(i); }
         mass_center_ = mass_center_/global_geometry_.area;
     }
 
@@ -215,7 +214,7 @@ public:
     void initiate_simple_mass_center()
     {
         mass_center_ = vec3<Real>{0, 0, 0};
-        for (Index i = 0; i<nodes_.size(); ++i) { mass_center_ += nodes_[i].pos; }
+        for (Index i = 0; i<nodes_.size(); ++i) { mass_center_ += nodes_.pos(i); }
         mass_center_ = mass_center_/nodes_.size();
     }
 
@@ -225,19 +224,18 @@ public:
 //        copy_node_and_its_neighbours(node_id);
         pre_update_geometry = get_two_ring_geometry(node_id);
 //        old_mass_center_=mass_center_;
-        mass_center_ -= nodes_[node_id].pos*nodes_[node_id].area/global_geometry_.area;
-        nodes_[node_id].pos += displacement_vector;
+        mass_center_ -= nodes_.pos(node_id)*nodes_.area(node_id)/global_geometry_.area;
+        nodes_.displace(node_id, displacement_vector);
 //        mass_center_ += displacement_vector/nodes_.size();
         update_two_ring_geometry(node_id);
         post_update_geometry = get_two_ring_geometry(node_id);
         update_global_geometry(pre_update_geometry, post_update_geometry);
-        mass_center_ += nodes_[node_id].pos*nodes_[node_id].area
-                /global_geometry_.area; //Todo make sure mass center is not needed in any geometry calculations
-
+        //Todo make sure mass center is not needed in any geometry calculations
+        mass_center_ += nodes_.pos(node_id)*nodes_.area(node_id)/global_geometry_.area;
     }
 
     // Todo unittest
-    void emplace_before(Index const& center_node_id, Index const& anchor_id, Index const& new_value)
+    void emplace_before(Index center_node_id, Index anchor_id, Index new_value)
     {
         auto anchor_pos_ptr = std::find(nodes_[center_node_id].nn_ids.begin(), nodes_[center_node_id].nn_ids.end(),
                 anchor_id);
@@ -246,14 +244,15 @@ public:
     }
 
     //Todo unittest
-    BondFlipData<Index> flip_bond(Index const& node_id, Index const& nn_id, Real const& min_bond_length_square,
-                                  Real const& max_bond_length_square)
+    BondFlipData<Index> flip_bond(Index node_id, Index nn_id,
+                                  Real min_bond_length_square,
+                                  Real max_bond_length_square)
     {
         BondFlipData<Index> bfd{};
-        if (nodes_[node_id].nn_ids.size()>BOND_DONATION_CUTOFF) {
-            if (nodes_[nn_id].nn_ids.size()>BOND_DONATION_CUTOFF) {
+        if (nodes_.nn_ids(node_id).size()>BOND_DONATION_CUTOFF) {
+            if (nodes_.nn_ids(nn_id).size()>BOND_DONATION_CUTOFF) {
                 Neighbors<Index> common_nns = previous_and_next_neighbour_global_ids(node_id, nn_id);
-                Real bond_length_square = (nodes_[common_nns.j_m_1].pos - nodes_[common_nns.j_p_1].pos).norm_square();
+                Real bond_length_square = (nodes_.pos(common_nns.j_m_1) - nodes_.pos(common_nns.j_p_1)).norm_square();
                 if ((bond_length_square<max_bond_length_square) && (bond_length_square>min_bond_length_square)) {
 //                    if (common_neighbours(node_id, nn_id).size()==2) {
 
@@ -277,7 +276,7 @@ public:
     }
 
 //    void unflip_bond(Index const& node_id, Index const& nn_id, Index const& cnn0_id, Index const& cnn1_id)
-    void unflip_bond(Index const& node_id, Index const& nn_id, BondFlipData<Index> const& common_nns)
+    void unflip_bond(Index node_id, Index nn_id, BondFlipData<Index> const& common_nns)
     {
         make_the_flip(common_nns.common_nn_0, common_nns.common_nn_1, nn_id, node_id);
 //        copy_diamond_back(node_id, nn_id, cnn0_id, cnn1_id);
@@ -285,8 +284,8 @@ public:
         update_global_geometry(post_update_geometry, pre_update_geometry);
     }
 
-    BondFlipData<Index> make_the_flip(Index const& node_id, Index const& nn_id,
-                                      Index const& common_nn_j_m_1, Index const& common_nn_j_p_1)
+    BondFlipData<Index> make_the_flip(Index node_id, Index nn_id,
+                                      Index common_nn_j_m_1, Index common_nn_j_p_1)
     {
         emplace_before(common_nn_j_m_1, node_id, common_nn_j_p_1);
         emplace_before(common_nn_j_p_1, nn_id, common_nn_j_m_1);
@@ -295,7 +294,7 @@ public:
     }
 
     // unit-tested
-    void update_node_geometry(Index const& node_id)
+    void update_node_geometry(Index node_id)
     {
         /**
          * calculates area volume and squared curvature integrated over the area, for the voronoi cell
@@ -308,47 +307,39 @@ public:
         Real area_sum = 0.;
         vec3<Real> face_normal_sum{0., 0., 0.}, local_curvature_vec{0., 0., 0.};
         vec3<Real> face_normal;
-        auto nn_number = (Index) nodes_[node_id].nn_ids.size();
+        auto nn_number = (Index) nodes_.nn_ids(node_id).size();
         Index j_p_1;
-//        Real area;
-//		vec3<Real> noremd_face_normal;
         for (Index j = 0; j<nn_number; ++j) {
             //return j+1 element of ordered_nn_ids unless j has the last value then wrap around and return 0th element
             j_p_1 = ((j<nn_number - 1) ? j + 1 : 0);
-            face_normal = nodes_[node_id].nn_distances[j].cross(nodes_[node_id].nn_distances[j_p_1]);
+            face_normal = nodes_.nn_distances(node_id)[j].cross(nodes_.nn_distances(node_id)[j_p_1]);
             area_sum += face_normal.norm();
             face_normal_sum += face_normal;
-            local_curvature_vec = local_curvature_vec + cot_alphas_sum(node_id, nodes_[node_id].nn_ids[j])
-                    *nodes_[node_id]
-                            .nn_distances[j]; //todo (speed) this is still too slow cos alphas are being over-calculated
+            local_curvature_vec += cot_alphas_sum(node_id, nodes_.nn_id(node_id,j))*nodes_.nn_distances(node_id)[j]; //todo (speed) this is still too slow cos alphas are being over-calculated
         }
         // in all following cases 6=2*3; 2 comes from dividing face normal norm by 2 to get the right area and 3 from distributing the area over nodes
         area_sum = area_sum/((Real) 6.);
-        nodes_[node_id].area = area_sum;
-        nodes_[node_id].volume = nodes_[node_id].pos.dot(face_normal_sum)
-                /((Real) 18.); // 18=3*6: 6 has the aforementioned justification. 3 is part of the formula for the tetrahedron volume
-//        nodes_[node_id].volume = nodes_[node_id].pos.dot(face_normal_sum)/((Real) 3.); // 18=3*6: 6 has the aforementioned justification. 3 is part of the formula for the tetrahedron volume
-        nodes_[node_id].curvature_vec = local_curvature_vec/((Real) 2.
-                *area_sum); // 2 is part of the formula to calculate the local curvature I just did not divide the vector inside the loop
-        nodes_[node_id].scaled_curvature_energy = local_curvature_vec.dot(local_curvature_vec)/((Real) 4.
-                *area_sum); // 4 is the square of the above two and the area in the denominator is what remains after canceling
+        nodes_.set_area(node_id, area_sum);
+        nodes_.set_volume(node_id, nodes_[node_id].pos.dot(face_normal_sum)/((Real) 18.)); // 18=3*6: 6 has the aforementioned justification. 3 is part of the formula for the tetrahedron volume
+        nodes_.set_curvature_vec(node_id,  local_curvature_vec/((Real) 2.*area_sum)); // 2 is part of the formula to calculate the local curvature I just did not divide the vector inside the loop
+        nodes_.set_scaled_curvature_energy(node_id, local_curvature_vec.dot(local_curvature_vec)/((Real) 4.*area_sum)); // 4 is the square of the above two and the area in the denominator is what remains after canceling
 
     };
 
-    [[nodiscard]] Geometry<Real, Index> calculate_two_ring_geometry(Index const& node_id) const
-    {
-        /**
-        * calculates area volume and squared curvature integrated over the area, for the  two-ring of the
-        * associated to the node, using the stored current_node_geometry
-        */
-        Geometry<Real, Index> trg = node_geometry(node_id);
-        for (auto const& nn_id: nodes_[node_id].nn_ids) {
-            trg += node_geometry(nn_id);
-        }
-        return trg;
-    }
+//    [[nodiscard]] Geometry<Real, Index> calculate_two_ring_geometry(Index const& node_id) const
+//    {
+//        /**
+//        * calculates area volume and squared curvature integrated over the area, for the  two-ring of the
+//        * associated to the node, using the stored current_node_geometry
+//        */
+//        Geometry<Real, Index> trg = node_geometry(node_id);
+//        for (auto nn_id: nodes_.nn_ids(node_id)) {
+//            trg += node_geometry(nn_id);
+//        }
+//        return trg;
+//    }
 
-    [[nodiscard]] Geometry<Real, Index> get_two_ring_geometry(Index const& node_id) const
+    [[nodiscard]] Geometry<Real, Index> get_two_ring_geometry(Index node_id) const
     {
         /**
         * calculates area volume and squared curvature integrated over the area, for the  two-ring of the
@@ -361,20 +352,20 @@ public:
         return trg;
     }
 
-    void update_two_ring_geometry(Index const& node_id)
+    void update_two_ring_geometry(Index node_id)
     {
         /**
          * calculates area volume and squared curvature integrated over the area, for the  two-ring of the
          * associated to the node
          */
         update_node_geometry(node_id);
-        for (auto const& nn_id: nodes_[node_id].nn_ids) {
+        for (auto nn_id: nodes_.nn_ids(node_id)) {
             update_node_geometry(nn_id);
         }
     };
 
     // unit-tested
-    void ellipse_fy_cell(Real const& x_stretch, Real const& y_stretch = 1, Real const& z_stretch = 1)
+    void ellipse_fy_cell(Real x_stretch, Real y_stretch = 1, Real z_stretch = 1)
     {
         vec3<Real> displ = {0, 0, 0};
         for (auto& node: nodes_.data) {
@@ -386,8 +377,8 @@ public:
     }
 
     //Todo unittest
-    [[nodiscard]] Geometry<Real, Index> get_diamond_geometry(Index const& node_id, Index const& nn_id,
-                                                             Index const& cnn_0, Index const& cnn_1) const
+    [[nodiscard]] Geometry<Real, Index> get_diamond_geometry(Index node_id, Index nn_id,
+                                                             Index cnn_0, Index cnn_1) const
     {
         /**
          * calculates area volume and squared curvature integrated over the area, for the diamond configuration of nodes
@@ -405,7 +396,7 @@ public:
     };
 
     //Todo unittest
-    void update_diamond_geometry(Index const& node_id, Index const& nn_id, Index const& cnn_0, Index const& cnn_1)
+    void update_diamond_geometry(Index node_id, Index nn_id, Index cnn_0, Index cnn_1)
     {
         /**
          * updates area volume and squared curvature integrated over the area, for the diamond configuration of nodes
@@ -419,7 +410,7 @@ public:
 
     // Const Viewer Functions
     [[nodiscard]] Index size() const { return nodes_.size(); }
-    const Node<Real, Index>& operator[](Index const idx) const { return nodes_.data.at(idx); }
+    const Node<Real, Index>& operator[](Index idx) const { return nodes_.data.at(idx); }
     const vec3<Real>& mass_center() const { return mass_center_; }
     const Nodes<Real, Index>& nodes() const { return nodes_; }
     [[nodiscard]] Json egg_data() const { return nodes_.make_data(); }
@@ -436,32 +427,35 @@ private:
     //unit tested
     void scale_all_nodes_to_R_init()
     {
+        vec3<Real> diff;
         for (Index i = 0; i<nodes_.size(); ++i) {
-            nodes_[i].pos =
-                    mass_center_ + R_initial*(nodes_[i].pos - mass_center_)/(nodes_[i].pos - mass_center_).norm();
+            diff = nodes_[i].pos - mass_center_;
+            diff.scale(R_initial/diff.norm());
+            diff += mass_center_;
+            nodes_.set_pos(i, diff);
         }
         initiate_simple_mass_center();
     }
 
     //unit tested
-    std::vector<vec3<Real>> all_nn_distance_vectors(Index const& node_id
-    ) const
-    {
-        /**
-         *  This function calculates distance vectors from a node to all of it's neighbors. The directions of the
-         *  distance vectors are (radiating outward) pointing from the node to neighbors.
-         *  The function also preserves the order of neighbors. Meaning that the lilst of distance vectors is in the same
-         *  order as th provided list of neighbor ids.
-         */
+//    std::vector<vec3<Real>> all_nn_distance_vectors(Index const& node_id
+//    ) const
+//    {
+//        /**
+//         *  This function calculates distance vectors from a node to all of it's neighbors. The directions of the
+//         *  distance vectors are (radiating outward) pointing from the node to neighbors.
+//         *  The function also preserves the order of neighbors. Meaning that the lilst of distance vectors is in the same
+//         *  order as th provided list of neighbor ids.
+//         */
+//
+//        std::vector<vec3<Real>>res;
+//        res.reserve(nodes_[node_id].nn_ids.size());
+//
+//        for (auto const& nn_id: nodes_[node_id].nn_ids) { res.push_back(nodes_[nn_id].pos - nodes_[node_id].pos); }
+//        return res;
+//    }
 
-        std::vector<vec3<Real>>res;
-        res.reserve(nodes_[node_id].nn_ids.size());
-
-        for (auto const& nn_id: nodes_[node_id].nn_ids) { res.push_back(nodes_[nn_id].pos - nodes_[node_id].pos); }
-        return res;
-    }
-
-    void update_nn_distance_vectors(Index const& node_id)
+    void update_nn_distance_vectors(Index node_id)
     {
         /**
          *  This function calculates distance vectors from a node to all of it's neighbors. The directions of the
@@ -472,14 +466,14 @@ private:
 
 //        nodes_[node_id].nn_distances.resize(nodes_[node_id].nn_ids.size());
 
-        for (std::size_t i = 0; auto const& nn_id: nodes_[node_id].nn_ids) {
-            nodes_[node_id].nn_distances[i] = (nodes_[nn_id].pos - nodes_[node_id].pos);
+        for (std::size_t i = 0; auto nn_id: nodes_.nn_ids(node_id)) {
+            nodes_.set_nn_distance(node_id, i, nodes_.pos(nn_id) - nodes_.pos(node_id));
             ++i;
         }
     }
 
     //unit tested
-    Real cot_alphas_sum(Index const& node_id, Index const& nn_id) const
+    Real cot_alphas_sum(Index node_id, Index nn_id) const
     {
         /**
          * given a node i and its neighbor j, they will share two common neighbor nodes p and m.
@@ -488,6 +482,7 @@ private:
          * The order of these neighbours does not matter for the correct sign of the angles.
          */
         auto common_nn_ids = two_common_neighbours(node_id, nn_id);
+//        l0_ = nodes_.get_nn_distance_vector_between(node_id, common_nn_ids[0]);
         l0_ = -nodes_[node_id].get_distance_vector_to(common_nn_ids[0]);
         l1_ = nodes_[nn_id].pos - nodes_[common_nn_ids[0]].pos;
         Real cot_sum = cot_between_vectors(l0_, l1_);
@@ -503,7 +498,7 @@ private:
     };
 
     //unit tested
-    [[nodiscard]] std::vector<Index> order_nn_ids(Index const& node_id) const
+    [[nodiscard]] std::vector<Index> order_nn_ids(Index node_id) const
     {
         std::vector<Index> const& nn_ids = nodes_[node_id].nn_ids;
         auto common_nn_ids = two_common_neighbours(node_id, nn_ids[0]);
@@ -561,7 +556,7 @@ private:
     }
 
     //unit tested
-    std::vector<Index> common_neighbours(Index const& node_id_0, Index const& node_id_1) const
+    std::vector<Index> common_neighbours(Index node_id_0, Index node_id_1) const
     {
         std::vector<Index> res;
         res.reserve(2);
@@ -576,7 +571,7 @@ private:
     }
 
     //unit tested
-    std::array<Index, 2> two_common_neighbours(Index const& node_id_0, Index const& node_id_1) const
+    std::array<Index, 2> two_common_neighbours(Index node_id_0, Index node_id_1) const
     {
         std::array<Index, 2> res{-1, -1};
 
@@ -592,7 +587,7 @@ private:
         return res;
     }
 
-    std::array<Index, 2> two_common_neighbour_positions(Index const& node_id_0, Index const& node_id_1) const
+    std::array<Index, 2> two_common_neighbour_positions(Index node_id_0, Index node_id_1) const
     {
         std::array<Index, 2> res{-1, -1};
         short counter = 0;
@@ -611,7 +606,7 @@ private:
 
     //Todo unittest
     //unit tested
-    Neighbors<Index> previous_and_next_neighbour_local_ids(Index const& node_id, Index const& nn_id) const
+    Neighbors<Index> previous_and_next_neighbour_local_ids(Index node_id, Index nn_id) const
     {
         /**
          *        j+1
@@ -632,7 +627,7 @@ private:
     }
 
     //unit tested
-    Neighbors<Index> previous_and_next_neighbour_global_ids(Index const& node_id, Index const& nn_id) const
+    Neighbors<Index> previous_and_next_neighbour_global_ids(Index node_id, Index nn_id) const
     {
         /**
          *        j+1
@@ -655,7 +650,7 @@ private:
     }
 
     // Todo unittest
-    void delete_connection_between_nodes_of_old_edge(int const& old_node_id0, int const& old_node_id1)
+    void delete_connection_between_nodes_of_old_edge(Index old_node_id0, Index old_node_id1)
     {
         nodes_[old_node_id0].pop_nn(old_node_id1);
         nodes_[old_node_id1].pop_nn(old_node_id0);

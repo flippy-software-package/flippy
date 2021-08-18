@@ -6,9 +6,9 @@
 
 #define private public // please don't do this at home!
 #include "vec3.hpp"
-#include "Nodes.h"
+#include "Nodes.hpp"
 
-#include "Triangulation.h"
+#include "Triangulation.hpp"
 
 using json = nlohmann::json;
 using namespace fp;
@@ -153,11 +153,18 @@ TEST_CASE("Proper topology change")
         }
     }
 }
+
+TEST_CASE("bond flip unit test"){
+
+}
+
+
 TEST_CASE("unittest private member functions")
 {
     SECTION("unittest all_nn_distance_vectors") {
         Triangulation<double, long> star_triangulation(STAR_DATA, 0);
-        std::vector<vec3<double>> all_nn_d = star_triangulation.all_nn_distance_vectors(8);
+        star_triangulation.update_nn_distance_vectors(8);
+        std::vector<vec3<double>> all_nn_d = star_triangulation.nodes().nn_distances(8);//star_triangulation.all_nn_distance_vectors(8);
         auto v3 = vec3<double>{1., 0., 0.};
         auto v1 = vec3<double>{2., 0., 0.};
         auto v0 = vec3<double>{0.5,0.,-1.};
