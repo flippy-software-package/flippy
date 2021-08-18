@@ -1,5 +1,5 @@
-#ifndef EXPERIMENT_H_NODES_H_
-#define EXPERIMENT_H_NODES_H_
+#ifndef FLIPPY_NODES_HPP
+#define FLIPPY_NODES_HPP
 
 #include <vector>
 #include <unordered_set>
@@ -225,4 +225,4 @@ private:
     Real verlet_radius_squared;
 };
 }
-#endif //EXPERIMENT_H_NODES_H_
+#endif //FLIPPY_NODES_H_

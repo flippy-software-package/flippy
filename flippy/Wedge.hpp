@@ -1,5 +1,5 @@
-#ifndef SYNC_BACK_WATCHER_PY_WEDGE_HPP
-#define SYNC_BACK_WATCHER_PY_WEDGE_HPP
+#ifndef FLIPPY_WEDGE_HPP
+#define FLIPPY_WEDGE_HPP
 
 #include <vec3.h>
 
@@ -70,4 +70,4 @@ private:
     Type side_length_, hallf_max_width_;
 };
 
-#endif //SYNC_BACK_WATCHER_PY_WEDGE_HPP
+#endif //FLIPPY_WEDGE_HPP

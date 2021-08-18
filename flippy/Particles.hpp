@@ -1,5 +1,5 @@
-#ifndef SYNC_BACK_WATCHER_PY_SWARM_HPP
-#define SYNC_BACK_WATCHER_PY_SWARM_HPP
+#ifndef FLIPPY_PARTICLES_H
+#define FLIPPY_PARTICLES_H
 
 #include <random>
 #include "vec3.hpp"
@@ -72,4 +72,4 @@ private:
     Type R_;
 };
 }
-#endif //SYNC_BACK_WATCHER_PY_SWARM_HPP
+#endif //FLIPPY_PARTICLES_H

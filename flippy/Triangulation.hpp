@@ -3,11 +3,10 @@
  * See bibliography at the end of the file.
  */
 
-#ifndef EXPERIMENT_H_TRIANGULATION_H_
-#define EXPERIMENT_H_TRIANGULATION_H_
+#ifndef FLIPPY_TRIANGULATION_HPP
+#define FLIPPY_TRIANGULATION_HPP
 
 #include "external/delaunay-cpp-master/delaunay.hpp"
-#include "external/json.hpp"
 
 #include "Nodes.hpp"
 #include "vec3.hpp"
@@ -15,7 +14,6 @@
 #include "utilities/utils.h"
 
 namespace fp {
-using Json = nlohmann::json;
 
 const int BOND_DONATION_CUTOFF = 5; // a node needs to have more than the cutoff number of bonds to be allowed to donate one
 const int BOND_ACCEPTANCE_CUTOFF = 9; // a node needs to have less than the cutoff number of bonds to be allowed to accept one
@@ -669,7 +667,7 @@ private:
 
 };
 }
-#endif //EXPERIMENT_H_TRIANGULATION_H_
+#endif //FLIPPY_TRIANGULATION_H_
 
 /**
  * BIBLIOGRAPHY:
