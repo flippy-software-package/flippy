@@ -1,6 +1,9 @@
 stages:
+  - pages
   - build
   - test
+
+image: alpine
 
 pages:
   script:
