@@ -2,6 +2,18 @@ stages:
   - build
   - test
 
+pages:
+  script:
+    - apk update && apk add doxygen
+    - doxygen docs/Doxyfile.in
+    - mv doxygen/documentation/html/ public/
+  artifacts:
+    paths:
+      - public
+  only:
+    - master
+
+
 build:
   stage: build
   script:

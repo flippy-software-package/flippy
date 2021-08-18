@@ -1,0 +1,4 @@
+OUTPUT_DIRECTORY        = .
+INPUT                   = ../flippy/
+GENERATE_TREEVIEW       =YES
+USE_MDFILE_AS_MAINPAGE  =mainpage.md
