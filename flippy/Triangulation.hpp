@@ -110,87 +110,6 @@ public:
 //        pre_move_nodes = nodes_;
     }
 
-    Triangulation(Index nNodes, Real R_initial_input, Real verlet_radius_inp)
-            :
-            R_initial(R_initial_input), nodes_(), mass_center_({0., 0., 0.}), global_geometry_()
-    {
-        std::vector<vec3<Real>>
-        nodePos = points_on_unit_sphere(nNodes);
-        std::vector<std::vector<Index>> nnLists = find_nns(nodePos);
-        std::vector<Node<Real, Index>>
-        nodeData(nNodes);
-        for (std::size_t idx = 0; Node<Real, Index>& node: nodeData) {
-            node.pos = nodePos[idx];
-            node.nn_ids = nnLists[idx];
-            ++idx;
-        }
-        nodes_ = Nodes<Real, Index>(nodeData, verlet_radius_inp);
-
-        initiate_simple_mass_center();
-        scale_all_nodes_to_R_init();
-        orient_surface_of_a_sphere();
-        initiate_distance_vectors(); //Todo if this is done before orient surface we can save time
-        make_global_geometry();
-        initiate_real_mass_center();
-        make_verlet_list();
-    }
-
-    vec3<Real> rS2(Real phi, Real theta)
-    {
-        return {cos(phi)*sin(theta), sin(phi)*sin(theta), cos(theta)};
-    }
-
-    template<typename T>
-    int sgn(T val)
-    {
-        /*
-         * taken from stack overflow:
-         * https://stackoverflow.com/questions/1903954/is-there-a-standard-sign-function-signum-sgn-in-c-c
-         */
-        return (T(0)<val) - (val<T(0));
-    }
-
-    std::vector<vec3<Real>> points_on_unit_sphere(
-    Index nNodes
-    ){
-        std::vector<vec3<Real>>
-        positions(nNodes);
-        for (Real phi = -1. + 1./(nNodes - 1.); auto& pos: positions) {
-            pos = rS2(phi*(0.1 + 1.2*nNodes), M_PI*(1 - sgn(phi)*(1 - sqrt(1 - abs(phi))))/2.);
-            phi += (2. - 2./(nNodes - 1.))/(nNodes - 1.);
-        }
-        return positions;
-    }
-
-    std::vector<delaunay::Point<float>> stereographic_projecttion(std::vector<vec3<Real>>
-    const& nodePos){
-        std::vector<delaunay::Point<float>> projectedPoints(nodePos.size());
-        for (std::size_t idx = 0; auto& point: projectedPoints) {
-            point.x = nodePos[idx][0]/(1 - nodePos[idx][2]);
-            point.y = nodePos[idx][1]/(1. - nodePos[idx][2]);
-            point.id = idx;
-            ++idx;
-        }
-        return projectedPoints;
-    }
-
-    std::vector<std::vector<Index>> find_nns(std::vector<vec3<Real>>const& nodePos){
-        std::vector<std::vector<Index>> nnList(nodePos.size());
-        std::vector<delaunay::Point<float>> projectedPoints = stereographic_projecttion(nodePos);
-
-        const auto triangulation = delaunay::triangulate(projectedPoints);
-        std::vector<delaunay::Point<float>> plugProjectedPoints(5);
-        std::copy(projectedPoints.end() - 5, projectedPoints.end(), plugProjectedPoints.begin());
-        const auto plugTriangulation = delaunay::triangulate(projectedPoints);
-
-        for (auto const& e : triangulation.edges) {
-//            print(e.p0.id, e.p1.id);
-            nnList[e.p0.id].push_back(e.p1.id);
-            nnList[e.p1.id].push_back(e.p0.id);
-        }
-        return nnList;
-    }
-
     void make_verlet_list()
     {
         nodes_.make_verlet_list();
@@ -572,7 +491,6 @@ private:
     std::array<Index, 2> two_common_neighbours(Index node_id_0, Index node_id_1) const
     {
         std::array<Index, 2> res{-1, -1};
-
         for (auto res_p = res.begin(); auto const& n0_nn_id: nodes_[node_id_0].nn_ids) {
             if (res_p==res.end()) { break; }
             else {
@@ -666,8 +584,9 @@ private:
     }
 
 };
+
 }
-#endif //FLIPPY_TRIANGULATION_H_
+#endif //FLIPPY_TRIANGULATION_HPP
 
 /**
  * BIBLIOGRAPHY:
