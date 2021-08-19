@@ -15,13 +15,13 @@ constexpr double eps = 1e-4;
 template <typename T>
 struct Point {
   T x, y;
-  std::size_t id;
+  size_t id;
 
   Point() : x{0}, y{0}, id{0} {}
-  Point(T _x, T _y, T id_) : x{_x}, y{_y}, id{id_} {}
+  Point(T _x, T _y,  size_t id_) : x{_x}, y{_y}, id{id_} {}
 
   template <typename U, typename V>
-  Point(U _x, U _y, U id_) : x{static_cast<T>(_x)}, y{static_cast<T>(_y)}, id{static_cast<size_t>(id_)}
+  Point(U _x, U _y, size_t id_) : x{static_cast<T>(_x)}, y{static_cast<T>(_y)}, id{static_cast<size_t>(id_)}
   {
   }
 
@@ -177,7 +177,7 @@ Delaunay<T> triangulate(const std::vector<Point<T>>& points)
 
     /* Update triangulation. */
     for (auto const& e : edges) {
-      tmps.push_back({e.p0, e.p1, {pt.x, pt.y, pt.id}});
+      tmps.push_back({e.p0, e.p1, Point<T>{pt.x, pt.y, pt.id}});
     }
     d.triangles = tmps;
   }
