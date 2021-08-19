@@ -66,7 +66,7 @@ struct Node
           return nn_distances[(Index) (id_pos - nn_ids.begin())];
       }
       else {
-          std::cerr << "nn_id:" << nn_id << " provided to `get_distance_vector_to` is not a next neighbour of the node"
+          std::cerr << "nn_id:" << nn_id << " provided to `get_distance_vector_to` is not a next neighbour of the node "
                     << id;
           exit(12);
       }
@@ -225,4 +225,4 @@ private:
     Real verlet_radius_squared;
 };
 }
-#endif //FLIPPY_NODES_H_
+#endif //FLIPPY_NODES_HPP
