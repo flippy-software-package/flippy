@@ -238,7 +238,7 @@ public:
         area_sum = area_sum/((Real) 6.);
         nodes_.set_area(node_id, area_sum);
         nodes_.set_volume(node_id, nodes_[node_id].pos.dot(face_normal_sum)/((Real) 18.)); // 18=3*6: 6 has the aforementioned justification. 3 is part of the formula for the tetrahedron volume
-        nodes_.set_curvature_vec(node_id,  local_curvature_vec/((Real) 2.*area_sum)); // 2 is part of the formula to calculate the local curvature I just did not divide the vector inside the loop
+        nodes_.set_curvature_vec(node_id,  -local_curvature_vec/((Real) 2.*area_sum)); // 2 is part of the formula to calculate the local curvature I just did not divide the vector inside the loop
         nodes_.set_scaled_curvature_energy(node_id, local_curvature_vec.dot(local_curvature_vec)/((Real) 4.*area_sum)); // 4 is the square of the above two and the area in the denominator is what remains after canceling
 
     };
