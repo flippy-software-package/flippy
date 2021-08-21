@@ -10,8 +10,10 @@
 
 #include "Nodes.hpp"
 #include "vec3.hpp"
+#include "Triangulation.hpp"
 #include "utilities/debug_utils.hpp"
 #include "utilities/utils.hpp"
+#include "Triangulator.hpp"
 
 namespace fp {
 
@@ -107,7 +109,39 @@ public:
         make_global_geometry();
         initiate_real_mass_center();
         make_verlet_list();
-//        pre_move_nodes = nodes_;
+    }
+
+    Triangulation(Index nNodesIter, Real R_initial_input, Real verlet_radius_inp)
+    :R_initial(R_initial_input), nodes_(), mass_center_({0., 0., 0.}), global_geometry_()
+    {
+        std::unordered_map<std::string,fp::implementation::SimpleNodeData<Real, Index>> simpleNodeData = fp::implementation::make_corner_nodes<Real, Index>();
+        fp::implementation::make_face_nodes(simpleNodeData, nNodesIter);
+
+        Index nNewNodesOnEdge = nNodesIter - 1;
+        Index nBulk = nNewNodesOnEdge*(nNewNodesOnEdge+1)/2;
+        Index nNodes = fp::implementation::N_ICOSA_NODEs + fp::implementation::N_ICOSA_EDGEs*nNodesIter + fp::implementation::N_ICOSA_FACEs * nBulk;
+        std::vector<Node<Real, Index>> nodeData(nNodes);
+        for(Index id; auto & nodeEl :simpleNodeData){
+            id = nodeEl.second.id;
+            nodeData[id].id = nodeEl.second.id;
+            nodeData[id].pos = nodeEl.second.pos;
+            if(nodeEl.second.nn_hashes.size()<5){
+                print(nodeEl.second.nn_hashes.size(), nodeEl.first);
+            }
+            for(auto const& hash: nodeEl.second.nn_hashes){
+                nodeData[id].nn_ids.push_back(simpleNodeData[hash].id);
+            }
+        }
+
+        nodes_ = Nodes<Real, Index>(nodeData, verlet_radius_inp);
+
+        initiate_simple_mass_center();
+        scale_all_nodes_to_R_init();
+        orient_surface_of_a_sphere();
+        initiate_distance_vectors();//Todo if this is done before orient surface we can save time
+        make_global_geometry();
+        initiate_real_mass_center();
+        make_verlet_list();
     }
 
     void make_verlet_list()
@@ -459,7 +493,7 @@ private:
             if ((li0.cross(li1)).dot(nodes_[i].pos - mass_center_)<0) {
                 std::reverse(nn_ids_temp.begin(), nn_ids_temp.end());
             }
-            nodes_[i].nn_ids = nn_ids_temp;
+            nodes_.set_nn_ids(i, nn_ids_temp);
         }
     }
 
@@ -491,6 +525,7 @@ private:
     std::array<Index, 2> two_common_neighbours(Index node_id_0, Index node_id_1) const
     {
         std::array<Index, 2> res{-1, -1};
+        //todo safe remove const& in the loop
         for (auto res_p = res.begin(); auto const& n0_nn_id: nodes_[node_id_0].nn_ids) {
             if (res_p==res.end()) { break; }
             else {

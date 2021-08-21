@@ -2,7 +2,6 @@
 #include <array>
 #include <iostream>
 #include "json.hpp"
-#include "utilities/debug_utils.hpp"
 
 #define private public // please don't do this at home!
 #include "vec3.hpp"
@@ -46,12 +45,45 @@ json const STAR_DATA =
 
 TEST_CASE("Proper scaling with initial Radius for Triangulation Instantiator")
 {
-    double r_init = 10.1;
-    Triangulation<double, long> triangulation(ICOSA_DATA, r_init, 0);
-    auto target = Approx(r_init).margin(0.001);
+    SECTION("loading data instantiation"){
+        double r_init = 10.1;
+        Triangulation<double, long> triangulation(ICOSA_DATA, r_init, 0);
+        auto target = Approx(r_init).margin(0.001);
 
-    for (long i = 0; i<triangulation.size(); ++i) {
-        CHECK((triangulation[i].pos - triangulation.mass_center()).norm()==target);
+        for (long i = 0; i<triangulation.size(); ++i) {
+            CHECK((triangulation[i].pos - triangulation.mass_center()).norm()==target);
+        }
+    }
+    SECTION("triangulator data instantiation"){
+        double r_init = 10.1;
+        Triangulation<double, long> triangulation(0, r_init, 0);
+        auto target = Approx(r_init).margin(0.001);
+
+        for (long i = 0; i<triangulation.size(); ++i) {
+            CHECK((triangulation[i].pos - triangulation.mass_center()).norm()==target);
+        }
+    }
+}
+
+TEST_CASE("Triangulator Instantiation: correct  node count and global geometry"){
+    for (int nIter = 0; nIter<16; ++nIter) {
+        int nBulk = nIter*(nIter-1)/2;
+        int expected_node_count = fp::implementation::N_ICOSA_NODEs
+                    + fp::implementation::N_ICOSA_EDGEs*nIter
+                    + fp::implementation::N_ICOSA_FACEs * nBulk;
+        Triangulation<float, int> trg(nIter, 1.,0.);
+        CHECK(trg.size()==expected_node_count);
+        if(nIter>7){
+            float niter_inv = 1/((float)nIter);
+            float precision = 0.14f*niter_inv;
+            auto unit_sphere_volume = Approx(4.*M_PI/3.).epsilon(precision);
+            auto unit_sphere_area = Approx(4.*M_PI).epsilon(precision);
+            auto four_PI = Approx(16.*M_PI).epsilon(precision);
+            CHECK(trg.global_geometry().volume==unit_sphere_volume);
+            CHECK(trg.global_geometry().area==unit_sphere_area);
+            CHECK(trg.global_geometry().dA_K2==four_PI);
+        }
+
     }
 }
 

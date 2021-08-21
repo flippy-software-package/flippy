@@ -1,10 +1,11 @@
 cmake_minimum_required(VERSION 3.19)
 project(flippy_test DESCRIPTION "flippy test framework")
 set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_BUILD_TYPE Coverage)
+set(CMAKE_BUILD_TYPE Release)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} -g")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} -O3")
 
 include_directories(.)
 include_directories(external)
@@ -21,6 +22,7 @@ add_executable(${PROJECT_NAME} main.cpp
         Nodes_test.cpp
         local_geometry_test.cpp
         Triangulation_test.cpp
+        Triangulator_test.cpp
         )
 
 enable_testing()

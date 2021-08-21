@@ -152,7 +152,8 @@ struct Nodes
         }
         for (auto node_p = data.begin(); node_p!=data.end(); ++node_p) {
             for (auto other_node_p = data.begin(); other_node_p!=node_p; ++other_node_p) {
-                if ((node_p->pos - other_node_p->pos).norm_square()<verlet_radius_squared) {
+                if ((node_p->pos - other_node_p->pos).norm_square()<verlet_radius_squared)
+                {
                     node_p->verlet_list.push_back(other_node_p->id);
                     other_node_p->verlet_list.push_back(node_p->id);
                 }
@@ -161,6 +162,11 @@ struct Nodes
         }
 
     }
+
+    typename std::vector<Node<Real, Index>>::iterator begin(){return data.begin();}
+    typename std::vector<Node<Real, Index>>::const_iterator begin() const {return data.begin();}
+    typename std::vector<Node<Real, Index>>::iterator end() {return data.end();}
+    typename std::vector<Node<Real, Index>>::const_iterator end() const {return data.end();}
 
     // getters and setters
     //unit-tested

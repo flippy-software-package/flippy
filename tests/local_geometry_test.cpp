@@ -160,6 +160,45 @@ TEST_CASE("Ellipse geometry test")
     }
 }
 
+TEST_CASE("Ellipse geometry test for triangulatror mesh")
+{
+    double R = 2.;
+    double x_stretch = 1.4;
+    Triangulation<double, long> ellipse(15, R, 0);
+    ellipse.ellipse_fy_cell(x_stretch);
+
+    auto ACCEPTABLE_ERROR = 0.01;
+
+    double V_Ellipse = x_stretch*4.*M_PI*R*R*R/3.;
+    auto V_Ellipse_target = Approx(V_Ellipse).epsilon(ACCEPTABLE_ERROR);
+    auto e = sqrt(1 - 1./(x_stretch*x_stretch));
+    double A_Ellipse = 2.*M_PI*R*R*(1 + (x_stretch/e)*asin(e));
+    auto A_Ellipse_target = Approx(A_Ellipse).epsilon(ACCEPTABLE_ERROR);
+
+    SECTION("internally calculated global geometry") {
+        CHECK(ellipse.global_geometry().volume==V_Ellipse_target);
+        CHECK(ellipse.global_geometry().area==A_Ellipse_target);
+    }
+
+    vec3<double> displacement{1200., 2329., -12.901};
+    ellipse.translate_all_nodes(displacement);
+
+
+    SECTION("checking translational invariance1") {
+        CHECK(ellipse.global_geometry().volume==V_Ellipse_target);
+        CHECK(ellipse.global_geometry().area==A_Ellipse_target);
+    }
+
+    vec3<double> displacement2{0., 9., -1};
+    ellipse.translate_all_nodes(displacement2 - displacement);
+
+
+    SECTION("checking translational invariance") {
+        CHECK(ellipse.global_geometry().volume==V_Ellipse_target);
+        CHECK(ellipse.global_geometry().area==A_Ellipse_target);
+    }
+}
+
 json const CUBE_DATA =
         R"({
 	  "0":	{"nn_ids": [3,2,1,4],   "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0,0,0]},
