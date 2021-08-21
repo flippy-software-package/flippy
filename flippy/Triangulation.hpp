@@ -6,8 +6,6 @@
 #ifndef FLIPPY_TRIANGULATION_HPP
 #define FLIPPY_TRIANGULATION_HPP
 
-#include "external/delaunay-cpp-master/delaunay.hpp"
-
 #include "Nodes.hpp"
 #include "vec3.hpp"
 #include "Triangulation.hpp"
