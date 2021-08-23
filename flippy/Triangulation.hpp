@@ -249,9 +249,7 @@ public:
          * calculates area volume and squared curvature integrated over the area, for the voronoi cell
          * associated to the node
          */
-//        std::vector<Index> const& ordered_nn_ids = nodes_[node_id].nn_ids;
         update_nn_distance_vectors(node_id);
-//        nodes_[node_id].nn_distances = all_nn_distance_vectors(node_id);
 
         Real area_sum = 0.;
         vec3<Real> face_normal_sum{0., 0., 0.}, local_curvature_vec{0., 0., 0.};
@@ -260,7 +258,7 @@ public:
         Index j_p_1, j_m_1;
         for (Index j = 0; j<nn_number; ++j) {
             //return j+1 element of ordered_nn_ids unless j has the last value then wrap around and return 0th element
-            j_p_1 = ((j<nn_number - 1) ? j + 1 : 0);
+            j_p_1 = Neighbors<Index>::plus_one(j,nn_number);
             j_m_1 = Neighbors<Index>::minus_one(j,nn_number);
 
             face_normal = nodes_.nn_distances(node_id)[j].cross(nodes_.nn_distances(node_id)[j_p_1]);
@@ -278,19 +276,6 @@ public:
         nodes_.set_scaled_curvature_energy(node_id, local_curvature_vec.dot(local_curvature_vec)/((Real) 4.*area_sum)); // 4 is the square of the above two and the area in the denominator is what remains after canceling
 
     };
-
-//    [[nodiscard]] Geometry<Real, Index> calculate_two_ring_geometry(Index const& node_id) const
-//    {
-//        /**
-//        * calculates area volume and squared curvature integrated over the area, for the  two-ring of the
-//        * associated to the node, using the stored current_node_geometry
-//        */
-//        Geometry<Real, Index> trg = node_geometry(node_id);
-//        for (auto nn_id: nodes_.nn_ids(node_id)) {
-//            trg += node_geometry(nn_id);
-//        }
-//        return trg;
-//    }
 
     [[nodiscard]] Geometry<Real, Index> get_two_ring_geometry(Index node_id) const
     {
@@ -390,24 +375,6 @@ private:
         initiate_simple_mass_center();
     }
 
-    //unit tested
-//    std::vector<vec3<Real>> all_nn_distance_vectors(Index const& node_id
-//    ) const
-//    {
-//        /**
-//         *  This function calculates distance vectors from a node to all of it's neighbors. The directions of the
-//         *  distance vectors are (radiating outward) pointing from the node to neighbors.
-//         *  The function also preserves the order of neighbors. Meaning that the lilst of distance vectors is in the same
-//         *  order as th provided list of neighbor ids.
-//         */
-//
-//        std::vector<vec3<Real>>res;
-//        res.reserve(nodes_[node_id].nn_ids.size());
-//
-//        for (auto const& nn_id: nodes_[node_id].nn_ids) { res.push_back(nodes_[nn_id].pos - nodes_[node_id].pos); }
-//        return res;
-//    }
-
     void update_nn_distance_vectors(Index node_id)
     {
         /**
@@ -425,26 +392,6 @@ private:
         }
     }
 
-    //unit tested
-    Real cot_alphas_sum(Index node_id, Index nn_id) const
-    {
-        /**
-         * given a node i and its neighbor j, they will share two common neighbor nodes p and m.
-         * This function finds the angles at p & m opposite of i-j link.
-         * This function implements the cot(alpha_ij) + cot(beta_ij) from fig. (6c) from [1].
-         * The order of these neighbours does not matter for the correct sign of the angles.
-         */
-        auto common_nn_ids = two_common_neighbours(node_id, nn_id);
-//        l0_ = nodes_.get_nn_distance_vector_between(node_id, common_nn_ids[0]);
-        l0_ = -nodes_[node_id].get_distance_vector_to(common_nn_ids[0]);
-        l1_ = nodes_[nn_id].pos - nodes_[common_nn_ids[0]].pos;
-        Real cot_sum = cot_between_vectors(l0_, l1_);
-        l0_ = -nodes_[node_id].get_distance_vector_to(common_nn_ids[1]);
-        l1_ = nodes_[nn_id].pos - nodes_[common_nn_ids[1]].pos;
-        cot_sum += cot_between_vectors(l0_, l1_);
-        return cot_sum;
-    }
-
     Real cot_alphas_sum(Index node_id, Index nn_id, Index cnn_0, Index cnn_1) const
     {
         /**
@@ -453,15 +400,14 @@ private:
          * This function implements the cot(alpha_ij) + cot(beta_ij) from fig. (6c) from [1].
          * The order of these neighbours does not matter for the correct sign of the angles.
          */
-//        auto common_nn_ids = two_common_neighbours(node_id, nn_id);
-        //        l0_ = nodes_.get_nn_distance_vector_between(node_id, common_nn_ids[0]);
-        l0_ = -nodes_[node_id].get_distance_vector_to(cnn_0);
+
+        l0_ = nodes_[node_id].pos - nodes_[cnn_0].pos;
         l1_ = nodes_[nn_id].pos - nodes_[cnn_0].pos;
-//        l1_ = nodes_[cnn_0].get_distance_vector_to(nn_id);
+
         Real cot_sum = cot_between_vectors(l0_, l1_);
-        l0_ = -nodes_[node_id].get_distance_vector_to(cnn_1);
+        l0_ = nodes_[node_id].pos - nodes_[cnn_1].pos;
         l1_ = nodes_[nn_id].pos - nodes_[cnn_1].pos;
-//        l1_ = nodes_[cnn_0].get_distance_vector_to(nn_id);
+
         cot_sum += cot_between_vectors(l0_, l1_);
         return cot_sum;
     }
