@@ -257,14 +257,18 @@ public:
         vec3<Real> face_normal_sum{0., 0., 0.}, local_curvature_vec{0., 0., 0.};
         vec3<Real> face_normal;
         auto nn_number = (Index) nodes_.nn_ids(node_id).size();
-        Index j_p_1;
+        Index j_p_1, j_m_1;
         for (Index j = 0; j<nn_number; ++j) {
             //return j+1 element of ordered_nn_ids unless j has the last value then wrap around and return 0th element
             j_p_1 = ((j<nn_number - 1) ? j + 1 : 0);
+            j_m_1 = Neighbors<Index>::minus_one(j,nn_number);
+
             face_normal = nodes_.nn_distances(node_id)[j].cross(nodes_.nn_distances(node_id)[j_p_1]);
             area_sum += face_normal.norm();
             face_normal_sum += face_normal;
-            local_curvature_vec += cot_alphas_sum(node_id, nodes_.nn_id(node_id,j))*nodes_.nn_distances(node_id)[j]; //todo (speed) this is still too slow cos alphas are being over-calculated
+
+            local_curvature_vec += cot_alphas_sum(node_id, nodes_.nn_id(node_id, j),  nodes_.nn_id(node_id, j_m_1), nodes_.nn_id(node_id, j_p_1))*nodes_.nn_distances(node_id)[j];
+//            local_curvature_vec += cot_alphas_sum(node_id, nodes_.nn_id(node_id,j))*nodes_.nn_distances(node_id)[j]; //todo (speed) this is still too slow cos alphas are being over-calculated
         }
         // in all following cases 6=2*3; 2 comes from dividing face normal norm by 2 to get the right area and 3 from distributing the area over nodes
         area_sum = area_sum/((Real) 6.);
@@ -441,6 +445,27 @@ private:
         return cot_sum;
     }
 
+    Real cot_alphas_sum(Index node_id, Index nn_id, Index cnn_0, Index cnn_1) const
+    {
+        /**
+         * given a node i and its neighbor j, they will share two common neighbor nodes p and m.
+         * This function finds the angles at p & m opposite of i-j link.
+         * This function implements the cot(alpha_ij) + cot(beta_ij) from fig. (6c) from [1].
+         * The order of these neighbours does not matter for the correct sign of the angles.
+         */
+//        auto common_nn_ids = two_common_neighbours(node_id, nn_id);
+        //        l0_ = nodes_.get_nn_distance_vector_between(node_id, common_nn_ids[0]);
+        l0_ = -nodes_[node_id].get_distance_vector_to(cnn_0);
+        l1_ = nodes_[nn_id].pos - nodes_[cnn_0].pos;
+//        l1_ = nodes_[cnn_0].get_distance_vector_to(nn_id);
+        Real cot_sum = cot_between_vectors(l0_, l1_);
+        l0_ = -nodes_[node_id].get_distance_vector_to(cnn_1);
+        l1_ = nodes_[nn_id].pos - nodes_[cnn_1].pos;
+//        l1_ = nodes_[cnn_0].get_distance_vector_to(nn_id);
+        cot_sum += cot_between_vectors(l0_, l1_);
+        return cot_sum;
+    }
+
     static Real cot_between_vectors(vec3<Real> const& v1, vec3<Real> const& v2)
     {
         return v1.dot(v2)/(v1.cross(v2).norm());
@@ -533,6 +558,18 @@ private:
                 }
             }
         }
+        return res;
+    }
+
+    std::array<Index, 2> fast_two_common_neighbours(Index node_id_0, Index node_id_1) const
+    {
+
+        Index j = nodes_.find_nns_loc_idx(node_id_0, node_id_1);
+        auto nn_number = (Index)nodes_.nn_ids(node_id_0).size();
+        Index j_p_1 = Neighbors<Index>::plus_one(j, nn_number);
+        Index j_m_1 = Neighbors<Index>::plus_one(j, nn_number);
+        std::array<Index, 2> res{nodes_.nn_id(node_id_0,j_m_1),
+                nodes_.nn_id(node_id_0,j_p_1)};
         return res;
     }
 
