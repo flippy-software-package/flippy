@@ -35,7 +35,7 @@ struct Node
   {
       // finds the element with the id to_pop_nn_id in the nn_id vector and deletes it.
       // this will lead to resizing of the vector!
-      auto pop_pos = std::find(nn_ids.begin(), nn_ids.end(), to_pop_nn_id);
+      auto pop_pos = find_nns_loc_pointer(to_pop_nn_id);
       Index dist = pop_pos - nn_ids.begin();
 
       if (pop_pos!=nn_ids.end()) {
@@ -206,6 +206,7 @@ struct Nodes
         return data[node_id].get_distance_vector_to(nn_id);
     }
     void set_nn_distance(Index node_id, Index loc_nn_index, vec3<Real>&& dist){data[node_id].nn_distances[loc_nn_index]=dist;}
+    void set_nn_distance(Index node_id, Index loc_nn_index, vec3<Real> const& dist){data[node_id].nn_distances[loc_nn_index]=dist;}
 
     [[nodiscard]] Index size() const { return data.size(); }
     Node<Real, Index>& operator[](Index idx) { return data[idx]; }
