@@ -35,7 +35,7 @@ struct Node
   {
       // finds the element with the id to_pop_nn_id in the nn_id vector and deletes it.
       // this will lead to resizing of the vector!
-      auto pop_pos = find_nns_loc_pointer(to_pop_nn_id);
+      auto pop_pos = std::find(nn_ids.begin(), nn_ids.end(), to_pop_nn_id);
       Index dist = pop_pos - nn_ids.begin();
 
       if (pop_pos!=nn_ids.end()) {
