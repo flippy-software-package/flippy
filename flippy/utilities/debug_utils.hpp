@@ -5,6 +5,8 @@
 #include <ctime>
 #include <utility>
 
+namespace fp {
+
 #if LOGGING_ON
 #define LOGN(x) std::cout<< #x <<": "; print(x)
 #else
@@ -22,8 +24,6 @@
 #else
 #define PRINT(...)
 #endif
-
-namespace fp {
 
 static void print();
 
