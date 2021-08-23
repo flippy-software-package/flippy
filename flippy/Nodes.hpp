@@ -35,7 +35,7 @@ struct Node
   {
       // finds the element with the id to_pop_nn_id in the nn_id vector and deletes it.
       // this will lead to resizing of the vector!
-      auto pop_pos = std::find(nn_ids.begin(), nn_ids.end(), to_pop_nn_id);
+      auto pop_pos = find_nns_loc_pointer(to_pop_nn_id);
       Index dist = pop_pos - nn_ids.begin();
 
       if (pop_pos!=nn_ids.end()) {
@@ -45,6 +45,9 @@ struct Node
       }
   }
 
+  auto find_nns_loc_pointer(Index to_pop_nn_id){
+      return std::find(nn_ids.begin(), nn_ids.end(), to_pop_nn_id);
+  }
   // unit-tested
   void emplace_nn_id(Index to_emplace_nn_id, vec3<Real> const& to_emplace_nn_pos, Index loc_idx)
   {
@@ -63,7 +66,7 @@ struct Node
   {
       auto id_pos = std::find(nn_ids.begin(), nn_ids.end(), nn_id);
       if (id_pos!=nn_ids.end()) {
-          return nn_distances[(Index) (id_pos - nn_ids.begin())];
+          return nn_distances[(id_pos - nn_ids.begin())];
       }
       else {
           std::cerr << "nn_id:" << nn_id << " provided to `get_distance_vector_to` is not a next neighbour of the node "
