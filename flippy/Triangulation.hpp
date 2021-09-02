@@ -183,11 +183,18 @@ public:
         mass_center_ += nodes_.pos(node_id)*nodes_.area(node_id)/global_geometry_.area;
     }
 
-    // Todo unittest
+    // unit-tested
     void emplace_before(Index center_node_id, Index anchor_id, Index new_value)
     {
-        auto anchor_pos_ptr = std::find(nodes_[center_node_id].nn_ids.begin(), nodes_[center_node_id].nn_ids.end(),
-                anchor_id);
+        /**
+         * this method finds the anchor node in the nn_ids vector of the center_node
+         * and uses Node classes own method emplace_nn_id to emplace the new_value
+         * there (together with its distance to the center_node).
+         * The body of this fuction looks like it does not guard against find returning
+         * end() pointer, but this is taken care of in the emplace_nn_id method.
+         */
+        auto anchor_pos_ptr = std::find(nodes_[center_node_id].nn_ids.begin(),
+                nodes_[center_node_id].nn_ids.end(), anchor_id);
         auto anchor_pos = (Index) (anchor_pos_ptr - nodes_[center_node_id].nn_ids.begin());
         nodes_[center_node_id].emplace_nn_id(new_value, nodes_[new_value].pos, anchor_pos);
     }
