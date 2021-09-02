@@ -8,19 +8,19 @@
 namespace fp {
 
 #if LOGGING_ON
-#define LOGN(x) std::cout<< #x <<": "; print(x)
+#define LOGN(x) std::cout<< #x <<": "; fp::print(x)
 #else
 #define LOGN(x)
 #endif
 
 #if LOGGING_ON
-#define LOG(...) print(__VA_ARGS__)
+#define LOG(...) fp::print(__VA_ARGS__)
 #else
 #define LOG(...);
 #endif
 
 #if PRINTING_ON
-#define PRINT(...) print(__VA_ARGS__)
+#define PRINT(...) fp::print(__VA_ARGS__)
 #else
 #define PRINT(...)
 #endif
