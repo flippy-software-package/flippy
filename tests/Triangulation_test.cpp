@@ -186,7 +186,43 @@ TEST_CASE("Proper topology change")
     }
 }
 
-TEST_CASE("bond flip unit test"){
+TEST_CASE("emplace_before unit test"){
+    //  0  : [ 4,  2,  3,  1,  5]
+    //  1  : [ 7,  6,  2,  5,  0]
+    //  2  : [ 7,  8,  3,  1,  0]
+    //  3  : [ 9,  8,  4,  0,  2]
+    //  4  : [ 9, 10,  3,  5,  0]
+    //  5  : [ 6, 10,  4,  1,  0]
+    //  6  : [11,  7, 10,  1,  5]
+    //  7  : [11,  8,  6,  2,  1]
+    //  8  : [11,  9,  7,  3,  2]
+    //  9  : [11,  8, 10,  4,  3]
+    //  10 : [11,  9,  6,  4,  5]
+    //  11 : [ 9,  8,  7,  6, 10]
+
+    SECTION("emplace_before at the beginning"){
+        Triangulation<float, long long> trg(ICOSA_DATA, 0);
+        trg.emplace_before(0, 4, 11);
+        CHECK(trg.nodes().nn_ids(0)==std::vector<long long>{11, 4, 2, 3, 1, 5});
+    }
+
+    SECTION("emplace_before in the middle"){
+        Triangulation<float, long long> trg(ICOSA_DATA, 0);
+        trg.emplace_before(0, 2, 11);
+        CHECK(trg.nodes().nn_ids(0)==std::vector<long long>{4, 11, 2, 3, 1, 5});
+    }
+
+    SECTION("emplace_before before the end"){
+        Triangulation<float, long long> trg(ICOSA_DATA, 0);
+        trg.emplace_before(0, 5, 11);
+        CHECK(trg.nodes().nn_ids(0)==std::vector<long long>{4, 2, 3, 1, 11, 5});
+    }
+
+    SECTION("emplace_before nn not found"){
+        Triangulation<float, long long> trg(ICOSA_DATA, 0);
+        trg.emplace_before(0, 10, 11);
+        CHECK(trg.nodes().nn_ids(0)==std::vector<long long>{4, 2, 3, 1, 5});
+    }
 
 }
 
