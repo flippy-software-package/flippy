@@ -203,21 +203,20 @@ public:
                 Neighbors<Index> common_nns = previous_and_next_neighbour_global_ids(node_id, nn_id);
                 Real bond_length_square = (nodes_.pos(common_nns.j_m_1) - nodes_.pos(common_nns.j_p_1)).norm_square();
                 if ((bond_length_square<max_bond_length_square) && (bond_length_square>min_bond_length_square)) {
-//                    if (common_neighbours(node_id, nn_id).size()==2) {
-
+                    if (common_neighbours(node_id, nn_id).size()==2) {
                     pre_update_geometry = get_diamond_geometry(node_id, nn_id, common_nns.j_m_1, common_nns.j_p_1);
                     bfd = make_the_flip(node_id, nn_id, common_nns.j_m_1, common_nns.j_p_1);
-//                        if (common_neighbours(bfd.common_nn_0, bfd.common_nn_1).size()==2) {
+                        if (common_neighbours(bfd.common_nn_0, bfd.common_nn_1).size()==2) {
                     update_diamond_geometry(node_id, nn_id, common_nns.j_m_1, common_nns.j_p_1);
                     post_update_geometry = get_diamond_geometry(node_id, nn_id, common_nns.j_m_1,
                             common_nns.j_p_1);
                     update_global_geometry(pre_update_geometry, post_update_geometry);
-//                        }
-//                        else {
-//                            make_the_flip(bfd.common_nn_0, bfd.common_nn_1, nn_id, node_id);
-//                            bfd.flipped = false;
-//                        }
-//                    }
+                        }
+                        else {
+                            make_the_flip(bfd.common_nn_0, bfd.common_nn_1, nn_id, node_id);
+                            bfd.flipped = false;
+                        }
+                    }
                 }
             }
         }
