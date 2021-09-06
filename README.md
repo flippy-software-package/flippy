@@ -7,6 +7,11 @@ c++ package for dynamically triangulated membrane simulations.
 
 <img src="assets/flippy.png" alt="flippy" width="300"/>
 
+## Gallery
+
+<img src="https://server269.web-hosting.com:2083/cpsess9807513701/viewer/home%2fgeortoes%2flinkable_assets/rbc_from_sphere.gif" alt="rbc" width="300">
+<img src="https://server269.web-hosting.com:2083/cpsess9807513701/viewer/home%2fgeortoes%2flinkable_assets/bubble_collision_short.gif" alt="bubble_collision" width="300">
+
 ## Current Version
 
 current release [![release version](https://img.shields.io/badge/dynamic/json?url=https://gitlab.tudelft.nl/idema-group/flippy/-/raw/master/VERSION.json&query=$.*&color=blue&label=version)](https://gitlab.tudelft.nl/idema-group/flippy/-/releases) is experimental. This means that the API may change significantly. 
