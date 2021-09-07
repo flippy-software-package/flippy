@@ -9,8 +9,9 @@ c++ package for dynamically triangulated membrane simulations.
 
 ## Gallery
 
-<img src="https://server269.web-hosting.com:2083/cpsess9807513701/viewer/home%2fgeortoes%2flinkable_assets/rbc_from_sphere.gif" alt="rbc" width="300">
-<img src="https://server269.web-hosting.com:2083/cpsess9807513701/viewer/home%2fgeortoes%2flinkable_assets/bubble_collision_short.gif" alt="bubble_collision" width="300">
+<img src="https://surfdrive.surf.nl/files/index.php/s/6HCtX7B4NwE6w48/download" alt="rbc" width="300">
+<img src="https://surfdrive.surf.nl/files/index.php/s/1O3oJBNMT0vLxIv/download" alt="bubble_collision" width="300">
+<img src="https://surfdrive.surf.nl/files/index.php/s/mua39VAvdxmobD4/download" alt="cell division" width="300">
 
 ## Current Version
 
