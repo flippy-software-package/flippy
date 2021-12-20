@@ -8,7 +8,6 @@
 
 #include "Nodes.hpp"
 #include "vec3.hpp"
-#include "Triangulation.hpp"
 #include "utilities/debug_utils.hpp"
 #include "utilities/utils.hpp"
 #include "Triangulator.hpp"
@@ -262,26 +261,108 @@ public:
         vec3<Real> face_normal;
         auto nn_number = (Index) nodes_.nn_ids(node_id).size();
         Index j_p_1, j_m_1;
+
+        Real face_area, face_normal_norm;
+        vec3<Real> ljj_p_1, lij_p_1, lij;
+        Real cot_at_j, cot_at_j_p_1;
+
         for (Index j = 0; j<nn_number; ++j) {
             //return j+1 element of ordered_nn_ids unless j has the last value then wrap around and return 0th element
             j_p_1 = Neighbors<Index>::plus_one(j,nn_number);
             j_m_1 = Neighbors<Index>::minus_one(j,nn_number);
 
-            face_normal = nodes_.nn_distances(node_id)[j].cross(nodes_.nn_distances(node_id)[j_p_1]);
-            area_sum += face_normal.norm();
-            face_normal_sum += face_normal;
+            lij = nodes_.nn_distances(node_id)[j];
+            lij_p_1 = nodes_.nn_distances(node_id)[j_p_1];
+            ljj_p_1 = lij_p_1 - lij;
 
-            local_curvature_vec += cot_alphas_sum(node_id, nodes_.nn_id(node_id, j),  nodes_.nn_id(node_id, j_m_1), nodes_.nn_id(node_id, j_p_1))*nodes_.nn_distances(node_id)[j];
+            cot_at_j = cot_between_vectors(lij, (-1)*ljj_p_1);
+            cot_at_j_p_1 = cot_between_vectors(lij_p_1, ljj_p_1);
+
+
+            face_normal = lij.cross(lij_p_1); //nodes_.nn_distances(node_id)[j].cross(nodes_.nn_distances(node_id)[j_p_1]);
+            face_normal_norm = face_normal.norm();
+            face_area = mixed_area(lij, lij_p_1, 0.5*face_normal_norm, cot_at_j, cot_at_j_p_1);
+            area_sum += face_area;
+            face_normal_sum += face_area*face_normal/face_normal_norm;
+
+//            local_curvature_vec += cot_alphas_sum(node_id, nodes_.nn_id(node_id, j),  nodes_.nn_id(node_id, j_m_1), nodes_.nn_id(node_id, j_p_1))*nodes_.nn_distances(node_id)[j];
+            local_curvature_vec -= (cot_at_j_p_1*lij + cot_at_j*lij_p_1);
 //            local_curvature_vec += cot_alphas_sum(node_id, nodes_.nn_id(node_id,j))*nodes_.nn_distances(node_id)[j]; //todo (speed) this is still too slow cos alphas are being over-calculated
         }
         // in all following cases 6=2*3; 2 comes from dividing face normal norm by 2 to get the right area and 3 from distributing the area over nodes
-        area_sum = area_sum/((Real) 6.);
+//        area_sum = area_sum/((Real) 6.);
+
         nodes_.set_area(node_id, area_sum);
-        nodes_.set_volume(node_id, nodes_[node_id].pos.dot(face_normal_sum)/((Real) 18.)); // 18=3*6: 6 has the aforementioned justification. 3 is part of the formula for the tetrahedron volume
+        nodes_.set_volume(node_id, nodes_[node_id].pos.dot(face_normal_sum)/((Real) 3.)); // 18=3*6: 6 has the aforementioned justification. 3 is part of the formula for the tetrahedron volume
+//        nodes_.set_volume(node_id, nodes_[node_id].pos.dot(face_normal_sum)/((Real) 18.)); // 18=3*6: 6 has the aforementioned justification. 3 is part of the formula for the tetrahedron volume
         nodes_.set_curvature_vec(node_id,  -local_curvature_vec/((Real) 2.*area_sum)); // 2 is part of the formula to calculate the local curvature I just did not divide the vector inside the loop
         nodes_.set_scaled_curvature_energy(node_id, local_curvature_vec.dot(local_curvature_vec)/((Real) 4.*area_sum)); // 4 is the square of the above two and the area in the denominator is what remains after canceling
 
     };
+
+
+        static std::tuple<Real, vec3<Real>> partial_voronoi_area_and_volume_of_node(vec3<Real> const& lij,
+            vec3<Real> const& lij_p_1)
+    {
+        /** This function returns values of eqn.'s (82) & (84) from the paper [1]
+         * Every node has its associated voronoi area and each voronoi area can be subdivided into parts that are
+         * associated to each triangle that the node is part of. This function returns that sub-area and the face normal
+         * of that triangle.
+         */
+        Real area, face_normal_norm;
+        vec3<Real> un_noremd_face_normal;
+        //precalculating this normal and its norm, will be needed in area calc. If all triangles are oriented as right
+        // handed then this normal will point outwards
+        un_noremd_face_normal = lij.cross(lij_p_1);
+        face_normal_norm = un_noremd_face_normal.norm();
+        area = mixed_area(lij, lij_p_1, face_normal_norm/2.);
+        return std::make_tuple(area, (area/face_normal_norm)*un_noremd_face_normal);
+    }
+
+    static Real mixed_area(vec3<Real> const& lij, vec3<Real> const& lij_p_1, Real triangle_area, Real cot_at_j, Real cot_at_j_p_1){
+        if ((cot_at_j>0.) && (cot_at_j_p_1>0.)) { // both angles at j and j+1 are smaller than 90 deg so the triangle can only be obtuse at the node
+            if (lij.dot(lij_p_1)>0) { // cos at i is positive i.e. angle at i is not obtuse
+                return (cot_at_j_p_1*lij.dot(lij) + cot_at_j*lij_p_1.dot(lij_p_1))/8.;
+            }
+            else {//obtuse at node i.
+                return triangle_area/2.;
+            }
+        }
+        else {//obtuse at node j or j+1.
+            return triangle_area/4.;
+        }
+
+        }
+
+//    unit tested
+//    depricated
+    static Real mixed_area(vec3<Real> const& lij, vec3<Real> const& lij_p_1, Real const& triangle_area)
+    {
+        /** This function returns values of eqn.'s (82) (and two unnamed formulas in the following paragraph) from [1]
+         *
+         * Every node has its associated voronoi area and each voronoi area can be subdivided into parts that are
+         * associated to each triangle that the node is part of. This function returns that sub-area. If the large triangle
+         * (that the voronoi sub element is part of), is not obtuse. If it is obtuse, then the return value is either half,
+         * or quarter of the large triangle. Depending where it is obtuse.
+         *
+         */
+        vec3<Real> ljj_p_1 = lij_p_1 - lij;
+
+        Real cot_at_j = cot_between_vectors(lij, (-1)*ljj_p_1);
+        Real cot_at_j_p_1 = cot_between_vectors(lij_p_1, ljj_p_1);
+        if ((cot_at_j>0.) && (cot_at_j_p_1>0.)) { // both angles at j and j+1 are smaller than 90 deg so the triangle can only be obtuse at the node
+            if (lij.dot(lij_p_1)>0) { // cos at i is positive i.e. angle at i is not obtuse
+                return (cot_at_j_p_1*lij.dot(lij) + cot_at_j*lij_p_1.dot(lij_p_1))/8.;
+            }
+            else {//obtuse at node i.
+                return triangle_area/2.;
+            }
+        }
+        else {//obtuse at node j or j+1.
+            return triangle_area/4.;
+        }
+
+    }
 
     [[nodiscard]] Geometry<Real, Index> get_two_ring_geometry(Index node_id) const
     {
@@ -360,7 +441,11 @@ public:
     [[nodiscard]] Json egg_data() const { return nodes_.make_data(); }
     [[nodiscard]] const Geometry<Real, Index>& global_geometry() const { return global_geometry_; }
 
+#ifdef TESTING_TRIANGULATION
+public:
+#else
 private:
+#endif
     Real R_initial;
     Nodes<Real, Index> nodes_;
     vec3<Real> mass_center_;

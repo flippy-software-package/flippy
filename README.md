@@ -12,7 +12,6 @@ c++ package for dynamically triangulated membrane simulations.
 <img src="https://surfdrive.surf.nl/files/index.php/s/6HCtX7B4NwE6w48/download" alt="rbc" width="300">
 <img src="https://surfdrive.surf.nl/files/index.php/s/1O3oJBNMT0vLxIv/download" alt="bubble_collision" width="300">
 <img src="https://surfdrive.surf.nl/files/index.php/s/mua39VAvdxmobD4/download" alt="cell division" width="300">
-<img src="https://surfdrive.surf.nl/files/index.php/s/Q88KogYMeX9fAnG/download" alt="colloid wrapping" width="300">
 
 ## Current Version
 

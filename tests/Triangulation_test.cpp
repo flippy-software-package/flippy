@@ -3,10 +3,11 @@
 #include <iostream>
 #include "json.hpp"
 
-#define private public // please don't do this at home!
+
 #include "vec3.hpp"
 #include "Nodes.hpp"
 
+#define TESTING_TRIANGULATION=1
 #include "Triangulation.hpp"
 
 using json = nlohmann::json;

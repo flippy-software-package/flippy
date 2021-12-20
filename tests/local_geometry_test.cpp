@@ -4,7 +4,6 @@
 #include "vec3.hpp"
 #include "Nodes.hpp"
 
-#define private public // please don't do this at home!
 #include "Triangulation.hpp"
 using json = nlohmann::json;
 using namespace fp;
@@ -115,6 +114,12 @@ TEST_CASE("Sphere geometry test")
         CHECK(lg_translated.area==A_SPHERE_target);
         CHECK(lg_translated.volume==V_SPHERE_target);
         CHECK(lg_translated.dA_K2==K_SQUARE_SPHERE_target);
+    }
+
+    SECTION("checking translational invariance") {
+        CHECK(sphere.global_geometry().area==A_SPHERE_target);
+        CHECK(sphere.global_geometry().volume==V_SPHERE_target);
+        CHECK(sphere.global_geometry().dA_K2==K_SQUARE_SPHERE_target);
     }
 }
 
