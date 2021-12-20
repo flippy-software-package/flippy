@@ -260,7 +260,7 @@ public:
         vec3<Real> face_normal_sum{0., 0., 0.}, local_curvature_vec{0., 0., 0.};
         vec3<Real> face_normal;
         auto nn_number = (Index) nodes_.nn_ids(node_id).size();
-        Index j_p_1, j_m_1;
+        Index j_p_1;
 
         Real face_area, face_normal_norm;
         vec3<Real> ljj_p_1, lij_p_1, lij;
@@ -269,7 +269,6 @@ public:
         for (Index j = 0; j<nn_number; ++j) {
             //return j+1 element of ordered_nn_ids unless j has the last value then wrap around and return 0th element
             j_p_1 = Neighbors<Index>::plus_one(j,nn_number);
-            j_m_1 = Neighbors<Index>::minus_one(j,nn_number);
 
             lij = nodes_.nn_distances(node_id)[j];
             lij_p_1 = nodes_.nn_distances(node_id)[j_p_1];
@@ -285,12 +284,8 @@ public:
             area_sum += face_area;
             face_normal_sum += face_area*face_normal/face_normal_norm;
 
-//            local_curvature_vec += cot_alphas_sum(node_id, nodes_.nn_id(node_id, j),  nodes_.nn_id(node_id, j_m_1), nodes_.nn_id(node_id, j_p_1))*nodes_.nn_distances(node_id)[j];
             local_curvature_vec -= (cot_at_j_p_1*lij + cot_at_j*lij_p_1);
-//            local_curvature_vec += cot_alphas_sum(node_id, nodes_.nn_id(node_id,j))*nodes_.nn_distances(node_id)[j]; //todo (speed) this is still too slow cos alphas are being over-calculated
         }
-        // in all following cases 6=2*3; 2 comes from dividing face normal norm by 2 to get the right area and 3 from distributing the area over nodes
-//        area_sum = area_sum/((Real) 6.);
 
         nodes_.set_area(node_id, area_sum);
         nodes_.set_volume(node_id, nodes_[node_id].pos.dot(face_normal_sum)/((Real) 3.)); // 18=3*6: 6 has the aforementioned justification. 3 is part of the formula for the tetrahedron volume
