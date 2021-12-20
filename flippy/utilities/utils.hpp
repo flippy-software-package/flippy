@@ -7,12 +7,13 @@
 #include <iostream>
 #include <fstream>
 #include <utility>
+#include <filesystem>
 
 namespace fp {
 
 using Json = nlohmann::json;
 
-static inline void json_dump(std::string const& file_name, Json data)
+static inline void json_dump(std::string const& file_name, const Json& data)
 {
     std::ofstream o(file_name + ".json");
     o << data.dump();
@@ -38,5 +39,14 @@ template<typename T>
     return (std::find(v.begin(),v.end(), el) != v.end());
 }
 
+static bool is_dir(std::string const& path){
+    std::filesystem::path dir(path);
+    return std::filesystem::is_directory(dir);
+}
+
+static void make_dir(std::string const& path){
+    std::filesystem::path dir(path);
+    std::filesystem::create_directories(dir);
+}
 }
 #endif
