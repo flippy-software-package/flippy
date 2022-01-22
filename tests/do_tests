@@ -7,7 +7,7 @@ cd ..
 lcov --zerocounters
 lcov --base-directory . --directory ${reportDir} -c -o test.info
 lcov --remove test.info "/Library/*" -o test.info # remove output for external libraries
-lcov --remove test.info "/usr/lib*/*" -o test.info # remove output for external libraries
+lcov --remove test.info "/usr/include/*" -o test.info # remove output for external libraries
 lcov --remove test.info "*/flippy/tests*" -o test.info # remove output for external libraries
 lcov --remove test.info "*/flippy/flippy/external*" -o test.info # remove output for external libraries
 lcov --summary test.info
