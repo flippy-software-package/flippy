@@ -8,11 +8,11 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} -g")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} -O3")
 
 include_directories(.)
-include_directories(SYSTEM BEFORE PRIVATE ../flippy/external)
-include_directories(SYSTEM BEFORE PRIVATE external)
+include_directories(external)
 include_directories(../flippy)
+include_directories(../flippy/external)
 
-set_source_files_properties(../flippy/external
+set_source_files_properties(../external
         PROPERTIES
         COMPILE_FLAGS -W0
         )
