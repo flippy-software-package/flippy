@@ -436,6 +436,17 @@ public:
     [[nodiscard]] Json egg_data() const { return nodes_.make_data(); }
     [[nodiscard]] const Geometry<Real, Index>& global_geometry() const { return global_geometry_; }
 
+    //Todo unittest
+    void make_global_geometry()
+    {
+        const Geometry<Real, Index> empty{};
+        global_geometry_ = empty;
+        for (auto const& node: nodes_.data) {
+            update_node_geometry(node.id);
+            update_global_geometry(empty, Geometry<Real, Index>(node));
+        }
+    }
+
 #ifdef TESTING_TRIANGULATION
 public:
 #else
@@ -674,16 +685,6 @@ private:
         nodes_[old_node_id1].pop_nn(old_node_id0);
     }
 
-    //Todo unittest
-    void make_global_geometry()
-    {
-        const Geometry<Real, Index> empty{};
-        global_geometry_ = empty;
-        for (auto const& node: nodes_.data) {
-            update_node_geometry(node.id);
-            update_global_geometry(empty, Geometry<Real, Index>(node));
-        }
-    }
 
 };
 
