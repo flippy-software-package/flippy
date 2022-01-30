@@ -37,41 +37,7 @@ constexpr int N_ICOSA_FACEs=20;
 constexpr int N_ICOSA_EDGEs=30;
 constexpr int N_ICOSA_NODEs=12;
 
-//constexpr std::array<std::array<int,2>,N_ICOSA_EDGEs> ICOSAHEDRON_EDGES = {
-//        std::array<int,2>{0, 2},
-//        std::array<int,2>{0, 4},
-//        std::array<int,2>{0, 5},
-//        std::array<int,2>{0, 8},
-//        std::array<int,2>{0, 9},
-//        std::array<int,2>{1, 3},
-//        std::array<int,2>{1, 6},
-//        std::array<int,2>{1, 7},
-//        std::array<int,2>{1,10},
-//        std::array<int,2>{1,11},
-//        std::array<int,2>{2, 6},
-//        std::array<int,2>{2, 7},
-//        std::array<int,2>{2, 8},
-//        std::array<int,2>{2, 9},
-//        std::array<int,2>{3, 4},
-//        std::array<int,2>{3, 5},
-//        std::array<int,2>{3,10},
-//        std::array<int,2>{3, 11},
-//        std::array<int,2>{4, 5},
-//        std::array<int,2>{4, 8},
-//        std::array<int,2>{4, 10},
-//        std::array<int,2>{5, 9},
-//        std::array<int,2>{5, 11},
-//        std::array<int,2>{6, 7},
-//        std::array<int,2>{6, 8},
-//        std::array<int,2>{6, 10},
-//        std::array<int,2>{7, 9},
-//        std::array<int,2>{7, 11},
-//        std::array<int,2>{8, 10},
-//        std::array<int,2>{9, 11}
-//};
-
 constexpr std::array<int, N_ICOSA_FACEs> FACE_IDs{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19};
-//constexpr std::array<int, N_ICOSA_FACEs> FACE_IDs{0, 1, 2, 3, 4, 5, 14, 13, 12, 11, 10, 9, 8, 7, 6, 16, 15, 19, 18, 17};
 constexpr std::array<int, N_ICOSA_NODEs> NODE_IDs{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
 constexpr std::array<std::array<int,3>,N_ICOSA_FACEs> FACE_CORNER_NODES_={
         std::array<int,3>{NODE_IDs[0 ], NODE_IDs[5 ], NODE_IDs[1 ]},
@@ -96,28 +62,7 @@ constexpr std::array<std::array<int,3>,N_ICOSA_FACEs> FACE_CORNER_NODES_={
         std::array<int,3>{NODE_IDs[11], NODE_IDs[9 ], NODE_IDs[8 ]}
 };
 
-//const std::array<std::array<int,3>,N_ICOSA_FACEs> FACE_CORNER_NODES={
-//        FACE_CORNER_NODES_[FACE_IDs[0]],
-//        FACE_CORNER_NODES_[FACE_IDs[1]],
-//        FACE_CORNER_NODES_[FACE_IDs[2]],
-//        FACE_CORNER_NODES_[FACE_IDs[3]],
-//        FACE_CORNER_NODES_[FACE_IDs[4]],
-//        FACE_CORNER_NODES_[FACE_IDs[5]],
-//        FACE_CORNER_NODES_[FACE_IDs[6]],
-//        FACE_CORNER_NODES_[FACE_IDs[7]],
-//        FACE_CORNER_NODES_[FACE_IDs[8]],
-//        FACE_CORNER_NODES_[FACE_IDs[9]],
-//        FACE_CORNER_NODES_[FACE_IDs[10]],
-//        FACE_CORNER_NODES_[FACE_IDs[11]],
-//        FACE_CORNER_NODES_[FACE_IDs[12]],
-//        FACE_CORNER_NODES_[FACE_IDs[13]],
-//        FACE_CORNER_NODES_[FACE_IDs[14]],
-//        FACE_CORNER_NODES_[FACE_IDs[15]],
-//        FACE_CORNER_NODES_[FACE_IDs[16]],
-//        FACE_CORNER_NODES_[FACE_IDs[17]],
-//        FACE_CORNER_NODES_[FACE_IDs[18]],
-//        FACE_CORNER_NODES_[FACE_IDs[19]]
-//};
+
 const std::array<std::array<int,3>,N_ICOSA_FACEs> FACE_CORNER_NODES={
         std::array<int,3>{0, 5, 1},
         std::array<int,3>{0, 1, 2},
@@ -141,25 +86,6 @@ const std::array<std::array<int,3>,N_ICOSA_FACEs> FACE_CORNER_NODES={
         std::array<int,3>{11, 9, 8}
 };
 
-
-//template<typename Index>
-//requires std::is_integral_v<Index>
-//Index k_lt(Index i, Index j){return (i*(i+1)>>1) +j;}
-//
-//template<typename Index>
-//requires std::is_integral_v<Index>
-//Index i_lt(Index k){return floor(0.5f*(sqrt(1+8*k)-1.f));}
-//
-//template<typename Index>
-//requires std::is_integral_v<Index>
-//Index j_lt(Index k, Index i){return k - (i*(i+1)>>1);}
-//
-//template<typename Index>
-//requires std::is_integral_v<Index>
-//std::pair<Index, Index> ij_lt(Index k){
-//    Index i = i_lt(k);
-//    return {i, j_lt(k, i)};
-//}
 
 template<typename Real>
 vec3<Real> r_S1(Real R, Real t, Real f) {
@@ -211,7 +137,6 @@ TriangleRegion get_region(Index i, Index j, Index sizeMinOne){
     else{return BULK;}
 }
 
-//std::string hash_any(Index c0, Index c1, Index c2, Index i, Index j, Index maxIdx){
 template<typename Index>
 std::string hash_any(Index c0, Index c1, Index c2, Index i, Index j, Index maxIdx){
     switch (get_region(i, j, maxIdx)) {
@@ -308,6 +233,7 @@ vec3<Real> get_pos(vec3<Real>const& p0, vec3<Real>const& p1,
             return p0 + wi*(p1 - p0) + wj*(p2 - p1);
 //            return p0 + wi*(p1 - p0)/(p1 - p0).norm() + wj*(p2 - p0)/(p2 - p0).norm();
     }
+    //todo handle the error case when this position is reached
 }
 
 template<typename Index>

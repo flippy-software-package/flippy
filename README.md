@@ -2,6 +2,7 @@
 [![coverage report](https://gitlab.tudelft.nl/idema-group/flippy/badges/master/coverage.svg)](https://gitlab.tudelft.nl/idema-group/flippy/-/commits/master)
 [![release version](https://img.shields.io/badge/dynamic/json?url=https://gitlab.tudelft.nl/idema-group/flippy/-/raw/master/VERSION.json&query=$.*&color=blue&label=version)](https://gitlab.tudelft.nl/idema-group/flippy/-/releases)
 [![licence](https://img.shields.io/badge/licence-MIT-green)](https://gitlab.tudelft.nl/idema-group/flippy/-/blob/master/LICENSE)
+[![EMail](https://img.shields.io/badge/EMail-D14836?logo=Mail.ru&logoColor=white&logoWidth=20)](mailto:flippy@mailbox.org)
 # flippy
 c++ package for dynamically triangulated membrane simulations.
 
@@ -17,6 +18,16 @@ c++ package for dynamically triangulated membrane simulations.
 
 current release [![release version](https://img.shields.io/badge/dynamic/json?url=https://gitlab.tudelft.nl/idema-group/flippy/-/raw/master/VERSION.json&query=$.*&color=blue&label=version)](https://gitlab.tudelft.nl/idema-group/flippy/-/releases) is experimental. This means that the API may change significantly. 
 
+## Support
+Flippy is still in active development and the documentation is almost non-existent, but I try my best to reply to e-mails and provide support for scientists who want to use flippy.
+### for questions about general usage
+please use the support email [![EMail](https://img.shields.io/badge/EMail-D14836?logo=Mail.ru&logoColor=white&logoWidth=20)](mailto:flippy@mailbox.org).
+### for bugfixes 
+please create an [issue](https://gitlab.tudelft.nl/idema-group/flippy/-/issues).
+### for feature requests
+again the [issues](https://gitlab.tudelft.nl/idema-group/flippy/-/issues) page can be used but be aware that new features will be slow to come.
+### want to join the team?
+write me an email!
 
 ## Release Version Nomenclature
 
@@ -139,6 +150,6 @@ int main(){
     file<<data;
     timer.stop(); // strictly speaking this is not necessary the timer would stop and print the time automatically when it gets deleted
     return 0;
-}
+}8PNy@TmaqhGx$jD(
 ```
 This code can be found in the subfolder `demos/simples_MC` together with a python script that visualizes the data, and a simple `CMake` file that can be used to build the code.
