@@ -6,6 +6,11 @@
 #include <unordered_set>
 #include "vec3.hpp"
 
+/**
+ * The API stability of the functions in the implementation namespace is not guaranteed!
+ * Functions that are part of the implementation namespace are not part of the public facing API and are not intended fot the end-user.
+ * Since flippy is a headers only library this could not be hidden in source files.
+ */
 namespace fp::implementation{
 
 template<typename Real, typename Index>

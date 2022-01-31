@@ -29,6 +29,7 @@ again the [issues](https://gitlab.tudelft.nl/idema-group/flippy/-/issues) page c
 ### want to join the team?
 write me an email!
 
+
 ## Release Version Nomenclature
 
 This repository follows [Semantic Versioning](https://semver.org/) guidelines.
@@ -47,7 +48,10 @@ Additional labels for pre-release and build metadata are available as extensions
 
 ## How to get it
 
-*flippy* is a headers only library, so all you need to to is download the `flippy` subfolder and copy it into your project.
+*flippy* is a headers only library, so all you need to is to download the `flippy` subfolder and copy it into your project.
+
+## Documentation
+You can find flippy's [user manual](https://gitlab.tudelft.nl/idema-group/flippy/-/wikis/User_Manual) and automatically generated code [documentation](https://gitlab.tudelft.nl/idema-group/flippy/-/wikis/Documentation) over on the [wiki](https://gitlab.tudelft.nl/idema-group/flippy/-/raw/master/docs/mainpage.md).
 
 ## Examples of usage
 

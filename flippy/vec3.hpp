@@ -6,6 +6,21 @@
 #include <cmath>
 
 namespace fp{
+
+/**
+ * Own implementation of a 3D vector.
+ * To keep the external dependencies low, flippy implements it's own 3D vector class with basic functionality like dot product and cross product
+ *
+ * Example:
+ * ```c++
+ * fp::vec3<double> v1{1,0,0};
+ * fp::vec3<double> v2{0,0,1};
+ *
+ * ASSERT(v1.dot(v2)==0);
+ * ASSERT(v1.cross(v2)==0);
+ * ASSERT(v1-v2==fp::vec3<double>{1,0,-1});
+ * ```
+ */
 template<typename Type>
 class vec3
 {
@@ -63,10 +78,7 @@ public:
     }
 
     bool operator==(vec3<Type> const& other) const =default;
-//    friend bool operator==(vec3<Type> const& lhs, vec3<Type> const& rhs)
-//    {
-//        return (lhs.x==rhs.x) && (lhs.y==rhs.y) && (lhs.z==rhs.z);
-//    }
+
 
     // mathematical operations
     friend vec3<Type> operator+(vec3<Type> lhs, vec3<Type> const& rhs)

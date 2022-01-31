@@ -1,8 +1,3 @@
-/**
- * Implementation of Triangulation of closed two dimensional surfaces in 3D
- * See bibliography at the end of the file.
- */
-
 #ifndef FLIPPY_TRIANGULATION_HPP
 #define FLIPPY_TRIANGULATION_HPP
 
@@ -12,11 +7,30 @@
 #include "utilities/utils.hpp"
 #include "Triangulator.hpp"
 
+/**
+ * flippy's namespace.
+ */
 namespace fp {
 
 const int BOND_DONATION_CUTOFF = 5; // a node needs to have more than the cutoff number of bonds to be allowed to donate one
 const int BOND_ACCEPTANCE_CUTOFF = 9; // a node needs to have less than the cutoff number of bonds to be allowed to accept one
 
+/**
+ * A helper struct; keeps track of bond flips.
+ * A bond flip can be unsuccessful, e.g. if the requested two nodes that are donating an edge already have too few edges.
+ * If the flipp does happen then `common_nn_0` and `common_nn_1` record the ids of nodes that receive new common bond.
+ *
+ *```txt
+ *    common_nn_0
+ *     /         \
+ *   /            \
+ * node -------- nn_id
+ *  \             /
+ *   \           /
+ *   common_nn_1
+ *```
+ *
+ * */
 template<typename Index>
 struct BondFlipData
 {
@@ -25,6 +39,9 @@ struct BondFlipData
   Index common_nn_1 = -1;
 };
 
+/**
+ * A helper struct;  makes addition and subtraction on a ring easier.
+ * */
 template<typename Index>
 struct Neighbors
 {
@@ -36,7 +53,9 @@ struct Neighbors
   static Index minus_one(Index j, Index ring_size) { return ((j==((Index) 0)) ? ring_size - 1 : j - 1); }
 
 };
-
+/**
+ * A helper struct (template) that is used by the triangulation to pass data around in one convenient package.
+ */
 template<typename Real, typename Index>
 struct Geometry
 {
@@ -77,6 +96,24 @@ struct Geometry
   }
 };
 
+/**
+ * Implementation of Triangulation of closed two dimensional surfaces in 3D
+ * See throughout the documentation the sources are referred to by numbers which can be looked up int the bibliography.
+ *
+ *
+ * BIBLIOGRAPHY:
+ *
+ * [1] Guillaume Gueguen, Nicolas Destainville, and Manoel Manghi,
+ * ‘Fluctuation Tension and Shape Transition of Vesicles: Renormalisation Calculations and Monte Carlo Simulations’,
+ * Soft Matter, 13.36 (2017), 6100–6117 <https://doi.org/10.1039/C7SM01272A>.
+ *
+ * [2] Mark Meyer and others,
+ * ‘Discrete Differential-Geometry Operators for Triangulated 2-Manifolds’,
+ * in Visualization and Mathematics III, ed. by Hans-Christian Hege and Konrad Polthier,
+ * Mathematics and Visualization (Berlin, Heidelberg: Springer, 2003),
+ * pp. 35–57 <https://doi.org/10.1007/978-3-662-05105-4_2>.
+ *
+ */
 template<typename Real, typename Index>
 class Triangulation
 {
@@ -691,16 +728,3 @@ private:
 }
 #endif //FLIPPY_TRIANGULATION_HPP
 
-/**
- * BIBLIOGRAPHY:
- *
- * [1] Guillaume Gueguen, Nicolas Destainville, and Manoel Manghi,
- * ‘Fluctuation Tension and Shape Transition of Vesicles: Renormalisation Calculations and Monte Carlo Simulations’,
- * Soft Matter, 13.36 (2017), 6100–6117 <https://doi.org/10.1039/C7SM01272A>.
- * [2] Mark Meyer and others,
- * ‘Discrete Differential-Geometry Operators for Triangulated 2-Manifolds’,
- * in Visualization and Mathematics III, ed. by Hans-Christian Hege and Konrad Polthier,
- * Mathematics and Visualization (Berlin, Heidelberg: Springer, 2003),
- * pp. 35–57 <https://doi.org/10.1007/978-3-662-05105-4_2>.
- *
- */
