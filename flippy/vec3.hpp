@@ -16,9 +16,9 @@ namespace fp{
  * fp::vec3<double> v1{1,0,0};
  * fp::vec3<double> v2{0,0,1};
  *
- * ASSERT(v1.dot(v2)==0);
- * ASSERT(v1.cross(v2)==0);
- * ASSERT(v1-v2==fp::vec3<double>{1,0,-1});
+ *  assert(v1.dot(v2)==0);
+ *  assert(v1.cross(v2).norm()==1);
+ *  assert(((v1-v2)==fp::vec3<double>{1.,0.,-1.}));
  * ```
  */
 template<typename Type>
@@ -70,6 +70,13 @@ public:
     Type norm() const { return std::sqrt(this->dot(*this)); }
 
     Type norm_square() const { return this->dot(*this); }
+
+    void normalize(){
+        /**
+         * normalize vector in place.
+         */
+        *this= *this/this->norm();
+    }
 
     friend std::ostream& operator<<(std::ostream& os, const vec3<Type>& obj)
     {

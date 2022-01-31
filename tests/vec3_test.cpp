@@ -104,6 +104,24 @@ TEST_CASE("member function and associated operator checks"){
     CHECK(v.norm()==target);
   }
 
+    SECTION("case test: normalize"){
+        fp::vec3<double> v{3., 4., 5.};
+        auto target = Approx(sqrt(1)).margin(EPSILON);
+        v.normalize();
+        CHECK(v.norm()==target);
+    }
+
+    SECTION("case test: normalize"){
+        fp::vec3<double> v{3., 4., 5.};
+        fp::vec3<double> v_norm = v/v.norm();
+        auto target = Approx(sqrt(0)).margin(EPSILON);
+        v.normalize();
+        CHECK((v.x-v_norm.x)==target);
+        CHECK((v.y-v_norm.y)==target);
+        CHECK((v.z-v_norm.z)==target);
+    }
+
+
   SECTION("property test: norm square is self dot"){
 	constexpr int numTrials = 3;
 	constexpr int min=-1.e5, max=1.e5;
