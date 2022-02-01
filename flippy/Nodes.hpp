@@ -12,23 +12,25 @@
 namespace fp {
 using Json = nlohmann::json;
 
+/**
+   * This is a DUMB DATA STRUCTURE, meaning that it is not responsible for the coherence of the data that it contains.
+   * I.e. it will never check if the curvature is the norm of the curvature vector or if the nn_ids and nn_distances are in the correct order.
+   * However it does check the data for consistency. It will match the length of nn_ids and nn_distances. And pop and add both of them together.
+   */
 template<typename Real, typename Index>
 struct Node
 {
-  /**
-   * This is a DUMB DATA STRUCTURE, meaning that it is not responsible for the coherence of the data that it contains.
-   * I.e. it will never check if the curvature is the norm of the curvature vector or if the nn_ids and nn_distances are in the correct order.
-   * However it does check the data for consistency. It will match the length of nn_ids and nn_distances. And pop and add both of them together. //Todo this is not yet implemented
-   */
   Index id;
   Real area;
   Real volume;
   Real scaled_curvature_energy;
   vec3<Real> pos;
   vec3<Real> curvature_vec;
+  //! nn_ids contains the ids of nodes that are connected to this node
   std::vector<Index> nn_ids;
-  std::vector<Index> verlet_list;
+  //! Verlet list contains the ids of nodes that are close to this node
   std::vector<vec3<Real>> nn_distances;
+  std::vector<Index> verlet_list;
 
   // unit-tested
   void pop_nn(Index to_pop_nn_id)

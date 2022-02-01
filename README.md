@@ -154,6 +154,6 @@ int main(){
     file<<data;
     timer.stop(); // strictly speaking this is not necessary the timer would stop and print the time automatically when it gets deleted
     return 0;
-}8PNy@TmaqhGx$jD(
+}
 ```
 This code can be found in the subfolder `demos/simples_MC` together with a python script that visualizes the data, and a simple `CMake` file that can be used to build the code.
