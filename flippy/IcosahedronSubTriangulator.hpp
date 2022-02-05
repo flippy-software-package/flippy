@@ -1,9 +1,10 @@
-#ifndef FLIPPY_TRIANGULATOR_HPP
-#define FLIPPY_TRIANGULATOR_HPP
+#ifndef FLIPPY_ICOSAHEDRONSUBTRIANGULATOR_HPP
+#define FLIPPY_ICOSAHEDRONSUBTRIANGULATOR_HPP
 
 #include <array>
 #include <vector>
 #include <unordered_set>
+#include <unordered_map>
 #include "vec3.hpp"
 
 /**
@@ -216,29 +217,55 @@ std::vector<std::string> neighbour_hash_vec(Index c0, Index c1, Index c2, Index 
 }
 
 template<typename Real, typename Index>
-vec3<Real> get_pos(vec3<Real>const& p0, vec3<Real>const& p1,
-                   vec3<Real>const& p2, Index i, Index j, Index maxIdx){
-
-    Real wi = static_cast<Real>(i)/(static_cast<Real>(maxIdx));
-    Real wj = static_cast<Real>(j)/(static_cast<Real>(maxIdx));
-    switch (get_region(i, j, maxIdx)) {
-        case TOP_CORNER:
-            return p0;
-        case BOTTOM_LEFT_CORNER:
-            return p1;
-        case BOTTOM_RIGHT_CORNER:
-            return p2;
-        case LEFT_EDGE:
-             return p0 + wi*(p1 - p0);
-        case BOTTOM_EDGE:
-          return p1 + wj*(p2 - p1);
-        case DIAGONAL_EDGE:
-             return p0 + wj*(p2 - p0);
-        case BULK:
-            return p0 + wi*(p1 - p0) + wj*(p2 - p1);
-//            return p0 + wi*(p1 - p0)/(p1 - p0).norm() + wj*(p2 - p0)/(p2 - p0).norm();
+Real even_angular_distance_length(Real l, Index k, Index n, Real R=1.){
+    /**
+     * The points of the sub-triangulation can not be equally spaced or their angular distances
+     * won't be the same.
+     */
+    if(k==0){return 0;
+    }else {
+        Real fr = static_cast<Real>(k)/static_cast<Real>(n);
+        Real denominator = l + sqrt(4.*R*R - l*l)/tan(fr*2.*asin(l/(2.*R)));
+        return 2.*R*R/denominator;
     }
-    //todo handle the error case when this position is reached
+}
+
+template<typename Real, typename Index>
+vec3<Real> get_pos(vec3<Real>const& p0, vec3<Real>const& p1, vec3<Real>const& p2, Index i, Index j, Index maxIdx)
+{
+/**
+ * get the position o a node in the sub triangulation of a face of the initial icosahedron.
+ * ```{.txt}
+ *              p0
+ *            /___\
+ *     e1   /__\/__\ e2
+ *        / \ / \  / \
+ *      p1 --------- p3
+ *            e3
+ * ```
+ */
+    vec3<Real> e1 = p1-p0;
+    vec3<Real> e2 = p2-p0;
+    auto e = e1.norm() ;
+    Real wi = even_angular_distance_length(e, i, maxIdx);
+
+    e1.normalize();
+    e2.normalize();
+
+    vec3<Real> li{};
+    Real li_norm{0};
+    vec3<Real> interm_1 = p0 + wi*e1;
+    interm_1.normalize();
+    if(i!=0){
+        vec3<Real> interm_2 = p0 + wi*e2;
+        interm_2.normalize();
+
+        li = interm_2-interm_1;
+        li_norm = li.norm();
+        li.normalize();
+    }
+    Real wj = even_angular_distance_length(li_norm, j, i);
+    return interm_1 + wj*li;
 }
 
 template<typename Index>
@@ -298,4 +325,4 @@ void make_face_nodes(std::unordered_map<std::string,SimpleNodeData<Real, Index>>
 
 }
 }
-#endif //FLIPPY_TRIANGULATOR_HPP
+#endif //FLIPPY_ICOSAHEDRONSUBTRIANGULATOR_HPP

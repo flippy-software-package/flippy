@@ -5,7 +5,7 @@
 #include "vec3.hpp"
 #include "utilities/debug_utils.hpp"
 #include "utilities/utils.hpp"
-#include "Triangulator.hpp"
+#include "IcosahedronSubTriangulator.hpp"
 
 /**
  * flippy's namespace.
