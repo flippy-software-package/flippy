@@ -300,7 +300,6 @@ if __name__ == '__main__':
     import matplotlib.pyplot as plt
     import numpy as np
     import json
-    from data_analysis import SingleTimeFrameImporter
 
     egg_init = SingleTimeFrameImporter.egg_import(f'test_run.json')
     egg_init.make_polygon()
