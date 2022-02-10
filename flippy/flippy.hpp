@@ -6,5 +6,6 @@
 #include "utilities/debug_utils.hpp"
 #include "Nodes.hpp"
 #include "Triangulation.hpp"
+#include "MonteCarloUpdater.hpp"
 
 #endif //FLIPPY_FLIPPY_HPP

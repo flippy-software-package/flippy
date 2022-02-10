@@ -17,7 +17,7 @@ using Json = nlohmann::json;
    * I.e. it will never check if the curvature is the norm of the curvature vector or if the nn_ids and nn_distances are in the correct order.
    * However it does check the data for consistency. It will match the length of nn_ids and nn_distances. And pop and add both of them together.
    */
-template<typename Real, typename Index>
+template<std::floating_point Real, std::integral Index>
 struct Node
 {
   Index id;
@@ -103,21 +103,19 @@ struct Node
 
 };
 
-template<typename Real, typename Index>
+template<std::floating_point Real, std::integral Index>
 struct Nodes
 {
     std::vector<Node<Real, Index>> data;
     Nodes() = default;
-    Nodes(std::vector<Node<Real, Index>> data_inp, Real verlet_radius_inp)
-            :data(data_inp), verlet_radius(verlet_radius_inp), verlet_radius_squared(verlet_radius*verlet_radius) { }
-    explicit Nodes(Json const& node_dict, Real verlet_radius_inp)
-            :verlet_radius(verlet_radius_inp)
+    explicit Nodes(std::vector<Node<Real, Index>> data_inp)
+            :data(data_inp) { }
+    explicit Nodes(Json const& node_dict)
     {
-        /*
+        /**
          * Initiating nodes from a Json of a node collection.
          * The nodes in the json file must be sequentially numbered from 0 to Number_of_nodes - 1
          */
-        verlet_radius_squared = verlet_radius*verlet_radius;
         std::vector<Index> nn_ids_temp;
         data.resize((node_dict.size()));
         for (auto const& node: node_dict.items()) {
@@ -144,28 +142,8 @@ struct Nodes
                     .pos{pos},
                     .curvature_vec{curvature_vec},
                     .nn_ids{nn_ids_temp},
-//                    .verlet_list={std::vector<Index>(10)},
                     .nn_distances{nn_distances}});
         }
-    }
-
-    //Todo unittest
-    void make_verlet_list()
-    {
-        for (auto& node: data) {
-            node.verlet_list.clear();
-        }
-        for (auto node_p = data.begin(); node_p!=data.end(); ++node_p) {
-            for (auto other_node_p = data.begin(); other_node_p!=node_p; ++other_node_p) {
-                if ((node_p->pos - other_node_p->pos).norm_square()<verlet_radius_squared)
-                {
-                    node_p->verlet_list.push_back(other_node_p->id);
-                    other_node_p->verlet_list.push_back(node_p->id);
-                }
-            }
-
-        }
-
     }
 
     typename std::vector<Node<Real, Index>>::iterator begin(){return data.begin();}
@@ -232,9 +210,6 @@ struct Nodes
         }
         return json_data;
     }
-private:
-    Real verlet_radius;
-    Real verlet_radius_squared;
 };
 }
 #endif //FLIPPY_NODES_HPP

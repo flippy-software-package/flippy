@@ -27,7 +27,7 @@ json const ICOSA_DATA =
 
 TEST_CASE("Correct Read of Icosa Data"){
 
-  Nodes<double, short> icosa_nodes(ICOSA_DATA, 0);
+  Nodes<double, short> icosa_nodes(ICOSA_DATA);
   for (int i = 0; i < 12; ++i) {
     CHECK(icosa_nodes.data[i].id==i );
 
@@ -92,7 +92,7 @@ TEST_CASE("get_distance_to test"){
 TEST_CASE("getter and setter tests for Nodes"){
     using idx = short;
     using real = double;
-    Nodes<real, idx> icosa_nodes(ICOSA_DATA, 0);
+    Nodes<real, idx> icosa_nodes(ICOSA_DATA);
 
     SECTION("nn_ids"){
         CHECK(icosa_nodes.nn_ids(0) ==std::vector<idx>{4,3,2,1,5});
@@ -155,7 +155,7 @@ TEST_CASE("getter and setter tests for Nodes"){
 
 
     SECTION("set_nn_ids"){
-        Nodes<double, int> icosa_nodes_loc(ICOSA_DATA, 0);
+        Nodes<double, int> icosa_nodes_loc(ICOSA_DATA);
         for(int i = 0; i<12;++i){
             for (int j = 0; j<5; ++j) {
                 icosa_nodes_loc.set_nn_id(i, j, 120);

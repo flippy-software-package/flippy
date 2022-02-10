@@ -3,7 +3,7 @@
 #include "json.hpp"
 #include "vec3.hpp"
 #include "Nodes.hpp"
-
+#define TESTING_TRIANGULATION = 1
 #include "Triangulation.hpp"
 using json = nlohmann::json;
 using namespace fp;
@@ -24,11 +24,23 @@ json const ICOSA_DATA =
 	  "10": {"nn_ids": [11,9,6,4,5], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [-27.639320225002113,-85.06508083520399,-44.72135954999579]},
 	  "11": {"nn_ids": [9,8,7,6,10], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [1.2246467991473532e-14,0.0,-100.0]}
   })"_json;
-
+template <typename Real, typename Index>
+void rescale_triangulation(Real R, Triangulation<Real,Index, SPHERICAL_TRIANGULATION>& tr)
+{
+    tr.R_initial=R;
+    tr.recalculate_mass_center();
+    tr.scale_all_nodes_to_R_init();
+    tr.orient_surface_of_a_sphere();
+    tr.initiate_distance_vectors();
+    tr.make_global_geometry();
+    tr.make_verlet_list();
+}
 TEST_CASE("Icosa geometry check test")
 {
     double R = 20.;
-    Triangulation<double, short> icosahedron(ICOSA_DATA, R, 0);
+    Triangulation<double, short, SPHERICAL_TRIANGULATION> icosahedron(ICOSA_DATA,  0);
+    rescale_triangulation(R, icosahedron);
+
     double sin_ = sin(2*M_PI/5.);
     double A_SUB = R*R/(4.*tan(M_PI/3)*pow(sin_, 2));
     auto A_NODE = 5*A_SUB;
@@ -43,7 +55,6 @@ TEST_CASE("Icosa geometry check test")
         CHECK(node.volume==V_NODE_target);
         CHECK(node.scaled_curvature_energy==K_SQUARE_NODE_target);
     }
-
 }
 
 TEST_CASE("Test Geometry Container")
@@ -72,8 +83,8 @@ TEST_CASE("Sphere geometry test")
 {
     double R = 1000.;
     auto all_data = json_read("../../tests/init_files/egg_it_4.json");
-    Triangulation<double, long> sphere(all_data["nodes"], R, 0);
-
+    Triangulation<double, long, SPHERICAL_TRIANGULATION> sphere(all_data["nodes"], 0);
+    rescale_triangulation(R, sphere);
     auto ACCEPTABLE_ERROR = 0.01;
 
     double A_SPHERE = 4*M_PI*R*R;
@@ -128,8 +139,9 @@ TEST_CASE("Ellipse geometry test")
     double R = 2.;
     auto all_data = json_read("../../tests/init_files/egg_it_4.json");
     double x_stretch = 1.4;
-    Triangulation<double, long> ellipse(all_data["nodes"], R, 0);
-    ellipse.ellipse_fy_cell(x_stretch);
+    Triangulation<double, long, SPHERICAL_TRIANGULATION> ellipse(all_data["nodes"], 0);
+    rescale_triangulation(R, ellipse);
+    ellipse.scale_node_coordinates(x_stretch);
 
     auto ACCEPTABLE_ERROR = 0.01;
 
@@ -139,7 +151,7 @@ TEST_CASE("Ellipse geometry test")
     double A_Ellipse = 2.*M_PI*R*R*(1 + (x_stretch/e)*asin(e));
     auto A_Ellipse_target = Approx(A_Ellipse).epsilon(ACCEPTABLE_ERROR);
 
-//    json_dump("../../../../data/ellipse_egg", ellipse.egg_data());
+//    json_dump("../../../../data/ellipse_egg", ellipse.make_egg_data());
 
     SECTION("internally calculated global geometry") {
         CHECK(ellipse.global_geometry().volume==V_Ellipse_target);
@@ -169,8 +181,8 @@ TEST_CASE("Ellipse geometry test for triangulatror mesh")
 {
     double R = 2.;
     double x_stretch = 1.4;
-    Triangulation<double, long> ellipse(15, R, 0);
-    ellipse.ellipse_fy_cell(x_stretch);
+    Triangulation<double, long, SPHERICAL_TRIANGULATION> ellipse(15, R, 0);
+    ellipse.scale_node_coordinates(x_stretch);
 
     auto ACCEPTABLE_ERROR = 0.01;
 
@@ -230,7 +242,7 @@ json const BRICK_DATA =
 
 TEST_CASE("cube geometry test")
 {
-    Triangulation<double, long> cube(CUBE_DATA, 0);
+    Triangulation<double, long, SPHERICAL_TRIANGULATION> cube(CUBE_DATA, 0);
     double ACCEPTABLE_ERROR = 0.01;
     auto A_square = Approx(24.).margin(ACCEPTABLE_ERROR);
     auto V_square = Approx(8).margin(ACCEPTABLE_ERROR);
@@ -249,7 +261,7 @@ TEST_CASE("cube geometry test")
 
 TEST_CASE("Brick geometry test")
 {
-    Triangulation<double, long> brick(BRICK_DATA, 0);
+    Triangulation<double, long, SPHERICAL_TRIANGULATION> brick(BRICK_DATA, 0);
     double ACCEPTABLE_ERROR = 0.01;
     auto A_square = Approx(32.).margin(ACCEPTABLE_ERROR);
     auto V_square = Approx(12).margin(ACCEPTABLE_ERROR);
@@ -290,7 +302,7 @@ json const HYPER_SQUEEZED_BRICK_DATA =
   })"_json;
 TEST_CASE("Hyperstretch geometry test")
 {
-    Triangulation<double, long> brick(HYPERBRICK_DATA, 0);
+    Triangulation<double, long, SPHERICAL_TRIANGULATION> brick(HYPERBRICK_DATA, 0);
     double ACCEPTABLE_ERROR = 0.01;
     auto A_square = Approx(2408.).margin(ACCEPTABLE_ERROR);
     auto V_square = Approx(1200).margin(ACCEPTABLE_ERROR);
@@ -308,7 +320,7 @@ TEST_CASE("Hyperstretch geometry test")
 
 TEST_CASE("Hyperqueeze geometry test")
 {
-    Triangulation<double, long> brick(HYPER_SQUEEZED_BRICK_DATA, 0);
+    Triangulation<double, long, SPHERICAL_TRIANGULATION> brick(HYPER_SQUEEZED_BRICK_DATA, 0);
     double ACCEPTABLE_ERROR = 0.01;
     auto A_square = Approx(8.24).margin(ACCEPTABLE_ERROR);
     auto V_square = Approx(0.12).margin(ACCEPTABLE_ERROR);

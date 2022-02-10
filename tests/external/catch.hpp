@@ -4691,13 +4691,13 @@ public:
 
 template <typename T>
 GeneratorWrapper<T> range(T const& start, T const& end, T const& step) {
-    static_assert(std::is_arithmetic<T>::value && !std::is_same<T, bool>::value, "Type must be numeric");
+    static_assert(std::is_arithmetic<T>::value && !std::is_same<T, bool>::value, "Real must be numeric");
     return GeneratorWrapper<T>(pf::make_unique<RangeGenerator<T>>(start, end, step));
 }
 
 template <typename T>
 GeneratorWrapper<T> range(T const& start, T const& end) {
-    static_assert(std::is_integral<T>::value && !std::is_same<T, bool>::value, "Type must be an integer");
+    static_assert(std::is_integral<T>::value && !std::is_same<T, bool>::value, "Real must be an integer");
     return GeneratorWrapper<T>(pf::make_unique<RangeGenerator<T>>(start, end));
 }
 
@@ -8929,17 +8929,17 @@ namespace detail {
 
     class ResultBase {
     public:
-        enum Type {
+        enum Real {
             Ok, LogicError, RuntimeError
         };
 
     protected:
-        ResultBase( Type type ) : m_type( type ) {}
+        ResultBase( Real type ) : m_type( type ) {}
         virtual ~ResultBase() = default;
 
         virtual void enforceOk() const = 0;
 
-        Type m_type;
+        Real m_type;
     };
 
     template<typename T>
@@ -8951,14 +8951,14 @@ namespace detail {
         }
 
     protected:
-        ResultValueBase( Type type ) : ResultBase( type ) {}
+        ResultValueBase( Real type ) : ResultBase( type ) {}
 
         ResultValueBase( ResultValueBase const &other ) : ResultBase( other ) {
             if( m_type == ResultBase::Ok )
                 new( &m_value ) T( other.m_value );
         }
 
-        ResultValueBase( Type, T const &value ) : ResultBase( Ok ) {
+        ResultValueBase( Real, T const &value ) : ResultBase( Ok ) {
             new( &m_value ) T( value );
         }
 
@@ -9005,7 +9005,7 @@ namespace detail {
         static auto runtimeError( std::string const &message ) -> BasicResult { return { ResultBase::RuntimeError, message }; }
 
         explicit operator bool() const { return m_type == ResultBase::Ok; }
-        auto type() const -> ResultBase::Type { return m_type; }
+        auto type() const -> ResultBase::Real { return m_type; }
         auto errorMessage() const -> std::string { return m_errorMessage; }
 
     protected:
@@ -9021,7 +9021,7 @@ namespace detail {
 
         std::string m_errorMessage; // Only populated if resultType is an error
 
-        BasicResult( ResultBase::Type type, std::string const &message )
+        BasicResult( ResultBase::Real type, std::string const &message )
         :   ResultValueBase<T>(type),
             m_errorMessage(message)
         {

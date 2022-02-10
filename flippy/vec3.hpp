@@ -4,6 +4,7 @@
 #include <ostream>
 #include <iostream>
 #include <cmath>
+#include <concepts>
 
 namespace fp{
 
@@ -21,55 +22,55 @@ namespace fp{
  *  assert(((v1-v2)==fp::vec3<double>{1.,0.,-1.}));
  * ```
  */
-template<typename Type>
+template<std::floating_point Real>
 class vec3
 {
 public:
-    Type x, y, z;
+    Real x, y, z;
 
-    void add(vec3<Type> const& v)
+    void add(vec3<Real> const& v)
     {
         x += v.x;
         y += v.y;
         z += v.z;
     }
 
-    void subtract(vec3<Type> const& v)
+    void subtract(vec3<Real> const& v)
     {
         x -= v.x;
         y -= v.y;
         z -= v.z;
     }
 
-    void scale(Type s)
+    void scale(Real s)
     {
         x = s*x;
         y = s*y;
         z = s*z;
     }
 
-    Type dot(vec3<Type> const& v) const
+    Real dot(vec3<Real> const& v) const
     {
-        Type res = x*v.x + y*v.y + z*v.z;
+        Real res = x*v.x + y*v.y + z*v.z;
         return res;
     }
 
     [[nodiscard]] constexpr std::size_t size() const { return 3; }
 
-    static inline vec3<Type> cross(vec3<Type> const& a, vec3<Type> const& b)
+    static inline vec3<Real> cross(vec3<Real> const& a, vec3<Real> const& b)
     {
-        vec3<Type> res;
+        vec3<Real> res;
         res.x = a.y*b.z - a.z*b.y;
         res.y = a.z*b.x - a.x*b.z;
         res.z = a.x*b.y - a.y*b.x;
         return res;
     }
 
-    vec3<Type> cross(vec3<Type> const& other) const { return cross(*this, other); }
+    vec3<Real> cross(vec3<Real> const& other) const { return cross(*this, other); }
 
-    Type norm() const { return std::sqrt(this->dot(*this)); }
+    Real norm() const { return std::sqrt(this->dot(*this)); }
 
-    Type norm_square() const { return this->dot(*this); }
+    Real norm_square() const { return this->dot(*this); }
 
     void normalize(){
         /**
@@ -78,54 +79,54 @@ public:
         *this= *this/this->norm();
     }
 
-    friend std::ostream& operator<<(std::ostream& os, const vec3<Type>& obj)
+    friend std::ostream& operator<<(std::ostream& os, const vec3<Real>& obj)
     {
         os << "{" << obj.x << ',' << obj.y << ',' << obj.z << '}';
         return os;
     }
 
-    bool operator==(vec3<Type> const& other) const =default;
+    bool operator==(vec3<Real> const& other) const =default;
 
 
     // mathematical operations
-    friend vec3<Type> operator+(vec3<Type> lhs, vec3<Type> const& rhs)
+    friend vec3<Real> operator+(vec3<Real> lhs, vec3<Real> const& rhs)
     {
         lhs+=rhs;
         return lhs;
     }
 
-    friend void operator+=(vec3<Type>& lhs, vec3<Type> const& rhs)
+    friend void operator+=(vec3<Real>& lhs, vec3<Real> const& rhs)
     {
         lhs.add(rhs);
     }
 
-    friend vec3<Type> operator-(vec3<Type> lhs, vec3<Type> const& rhs)
+    friend vec3<Real> operator-(vec3<Real> lhs, vec3<Real> const& rhs)
     {
         lhs-=rhs;
         return lhs;
     }
 
-    friend void operator-=(vec3<Type>& lhs, vec3<Type> const& rhs)
+    friend void operator-=(vec3<Real>& lhs, vec3<Real> const& rhs)
     {
         lhs.subtract(rhs);
     }
 
-    friend vec3<Type> operator*(Type const& lhs, vec3<Type> rhs)
+    friend vec3<Real> operator*(Real const& lhs, vec3<Real> rhs)
     {
         rhs.scale(lhs);
         return rhs;
     }
 
-    friend vec3<Type> operator*(vec3<Type> lhs, Type const& rhs)
+    friend vec3<Real> operator*(vec3<Real> lhs, Real const& rhs)
     {
         lhs.scale(rhs);
         return lhs;
     }
 
-    friend void operator/=(vec3<Type>& lhs, Type const& rhs){
-        lhs.scale((Type)1/rhs);
+    friend void operator/=(vec3<Real>& lhs, Real const& rhs){
+        lhs.scale((Real)1/rhs);
     }
-    friend vec3<Type> operator/(vec3<Type> lhs, Type const& rhs)
+    friend vec3<Real> operator/(vec3<Real> lhs, Real const& rhs)
     {
         lhs/=rhs;
         return lhs;
@@ -133,7 +134,7 @@ public:
 
     template<typename Index>
     requires std::is_integral_v<Index>
-    Type& operator[](Index idx)
+    Real& operator[](Index idx)
     {
         switch (idx) {
             case 0:return x;
@@ -146,7 +147,7 @@ public:
 
     template<typename Index>
     requires std::is_integral_v<Index>
-    const Type& operator[](Index idx) const
+    const Real& operator[](Index idx) const
     {
         switch (idx) {
             case 0:return x;
@@ -157,7 +158,7 @@ public:
         }
     }
 
-    friend vec3<Type> operator-(vec3<Type> v)
+    friend vec3<Real> operator-(vec3<Real> v)
     {
         v.x = -v.x;
         v.y = -v.y;
@@ -165,7 +166,7 @@ public:
         return v;
     }
 
-    friend vec3<Type>& operator-(vec3<Type>&& v)
+    friend vec3<Real>& operator-(vec3<Real>&& v)
     {
         v.x = -v.x;
         v.y = -v.y;

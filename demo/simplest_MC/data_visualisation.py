@@ -301,6 +301,8 @@ if __name__ == '__main__':
     import numpy as np
     import json
 
-    egg_init = SingleTimeFrameImporter.egg_import(f'test_run.json')
+    egg_init = SingleTimeFrameImporter.egg_import(f'test_run_init.json')
     egg_init.make_polygon()
+    egg_final = SingleTimeFrameImporter.egg_import(f'test_run.json')
+    egg_final.make_polygon()
     plt.show()

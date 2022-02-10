@@ -23,7 +23,7 @@ add_executable(${PROJECT_NAME} main.cpp
         local_geometry_test.cpp
         Triangulation_test.cpp
         Triangulator_test.cpp
-        )
+        ../flippy/MonteCarloUpdater.hpp)
 
 enable_testing()
 add_test(${PROJECT_NAME} ${PROJECT_NAME})

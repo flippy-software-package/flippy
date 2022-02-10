@@ -39,7 +39,7 @@ TEST_CASE("correct euler number up to nIter=31 count"){
     std::unordered_set<std::string> edge_name_hash;
     std::string edge_name, face_name_0, face_name_1;
     for(short nIter=0; nIter<=31;++nIter){
-        fp::Triangulation<float, short> trg(nIter, 1.f, 0.f);
+        fp::Triangulation<float, short, fp::SPHERICAL_TRIANGULATION> trg(nIter, 1.f, 0.f);
         for (auto const& node: trg.nodes()) {
             for(auto nn_id: node.nn_ids){
                 edge_name = edge_namer(node.id, nn_id);
