@@ -9,7 +9,13 @@
 namespace fp{
 
 /**
- * Own implementation of a 3D vector.
+ * Internal implementation of a 3D vector.
+ *
+ * !!! vec3 does not throw !!! This means that if you ask vec3 to divide a vector by 0 or more realistically if you
+ * normalize a zero length vector vec3 will not check for the division by zero and will return a nan result!
+ * Since vec3 is used everywhere in flippy, including in very expensive calculations, I decided to omit the security check
+ * for the sake of speed.
+ *
  * To keep the external dependencies low, flippy implements it's own 3D vector class with basic functionality like dot product and cross product
  *
  * Example:
@@ -72,9 +78,13 @@ public:
 
     Real norm_square() const { return this->dot(*this); }
 
-    void normalize(){
+    vec3<Real>const& normalize(){
         /**
-         * normalize vector in place.
+         * normalize vector in place. And return a reference.
+         *
+         * IMPORTANT: if you normalize a zero length vector, you effectively
+         * demand to divide by zero! this function will not do a security check
+         * for you and will just return nan!
          */
         *this= *this/this->norm();
     }
