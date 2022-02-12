@@ -24,7 +24,6 @@ template <typename Real, typename Index>
 void rescale_triangulation(Real R, Triangulation<Real,Index, SPHERICAL_TRIANGULATION>& tr)
 {
     tr.R_initial=R;
-    tr.recalculate_mass_center();
     tr.scale_all_nodes_to_R_init();
     tr.orient_surface_of_a_sphere();
     tr.initiate_distance_vectors();

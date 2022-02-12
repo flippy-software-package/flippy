@@ -131,7 +131,7 @@ class Triangulation
 {
 private:
     explicit Triangulation(Real verlet_radius_inp)
-    :mass_center_({0., 0., 0.}), global_geometry_(), verlet_radius(verlet_radius_inp){}
+    :global_geometry_(), verlet_radius(verlet_radius_inp){}
 public:
     Triangulation() = default;
     //unit tested
@@ -140,7 +140,6 @@ public:
         if constexpr(triangulation_type==SPHERICAL_TRIANGULATION) {
             nodes_ = Nodes<Real, Index>(nodes_input);
             all_nodes_are_bulk();
-            recalculate_mass_center();
             initiate_advanced_geometry();
         }
         else{
@@ -155,7 +154,6 @@ public:
         R_initial = R_initial_input;
         nodes_ = triangulate_sphere_nodes(n_nodes_iter);
         all_nodes_are_bulk();
-        recalculate_mass_center();
         scale_all_nodes_to_R_init();
         orient_surface_of_a_sphere();
         initiate_advanced_geometry();
@@ -165,7 +163,6 @@ public:
     {
         static_assert(triangulation_type==PLANAR_TRIANGULATION, "This initialization is intended for planar triangulations");
         triangulate_planar_nodes(n_length, n_width, length, width);
-        recalculate_mass_center();
         initiate_advanced_geometry();
     }
 
@@ -198,25 +195,22 @@ public:
     }
 
     //unit tested
-    vec3<Real>const& recalculate_mass_center()
+    vec3<Real> calculate_mass_center() const
     {
-        mass_center_ = vec3<Real>{0., 0., 0.};
-        for (Index i = 0; i<nodes_.size(); ++i) { mass_center_ += nodes_.pos(i); }
-        mass_center_ = mass_center_/nodes_.size();
-        return mass_center_;
+        vec3<Real> mass_center = vec3<Real>{0., 0., 0.};
+        for (auto const& node : nodes_) { mass_center += node.pos; }
+        mass_center = mass_center/nodes_.size();
+        return mass_center;
     }
 
     //unit tested
     void move_node(Index node_id, vec3<Real> const& displacement_vector)
     {
         pre_update_geometry = get_two_ring_geometry(node_id);
-        mass_center_ -= nodes_.pos(node_id)*nodes_.area(node_id)/global_geometry_.area;
         nodes_.displace(node_id, displacement_vector);
         update_two_ring_geometry(node_id);
         post_update_geometry = get_two_ring_geometry(node_id);
         update_global_geometry(pre_update_geometry, post_update_geometry);
-        //Todo make sure mass center is not needed in any geometry calculations
-        mass_center_ += nodes_.pos(node_id)*nodes_.area(node_id)/global_geometry_.area;
     }
 
     // unit-tested
@@ -235,7 +229,7 @@ public:
         nodes_[center_node_id].emplace_nn_id(new_value, nodes_[new_value].pos, anchor_pos);
     }
 
-    //Todo unittest
+    //unit tested
     BondFlipData<Index> flip_bond(Index node_id, Index nn_id,
                                   Real min_bond_length_square,
                                   Real max_bond_length_square)
@@ -266,6 +260,7 @@ public:
         return bfd;
     }
 
+    //unit-tested
     void unflip_bond(Index node_id, Index nn_id, BondFlipData<Index> const& common_nns)
     {
         flip_bond_unchecked(common_nns.common_nn_0, common_nns.common_nn_1, nn_id, node_id);
@@ -331,7 +326,7 @@ public:
     };
 
 
-        static std::tuple<Real, vec3<Real>> partial_voronoi_area_and_volume_of_node(vec3<Real> const& lij,
+    static std::tuple<Real, vec3<Real>> partial_voronoi_area_and_volume_of_node(vec3<Real> const& lij,
             vec3<Real> const& lij_p_1)
     {
         /** This function returns values of eqn.'s (82) & (84) from the paper [1]
@@ -365,7 +360,7 @@ public:
         }
 
 //    unit tested
-//    depricated
+    [[deprecated("This function is deprecated and will be removed in a future release. mixed_area which does not take precalculated cotangents is performs expensive calculations use the use the alternative mixed_area function!")]]
     static Real mixed_area(vec3<Real> const& lij, vec3<Real> const& lij_p_1, Real const& triangle_area)
     {
         /** This function returns values of eqn.'s (82) (and two unnamed formulas in the following paragraph) from [1]
@@ -462,7 +457,6 @@ public:
     // Const Viewer Functions
     [[nodiscard]] Index size() const { return nodes_.size(); }
     const Node<Real, Index>& operator[](Index idx) const { return nodes_.data.at(idx); }
-    const vec3<Real>& mass_center() const { return mass_center_; }
     const Nodes<Real, Index>& nodes() const { return nodes_; }
     [[nodiscard]] Json make_egg_data() const { return nodes_.make_data(); }
     [[nodiscard]] const Geometry<Real, Index>& global_geometry() const { return global_geometry_; }
@@ -502,7 +496,6 @@ private:
     Nodes<Real, Index> nodes_;
     std::vector<Index> boundary_nodes_ids;
     std::vector<Index> bulk_nodes_ids;
-    vec3<Real> mass_center_;
     Geometry<Real, Index> global_geometry_;
     Geometry<Real, Index> pre_update_geometry, post_update_geometry;
     mutable vec3<Real> l0_, l1_;
@@ -522,13 +515,14 @@ private:
     {
         static_assert(triangulation_type==SPHERICAL_TRIANGULATION, "This function is only well defined for a spherical triangulation");
         vec3<Real> diff;
+        vec3<Real> mass_center = calculate_mass_center();
         for (Index i = 0; i<nodes_.size(); ++i) {
-            diff = nodes_[i].pos - mass_center_;
+            diff = nodes_[i].pos - mass_center;
             diff.scale(R_initial/diff.norm());
-            diff += mass_center_;
+            diff += mass_center;
             nodes_.set_pos(i, diff);
         }
-        recalculate_mass_center();
+
     }
 
     void update_nn_distance_vectors(Index node_id)
@@ -611,12 +605,12 @@ private:
         static_assert(triangulation_type==SPHERICAL_TRIANGULATION, "This function is only well defined for a spherical triangulation");
         std::vector<Index> nn_ids_temp;
         vec3<Real> li0, li1;
-
-        for (Index i = 0; i<nodes_.size(); ++i) {
+        vec3<Real> mass_center = calculate_mass_center();
+        for (Index i = 0; i<nodes_.size(); ++i) { //ToDo modernize this loop
             nn_ids_temp = order_nn_ids(i);
             li0 = nodes_[nn_ids_temp[0]].pos - nodes_[i].pos;
             li1 = nodes_[nn_ids_temp[1]].pos - nodes_[i].pos;
-            if ((li0.cross(li1)).dot(nodes_[i].pos - mass_center_)<0) {
+            if ((li0.cross(li1)).dot(nodes_[i].pos - mass_center)<0) {
                 std::reverse(nn_ids_temp.begin(), nn_ids_temp.end());
             }
             nodes_.set_nn_ids(i, nn_ids_temp);

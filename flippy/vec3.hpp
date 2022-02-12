@@ -50,6 +50,9 @@ public:
 
     void scale(Real s)
     {
+        /**
+         * scale the vector by a real number s
+         */
         x = s*x;
         y = s*y;
         z = s*z;
@@ -87,6 +90,7 @@ public:
          * for you and will just return nan!
          */
         *this= *this/this->norm();
+        return *this;
     }
 
     friend std::ostream& operator<<(std::ostream& os, const vec3<Real>& obj)

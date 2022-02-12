@@ -11,7 +11,6 @@ template <typename Real, typename Index>
 void rescale_triangulation(Real R, Triangulation<Real,Index, SPHERICAL_TRIANGULATION>& tr)
 {
     tr.R_initial=R;
-    tr.recalculate_mass_center();
     tr.scale_all_nodes_to_R_init();
     tr.orient_surface_of_a_sphere();
     tr.initiate_distance_vectors(); //Todo if this is done before orient surface we can save time
@@ -54,9 +53,9 @@ fp::Json const STAR_DATA =
 template<std::floating_point Real, std::integral Index>
 void radius_scaling_test(Triangulation<Real, Index, SPHERICAL_TRIANGULATION> const& triangulation, Real r_init){
     auto target = Approx(r_init).margin(0.001);
-
+    auto mc = triangulation.calculate_mass_center();
     for (long i = 0; i<triangulation.size(); ++i) {
-        CHECK((triangulation[i].pos - triangulation.mass_center()).norm()==target);
+        CHECK((triangulation[i].pos - mc).norm()==target);
     }
 
 }
@@ -132,7 +131,9 @@ TEST_CASE("Proper move")
         icosa_triangulation.move_node(0, displ2);
 //        auto copy_icosa_triangulation = icosa_triangulation;
         icosa_triangulation.move_node(0, -displ2);
-        CHECK((copy_icosa_triangulation.mass_center() - icosa_triangulation.mass_center()).norm()
+        vec3<double> copy_mc = copy_icosa_triangulation.calculate_mass_center();
+        vec3<double> mc = icosa_triangulation.calculate_mass_center();
+        CHECK((copy_mc-mc).norm()
                 ==Approx(0).margin(0.001));
         for (int i = 0; i<icosa_triangulation.size(); ++i) {
             CHECK(copy_icosa_triangulation.nodes_[i].area==Approx(icosa_triangulation.nodes_[i].area).margin(0.01));
@@ -152,9 +153,36 @@ TEST_CASE("Proper move")
 TEST_CASE("Proper topology change")
 {
 
-    SECTION("CHECK two common neighbours and normal common neighbours on icosa examples") {
+    SECTION("flip_bond unit test"){
+        Triangulation<double, long, SPHERICAL_TRIANGULATION> icosa(ICOSA_DATA, 0);
+        icosa.orient_surface_of_a_sphere();
+//        fp::print(icosa[0].nn_ids);
+//        fp::print(icosa[1].nn_ids);
+//        fp::print(icosa[2].nn_ids);
+//        fp::print(icosa[7].nn_ids);
+        auto bfd = icosa.flip_bond(1,2, 0, MAXFLOAT);
+        CHECK(bfd.flipped==true);
+        CHECK(icosa[1].nn_ids==std::vector<long>{6,7,0,5});
+        CHECK(icosa[2].nn_ids==std::vector<long>{3,0,7,8});
+        CHECK(icosa[0].nn_ids==std::vector<long>{3,4,5,1,7,2});
+        CHECK(icosa[7].nn_ids==std::vector<long>{2,0,1,6,11,8});
+    }
+
+    SECTION("Property check: unflip reverses flip"){
         double r_init = 1;
-        Triangulation<double, long, SPHERICAL_TRIANGULATION> icosa_triangulation(ICOSA_DATA, r_init);
+        Triangulation<double, long, SPHERICAL_TRIANGULATION> sphere(10, r_init, 0);
+        for(int repeat=0; repeat<10; ++repeat) {
+            long rand_node_id = rand()%sphere.size();
+            auto nn_ids = sphere[rand_node_id].nn_ids;
+            long rand_nn_id = nn_ids[rand()%nn_ids.size()];
+            auto bfd = sphere.flip_bond(rand_node_id, rand_nn_id, 0, MAXFLOAT);
+            sphere.unflip_bond(rand_node_id, rand_nn_id, bfd);
+            CHECK(bfd.flipped==true);
+            CHECK(nn_ids==sphere[rand_node_id].nn_ids);
+        }
+    }
+    SECTION("CHECK two common neighbours and normal common neighbours on icosa examples") {
+        Triangulation<double, long, SPHERICAL_TRIANGULATION> icosa_triangulation(ICOSA_DATA, 0);
 
         std::array<long, 2> two_cnns = icosa_triangulation.two_common_neighbours(11, 1);
         std::vector<long> cnns = icosa_triangulation.common_neighbours(11, 1);
