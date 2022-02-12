@@ -9,7 +9,7 @@ TEST_CASE("proper initiation for vec3"){
 
   SECTION("instantiation values are correct") {
 	fp::vec3<double> v0{1, 12, 3};
-	REQUIRE(v0[0]==10);
+	REQUIRE(v0[0]==1);
 	REQUIRE(v0[1]==12);
 	REQUIRE(v0[2]==3);
   }
