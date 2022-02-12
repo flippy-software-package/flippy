@@ -22226,6 +22226,9 @@ public:
 
     void scale(Real s)
     {
+        /**
+         * scale the vector by a real number s
+         */
         x = s*x;
         y = s*y;
         z = s*z;

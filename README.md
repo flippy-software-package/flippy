@@ -109,7 +109,7 @@ int main(){
     fp::MonteCarloUpdater<double, int, SimulationParameters, std::mt19937, fp::SPHERICAL_TRIANGULATION> mc_updater(tr, prms, surface_energy_area_volume_ensemble, rng, l_min, l_max);
 
     fp::vec3<double> displ{}; // declaring a 3d vector (using flippy's built in vec3 type) for a later use as a random direction vector
-    std::uniform_real_distribution<double> dx_distr(-prms.linear_displ, prms.linear_displ); //define a distribution from which the small displacements in x y and z directions will be drawn
+    std::uniform_real_distribution<double> displ_distr(-prms.linear_displ, prms.linear_displ); //define a distribution from which the small displacements in x y and z directions will be drawn
 
     tr.scale_node_coordinates(1,1,0.8); // squish the sphere in z direction to break the initial symmetry. This speeds up the convergence to a biconcave shape greatly
     fp::Json data_init = {{"nodes", tr.make_egg_data()}};
@@ -117,9 +117,7 @@ int main(){
 
     std::vector<int> shuffled_ids;
     shuffled_ids.reserve(tr.size());
-    for(auto const& node: tr.nodes()){
-        shuffled_ids.push_back(node.id);
-    }
+    for(auto const& node: tr.nodes()){ shuffled_ids.push_back(node.id);} //create a vector that contains all node ids. We can shuffle this vector in each MC step, to iterate randomly through the nodes
     double progress=0;
 
     for(int t=1; t<prms.max_mc_steps+1; ++t){
@@ -140,7 +138,7 @@ int main(){
         }
         for(int update_step=0; update_step<prms.surface_updates_per_mc_step;++update_step) {
             for (int node_id: shuffled_ids) { // we first loop through all the beads and move them
-                displ = {dx_distr(rng), dx_distr(rng), dx_distr(rng)};
+                displ = {displ_distr(rng), displ_distr(rng), displ_distr(rng)};
                 mc_updater.move_MC_updater(tr[node_id], displ);
             }
             std::shuffle(shuffled_ids.begin(), shuffled_ids.end(), rng); //then we shuffle the bead_ids
