@@ -1,7 +1,6 @@
 #include "external/catch.hpp"
 #include <array>
 #include <iostream>
-#include "json.hpp"
 #include "flippy.hpp"
 
 template<typename Index> std::string edge_namer(Index a, Index b){

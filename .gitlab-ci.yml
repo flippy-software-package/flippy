@@ -1,11 +1,17 @@
 stages:
-  - build
+  - test_single_header
   - test
 
-build:
-  stage: build
+test_single_header:
+  stage: test_single_header
   script:
-    - echo "nothing to build"
+    - cd tests/
+    - bash build_tests_for_single_header_flippy
+    - cd cmake-build-default
+    - ./flippy_test
+    - cd ..
+    - ./do_tests
+    - echo "done testing"
 
 test:
   stage: test

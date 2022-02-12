@@ -302,7 +302,7 @@ if __name__ == '__main__':
     import json
 
     egg_init = SingleTimeFrameImporter.egg_import(f'test_run_init.json')
-    egg_init.make_polygon()
-    egg_final = SingleTimeFrameImporter.egg_import(f'test_run.json')
+    egg_init.make_polygon(no_box=False)
+    egg_final = SingleTimeFrameImporter.egg_import(f'test_run_final.json')
     egg_final.make_polygon()
     plt.show()

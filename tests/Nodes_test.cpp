@@ -1,14 +1,10 @@
 #include "external/catch.hpp"
-#include "json.hpp"
 #include <iostream>
-#include "utilities/debug_utils.hpp"
-#include "vec3.hpp"
-#include "Nodes.hpp"
+#include "flippy.hpp"
 
-using json = nlohmann::json;
 using namespace fp;
 
-json const ICOSA_DATA =
+fp::Json const ICOSA_DATA =
 	R"({
 	  "0":	{"nn_ids": [4,3,2,1,5],   "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0.0,0.0,100.0]},
 	  "1":  {"nn_ids": [7,6,2,5,0],   "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [89.44271909999158,0.0,44.721359549995796]},

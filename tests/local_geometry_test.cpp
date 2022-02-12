@@ -1,15 +1,11 @@
 #include "external/catch.hpp"
 #include <iostream>
-#include "json.hpp"
-#include "vec3.hpp"
-#include "Nodes.hpp"
 #define TESTING_TRIANGULATION = 1
-#include "Triangulation.hpp"
-using json = nlohmann::json;
+#include "flippy.hpp"
 using namespace fp;
 const double EPSILON = 1e-9;
 
-json const ICOSA_DATA =
+fp::Json const ICOSA_DATA =
         R"({
 	  "0":	{"nn_ids": [4,2,3,1,5],  "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0.0,0.0,100.0]},
 	  "1":  {"nn_ids": [7,6,2,5,0],  "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [89.44271909999158,0.0,44.721359549995796]},
@@ -216,7 +212,7 @@ TEST_CASE("Ellipse geometry test for triangulatror mesh")
     }
 }
 
-json const CUBE_DATA =
+fp::Json const CUBE_DATA =
         R"({
 	  "0":	{"nn_ids": [3,2,1,4],   "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0,0,0]},
 	  "1":  {"nn_ids": [0,2,6,5,4], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0,2,0]},
@@ -228,7 +224,7 @@ json const CUBE_DATA =
 	  "7":  {"nn_ids": [6,2,3,4,5], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [2,0,-2]}
   })"_json;
 
-json const BRICK_DATA =
+fp::Json const BRICK_DATA =
         R"({
 	  "0":	{"nn_ids": [3,2,1,4],   "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0,0,0]},
 	  "1":  {"nn_ids": [0,2,6,5,4], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0,2,0]},
@@ -277,7 +273,7 @@ TEST_CASE("Brick geometry test")
     }
 
 }
-json const HYPERBRICK_DATA =
+fp::Json const HYPERBRICK_DATA =
         R"({
 	  "0":	{"nn_ids": [3,2,1,4],   "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0,0,0]},
 	  "1":  {"nn_ids": [0,2,6,5,4], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0,2,0]},
@@ -289,7 +285,7 @@ json const HYPERBRICK_DATA =
 	  "7":  {"nn_ids": [6,2,3,4,5], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [300,0,-2]}
   })"_json;
 
-json const HYPER_SQUEEZED_BRICK_DATA =
+fp::Json const HYPER_SQUEEZED_BRICK_DATA =
         R"({
 	  "0":	{"nn_ids": [3,2,1,4],   "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0,0,0]},
 	  "1":  {"nn_ids": [0,2,6,5,4], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0,2,0]},

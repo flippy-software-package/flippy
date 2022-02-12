@@ -5,5 +5,5 @@ if [ -d $cmakeDir ]; then
 fi
 mkdir cmake-build-default
 cd $cmakeDir || exit
-cmake -DSINGLE_HEADER_TEST=0 -E env CXXFLAGS="--coverage" cmake ..
+cmake -DSINGLE_HEADER_TEST=1 -E env CXXFLAGS="--coverage" cmake ..
 make VERBOSE=1

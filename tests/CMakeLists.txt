@@ -9,8 +9,16 @@ set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} -O3")
 
 include_directories(.)
 include_directories(external)
-include_directories(../flippy)
-include_directories(../flippy/external)
+
+
+if (${SINGLE_HEADER_TEST})
+    message("testing SINGLE_HEADER_FLIPPY")
+    include_directories(../single_header_flippy)
+else()
+    message("testing FLIPPY")
+    include_directories(../flippy)
+    include_directories(../flippy/external)
+endif ()
 
 set_source_files_properties(../external
         PROPERTIES
@@ -23,7 +31,7 @@ add_executable(${PROJECT_NAME} main.cpp
         local_geometry_test.cpp
         Triangulation_test.cpp
         Triangulator_test.cpp
-        ../flippy/MonteCarloUpdater.hpp)
+        )
 
 enable_testing()
 add_test(${PROJECT_NAME} ${PROJECT_NAME})

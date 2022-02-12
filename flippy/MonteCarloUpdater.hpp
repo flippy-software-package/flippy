@@ -17,7 +17,8 @@ private:
     std::function<Real(fp::Node<Real, Index> const&, fp::Triangulation<Real, Index, triangulation_type> const&, EnergyFunctionParameters const&)> energy_function;
     RandomNumberEngine& rng;
     std::uniform_real_distribution<Real> unif_distr_on_01;
-    Real min_bond_length_square, max_bond_length_square;
+    Real kBT_{1};
+    Real min_bond_length_square{0.}, max_bond_length_square{MAXFLOAT};
     Index move_attempt{0}, bond_length_move_rejection{0},move_back{0};
     Index flip_attempt{0}, bond_length_flip_rejection{0}, flip_back{0};
 
@@ -35,7 +36,11 @@ public:
     bool move_needs_undoing()
     {
         e_diff = e_old - e_new;
-        return (e_diff<0) && (unif_distr_on_01(rng)>std::exp(e_diff));
+        if(kBT_>0){ //temperature can safely be put to 0, this will make the algorithm greedy
+            return (e_diff<0) && (unif_distr_on_01(rng)>std::exp(e_diff/kBT_));
+        }else{
+            return (e_diff<0);
+        }
     }
 
     bool new_neighbour_distances_are_between_min_and_max_length(fp::Node<Real, Index> const& node,
@@ -56,12 +61,19 @@ public:
          * 3d vectors, i.e. nn_dist is of type fp::vec3. Then check if the displacement would make any of the
          * nn_distance vectors longer than the allowed max length.
          */
-        Real distance_square;
-        for (auto const& nn_dist: node.nn_distances)
-        {
-            distance_square=(nn_dist - displacement).norm_square();
-            if ((distance_square>max_bond_length_square)||(distance_square<min_bond_length_square)) { return false; }
+
+        Real distance_square_new, distance_square_old;
+        for (auto const& nn_dist: node.nn_distances){
+            distance_square_new=(nn_dist - displacement).norm_square();
+            distance_square_old=nn_dist.norm_square();
+            if ((distance_square_new>max_bond_length_square) && (distance_square_old < max_bond_length_square)) {
+                return false;
+            }
+            if ((distance_square_old>min_bond_length_square) && (distance_square_new<min_bond_length_square)) {
+                return false;
+            }
         }
+
         return true;
     }
 
@@ -74,11 +86,12 @@ public:
          * 3d vectors, i.e. nn_dist is of type fp::vec3. Then check if the displacement would make any of the
          * nn_distance vectors longer than the allowed max length.
          */
-        Real distance_square;
+        Real distance_square_new, distance_square_old;
         for (auto const& verlet_neighbour_id: node.verlet_list)
         {
-            distance_square=(triangulation[verlet_neighbour_id].pos - displacement).norm_square();
-            if (distance_square<min_bond_length_square) { return false; }
+            distance_square_new=(triangulation[verlet_neighbour_id].pos - node.pos - displacement).norm_square();
+            distance_square_old=(triangulation[verlet_neighbour_id].pos - node.pos).norm_square();
+            if ((distance_square_new<min_bond_length_square)&&(distance_square_old>min_bond_length_square)) { return false; }
         }
         return true;
     }
@@ -106,6 +119,18 @@ public:
             if (move_needs_undoing()) { triangulation.unflip_bond(node.id, nn_id, bfd); ++flip_back;}
         }else{++bond_length_flip_rejection;}
     }
+
+
+    void reset_kBT(Real kBT){kBT_=kBT;}
+
+    Real kBT(){return kBT_;}
+    Index move_attempt_count() const {return move_attempt;}
+    Index bond_length_move_rejection_count() const {return bond_length_move_rejection;}
+    Index move_back_count() const {return move_back;}
+    Index flip_attempt_count() const {return flip_attempt;}
+    Index bond_length_flip_rejection_count() const {return bond_length_flip_rejection;}
+    Index flip_back_count() const {return flip_back;}
+
 
 };
 }

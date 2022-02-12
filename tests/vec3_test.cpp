@@ -1,7 +1,7 @@
 #define CATCH_CONFIG_ENABLE_BENCHMARKING
 #include "catch.hpp"
 
-#include "vec3.hpp"
+#include "flippy.hpp"
 
 const double EPSILON = 1e-9;
 

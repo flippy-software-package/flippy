@@ -1,16 +1,10 @@
 #include "external/catch.hpp"
 #include <array>
 #include <iostream>
-#include "json.hpp"
-
-
-#include "vec3.hpp"
-#include "Nodes.hpp"
 
 #define TESTING_TRIANGULATION = 1
-#include "Triangulation.hpp"
+#include "flippy.hpp"
 
-using json = nlohmann::json;
 using namespace fp;
 
 template <typename Real, typename Index>
@@ -25,7 +19,7 @@ void rescale_triangulation(Real R, Triangulation<Real,Index, SPHERICAL_TRIANGULA
     tr.make_verlet_list();
 }
 
-json const ICOSA_DATA =
+fp::Json const ICOSA_DATA =
         R"({
 	  "0":	{"nn_ids": [4,2,3,1,5],   "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0.0,0.0,100.0]},
 	  "1":  {"nn_ids": [7,6,2,5,0],   "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [89.44271909999158,0.0,44.721359549995796]},
@@ -42,7 +36,7 @@ json const ICOSA_DATA =
   })"_json;
 
 // This topology was created by hand. The nn_ids order matters and makes the surface well oriented.
-json const STAR_DATA =
+fp::Json const STAR_DATA =
         R"({
 	  "2":	 {"nn_ids": [4, 3, 6, 7, 9, 10],       "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0.0,0.0,0.0]},
 	  "3":  {"nn_ids": [8, 6, 2, 4, 5, 1],         "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [1.0,0.0,0.0]},

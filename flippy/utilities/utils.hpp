@@ -8,6 +8,7 @@
 #include <fstream>
 #include <utility>
 #include <filesystem>
+#include <type_traits>
 
 namespace fp {
 
@@ -47,6 +48,17 @@ template<typename T>
 [[maybe_unused]] static void make_dir(std::string const& path){
     std::filesystem::path dir(path);
     std::filesystem::create_directories(dir);
+}
+
+
+
+static std::string stream_particle(std::string const& name, auto const& vec, std::stringstream& s){
+        s<<name<<' '<<stream_vec3(vec)<<'\n';
+        return s.str();
+}
+
+[[maybe_unused]] static void stream_xyz_data(){
+
 }
 }
 #endif
