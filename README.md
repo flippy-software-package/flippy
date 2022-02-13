@@ -87,7 +87,7 @@ double surface_energy_area_volume_ensemble([[maybe_unused]]fp::Node<double, int>
 int main(){
     fp::print("starting"); // write the string "starting" to the standard out. fp is flippy's namespace and print is a built-in print function
     fp::Timer timer; //setting up a timer that will print to console how long the simulation took
-    int n_triang = 8; // triangulation iteration number of nodes N_node=12+30*n+20*n*(n-1)/2 where n is the same as n_triang
+    int n_triang = 14; // triangulation iteration number of nodes N_node=12+30*n+20*n*(n-1)/2 where n is the same as n_triang
     double l_min = 2;
     double R = l_min/(2*sin(asin(1./(2*sin(2.*M_PI/5.)))/(n_triang+1.))); // estimate of a typical bond length in the initial triangulation and then create a sphere such that the initial bond length are close to minimal. This formula is derived from equidistant subtriangulation of an icosahedron, where geodesic distances are used as a distance measure.
     double l_max = 2.5*l_min; // if you make l_max closer to l_min bond_flip acceptance rate will go down
@@ -105,7 +105,7 @@ int main(){
     std::mt19937 rng(random_number_generator_seed()); // create a random number generator and seed it with current time
 
     // All the flippy magic is happening on the following two lines
-    fp::Triangulation<double, int> tr(prms.n_triang, prms.R, 2*l_max);
+    fp::Triangulation<double, int> tr(prms.n_triang, prms.R, 2*l_min);
     fp::MonteCarloUpdater<double, int, SimulationParameters, std::mt19937, fp::SPHERICAL_TRIANGULATION> mc_updater(tr, prms, surface_energy_area_volume_ensemble, rng, l_min, l_max);
 
     fp::vec3<double> displ{}; // declaring a 3d vector (using flippy's built in vec3 type) for a later use as a random direction vector

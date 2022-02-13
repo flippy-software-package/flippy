@@ -9,8 +9,6 @@ test_single_header:
     - bash build_tests_for_single_header_flippy
     - cd cmake-build-default
     - ./flippy_test
-    - cd ..
-    - ./do_tests
     - echo "done testing"
 
 test:
