@@ -4,23 +4,20 @@
 [![licence](https://img.shields.io/badge/licence-MIT-green)](https://gitlab.tudelft.nl/idema-group/flippy/-/blob/master/LICENSE)
 [![EMail](https://img.shields.io/badge/EMail-D14836?logo=Mail.ru&logoColor=white&logoWidth=20)](mailto:flippy@mailbox.org)
 # flippy
+
+<img src="assets/flippy.png" alt="flippy" width="300"/> 
+
 c++ package for dynamically triangulated membrane simulations.
 
+[[_TOC_]]
 
-|  <img src="assets/flippy.png" alt="flippy" width="300"/>  | [_TOC_] 
-|:---------------------------------------------------------:|:--------
-
-## Gallery
+# Gallery
 
 <img src="https://surfdrive.surf.nl/files/index.php/s/6HCtX7B4NwE6w48/download" alt="rbc" width="300">
 <img src="https://surfdrive.surf.nl/files/index.php/s/1O3oJBNMT0vLxIv/download" alt="bubble_collision" width="300">
 <img src="https://surfdrive.surf.nl/files/index.php/s/mua39VAvdxmobD4/download" alt="cell division" width="300">
 
-## Current Version
-
-current release [![release version](https://img.shields.io/badge/dynamic/json?url=https://gitlab.tudelft.nl/idema-group/flippy/-/raw/master/VERSION.json&query=$.*&color=blue&label=version)](https://gitlab.tudelft.nl/idema-group/flippy/-/releases) is experimental. This means that the API may change significantly. 
-
-## Support
+# Support
 Flippy is still in active development and the documentation is almost non-existent, but I try my best to reply to e-mails and provide support for scientists who want to use flippy.
 ### for questions about general usage
 please use the support email [![EMail](https://img.shields.io/badge/EMail-D14836?logo=Mail.ru&logoColor=white&logoWidth=20)](mailto:flippy@mailbox.org).
@@ -32,33 +29,22 @@ again the [issues](https://gitlab.tudelft.nl/idema-group/flippy/-/issues) page c
 write me an email!
 
 
-## Release Version Nomenclature
-
-This repository follows [Semantic Versioning](https://semver.org/) guidelines.
-
-Given a version number *MAJOR*.*MINOR*.*PATCH*, the flippy project will increment the:
-
-- *MAJOR* version when you make incompatible API changes,
-- *MINOR* version when you add functionality in a backwards compatible manner, and
-- *PATCH* version when you make backwards compatible bug fixes.
-
-Additional labels for pre-release and build metadata are available as extensions to the *MAJOR*.*MINOR*.*PATCH* format.
-
-## licence 
-
-*flippy* is under MIT License, which means you can do pretty much anything with it. For more information read the `LICENCE` file.
-
-## How to get it
+# How to get it
 
 *flippy* is a headers only library, so all you need to is to download the `flippy` subfolder and copy it into your project.
 
-## Documentation
+Or if you prefer using a single header file you can just download the [flippy.hpp](https://gitlab.tudelft.nl/idema-group/flippy/-/raw/master/single_header_flippy/flippy.hpp) header from the `single_header_flippy` folder.
+
+# Documentation
 You can find flippy's [user manual](https://gitlab.tudelft.nl/idema-group/flippy/-/wikis/User_Manual) and automatically generated code [documentation](https://gitlab.tudelft.nl/idema-group/flippy/-/wikis/Documentation) over on the [wiki](https://gitlab.tudelft.nl/idema-group/flippy/-/raw/master/docs/mainpage.md).
 
-## Examples of usage
+# Examples of usage
 
-This is a simple example of a fluctuating sphere in under 100 lines. The code is not as elegant as it could be, but it is general enough to be used as a starting pint in a real project. This code assumes that the `flippy` project is in the same folder as the main file.
-This code saves a data file in the folder where the binary file will be executed, under the name `test_run.json` which is a full snapshot of the final configuration.
+This is a simple example of a monte carlo update of a spherical triangulation in under 100 lines. The code will run for several seconds to several minutes depending on the strength of your cpu and will produce a biconcave shape, i.e. something resembling a red blood cell.
+This code assumes that the single header `flippy.hpp` is in the same folder as the main file.
+This code saves two data files in the folder where the binary file will be executed, under the names `test_run_init.json` and `test_run_final.json` which are full snapshots of the initial and final configurations.
+
+This code can be found in the subfolder `demo/simplest_MC` together with a python script that visualizes the data, and a simple `CMake` file that can be used to build the code.
 ```cpp
 //demo/simplest_MC/main.cpp
 
@@ -159,4 +145,50 @@ int main(){
     return 0;
 }
 ```
-This code can be found in the subfolder `demo/simplest_MC` together with a python script that visualizes the data, and a simple `CMake` file that can be used to build the code.
+
+# misc.
+
+
+# Versioning
+
+Crrent release [![release version](https://img.shields.io/badge/dynamic/json?url=https://gitlab.tudelft.nl/idema-group/flippy/-/raw/master/VERSION.json&query=$.*&color=blue&label=version)](https://gitlab.tudelft.nl/idema-group/flippy/-/releases) is experimental. This means that the API may change significantly. Every input on the usability of `flippy`'s API is very welcome.
+
+This repository follows [Semantic Versioning](https://semver.org/) guidelines.
+
+Given a version number *MAJOR*.*MINOR*.*PATCH*, the flippy project will increment the:
+
+- *MAJOR* version when we make incompatible API changes,
+- *MINOR* version when we add functionality in a backwards compatible manner, and
+- *PATCH* version when we make backwards compatible bug fixes.
+
+Additional labels for pre-release and build metadata are available as extensions to the *MAJOR*.*MINOR*.*PATCH* format.
+
+as long as *MAJOR* version is 0 the API is unstable and any *MINOR* update can be backwards incompatible!
+
+## well tested part of the api
+
+- spherical triangulation
+- vec3
+- nodes
+- debug utils / utils
+
+## new and weakly tested
+
+- MonteCarloUpdater
+- planar triangulation
+
+## coming soon
+
+- tubular triangulation
+
+## could be implemented at some point
+
+- solid bodies
+    - other objects that the triangulations could interact with
+- force based updater
+    - a utility class like MonteCarloUpdater, which uses force balance functions to update node positions
+
+
+## licence
+
+*flippy* is under MIT License, which means you can do pretty much anything with it. For more information read the `LICENCE` file.
