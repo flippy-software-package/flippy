@@ -172,6 +172,13 @@ public:
             case BOTTOM_EDGE:return hash_node(c1, c2, j);
             case DIAGONAL_EDGE:return hash_node(c0, c2, j);
             case BULK:return hash_node(c0, c1, c2, i, j);
+            default:
+                std::cerr<<"something went wrong! provided indices i: "
+                         <<i<<" and j: "
+                         <<j<<" together with the maxIdx: "<<maxIdx
+                         <<" produced a wrong region.\n";
+                exit(12);
+                break;
         }
     }
 
@@ -218,6 +225,13 @@ public:
                 neighbour_hash.push_back(hash_any(c0, c1, c2, i + 1, j + 1, maxIdx));
                 neighbour_hash.push_back(hash_any(c0, c1, c2, i + 1, j, maxIdx));
                 return neighbour_hash;
+            default:
+                std::cerr<<"something went wrong! provided indices i: "
+                         <<i<<" and j: "
+                         <<j<<" together with the maxIdx: "<<maxIdx
+                         <<" produced a wrong region.\n";
+                exit(12);
+                break;
         }
 
     }

@@ -1,6 +1,6 @@
 #! /bin/bash
 cmakeDir="cmake-build-default"
-reportDir=cmake-build-default/CMakeFiles/flippy_test.dir
+reportDir=${cmakeDir}/CMakeFiles/flippy_test.dir
 cd ${cmakeDir} || exit
 ctest
 cd ..
