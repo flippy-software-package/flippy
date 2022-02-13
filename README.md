@@ -6,9 +6,9 @@
 # flippy
 c++ package for dynamically triangulated membrane simulations.
 
-<img src="assets/flippy.png" alt="flippy" width="300"/>
 
-[[_TOC_]]
+|  <img src="assets/flippy.png" alt="flippy" width="300"/>  | [[_TOC_]] 
+|:---------------------------------------------------------:|:--------
 
 ## Gallery
 
