@@ -7,18 +7,18 @@ const double EPSILON = 1e-9;
 
 fp::Json const ICOSA_DATA =
         R"({
-	  "0":	{"nn_ids": [4,2,3,1,5],  "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0.0,0.0,100.0]},
-	  "1":  {"nn_ids": [7,6,2,5,0],  "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [89.44271909999158,0.0,44.721359549995796]},
-	  "2":  {"nn_ids": [7,8,3,1,0],  "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [27.639320225002102,85.06508083520399,44.721359549995796]},
-	  "3":  {"nn_ids": [9,8,4,0,2],  "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [-72.36067977499789,52.57311121191337,44.7213595499958]},
-	  "4":  {"nn_ids": [9,10,3,5,0], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [-72.3606797749979,-52.57311121191336,44.7213595499958]},
-	  "5":  {"nn_ids": [6,10,4,1,0], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [27.639320225002088,-85.065080835204,44.7213595499958]},
-	  "6":  {"nn_ids": [11,7,10,1,5],"curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [72.36067977499789,-52.57311121191336,-44.72135954999579]},
-	  "7":  {"nn_ids": [11,8,6,2,1], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [72.36067977499789,52.57311121191336,-44.72135954999579]},
-	  "8":  {"nn_ids": [11,9,7,3,2], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [-27.639320225002095,85.06508083520399,-44.72135954999579]},
-	  "9":  {"nn_ids": [11,8,10,4,3],"curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [-89.44271909999158,1.0953573965284053e-14,-44.72135954999579]},
-	  "10": {"nn_ids": [11,9,6,4,5], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [-27.639320225002113,-85.06508083520399,-44.72135954999579]},
-	  "11": {"nn_ids": [9,8,7,6,10], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [1.2246467991473532e-14,0.0,-100.0]}
+	  "0":	{"nn_ids": [4,2,3,1,5],   "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0.0,0.0,100.0]},
+	  "1":  {"nn_ids": [7,6,2,5,0],   "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [89.44271909999158,0.0,44.721359549995796]},
+	  "2":  {"nn_ids": [7,8,3,1,0],   "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [27.639320225002102,85.06508083520399,44.721359549995796]},
+	  "3":  {"nn_ids": [9,8,4,0,2],   "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [-72.36067977499789,52.57311121191337,44.7213595499958]},
+	  "4":  {"nn_ids": [9,10,3,5,0],  "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [-72.3606797749979,-52.57311121191336,44.7213595499958]},
+	  "5":  {"nn_ids": [6,10,4,1,0],  "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [27.639320225002088,-85.065080835204,44.7213595499958]},
+	  "6":  {"nn_ids": [11,7,10,1,5], "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [72.36067977499789,-52.57311121191336,-44.72135954999579]},
+	  "7":  {"nn_ids": [11,8,6,2,1],  "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [72.36067977499789,52.57311121191336,-44.72135954999579]},
+	  "8":  {"nn_ids": [11,9,7,3,2],  "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [-27.639320225002095,85.06508083520399,-44.72135954999579]},
+	  "9":  {"nn_ids": [11,8,10,4,3], "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [-89.44271909999158,1.0953573965284053e-14,-44.72135954999579]},
+	  "10": {"nn_ids": [11,9,6,4,5],  "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [-27.639320225002113,-85.06508083520399,-44.72135954999579]},
+	  "11": {"nn_ids": [9,8,7,6,10],  "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [1.2246467991473532e-14,0.0,-100.0]}
   })"_json;
 template <typename Real, typename Index>
 void rescale_triangulation(Real R, Triangulation<Real,Index, SPHERICAL_TRIANGULATION>& tr)
@@ -77,7 +77,7 @@ TEST_CASE("Test Geometry Container")
 TEST_CASE("Sphere geometry test")
 {
     double R = 1000.;
-    auto all_data = json_read("../../tests/init_files/egg_it_4.json");
+    auto all_data = json_read("../../tests/init_files/egg_init.json");
     Triangulation<double, long, SPHERICAL_TRIANGULATION> sphere(all_data["nodes"], 0);
     rescale_triangulation(R, sphere);
     auto ACCEPTABLE_ERROR = 0.01;
@@ -132,7 +132,7 @@ TEST_CASE("Sphere geometry test")
 TEST_CASE("Ellipse geometry test")
 {
     double R = 2.;
-    auto all_data = json_read("../../tests/init_files/egg_it_4.json");
+    auto all_data = json_read("../../tests/init_files/egg_init.json");
     double x_stretch = 1.4;
     Triangulation<double, long, SPHERICAL_TRIANGULATION> ellipse(all_data["nodes"], 0);
     rescale_triangulation(R, ellipse);
@@ -172,7 +172,7 @@ TEST_CASE("Ellipse geometry test")
     }
 }
 
-TEST_CASE("Ellipse geometry test for triangulatror mesh")
+TEST_CASE("Ellipse geometry test for triangulator mesh")
 {
     double R = 2.;
     double x_stretch = 1.4;
@@ -213,26 +213,26 @@ TEST_CASE("Ellipse geometry test for triangulatror mesh")
 
 fp::Json const CUBE_DATA =
         R"({
-	  "0":	{"nn_ids": [3,2,1,4],   "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0,0,0]},
-	  "1":  {"nn_ids": [0,2,6,5,4], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0,2,0]},
-	  "2":  {"nn_ids": [1,0,3,7,6], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [2,2,0]},
-	  "3":  {"nn_ids": [0,4,7,2],   "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [2,0,0]},
-	  "4":  {"nn_ids": [3,0,1,5,7], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0,0,-2]},
-	  "5":  {"nn_ids": [6,7,4,1],   "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0,2,-2]},
-	  "6":  {"nn_ids": [1,2,7,5],   "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [2,2,-2]},
-	  "7":  {"nn_ids": [6,2,3,4,5], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [2,0,-2]}
+	  "0":	{"nn_ids": [3,2,1,4],   "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0,0,0]},
+	  "1":  {"nn_ids": [0,2,6,5,4], "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0,2,0]},
+	  "2":  {"nn_ids": [1,0,3,7,6], "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [2,2,0]},
+	  "3":  {"nn_ids": [0,4,7,2],   "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [2,0,0]},
+	  "4":  {"nn_ids": [3,0,1,5,7], "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0,0,-2]},
+	  "5":  {"nn_ids": [6,7,4,1],   "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0,2,-2]},
+	  "6":  {"nn_ids": [1,2,7,5],   "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [2,2,-2]},
+	  "7":  {"nn_ids": [6,2,3,4,5], "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [2,0,-2]}
   })"_json;
 
 fp::Json const BRICK_DATA =
         R"({
-	  "0":	{"nn_ids": [3,2,1,4],   "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0,0,0]},
-	  "1":  {"nn_ids": [0,2,6,5,4], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0,2,0]},
-	  "2":  {"nn_ids": [1,0,3,7,6], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [3,2,0]},
-	  "3":  {"nn_ids": [0,4,7,2],   "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [3,0,0]},
-	  "4":  {"nn_ids": [3,0,1,5,7], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0,0,-2]},
-	  "5":  {"nn_ids": [6,7,4,1],   "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0,2,-2]},
-	  "6":  {"nn_ids": [1,2,7,5],   "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [3,2,-2]},
-	  "7":  {"nn_ids": [6,2,3,4,5], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [3,0,-2]}
+	  "0":	{"nn_ids": [3,2,1,4],   "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0,0,0]},
+	  "1":  {"nn_ids": [0,2,6,5,4], "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0,2,0]},
+	  "2":  {"nn_ids": [1,0,3,7,6], "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [3,2,0]},
+	  "3":  {"nn_ids": [0,4,7,2],   "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [3,0,0]},
+	  "4":  {"nn_ids": [3,0,1,5,7], "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0,0,-2]},
+	  "5":  {"nn_ids": [6,7,4,1],   "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0,2,-2]},
+	  "6":  {"nn_ids": [1,2,7,5],   "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [3,2,-2]},
+	  "7":  {"nn_ids": [6,2,3,4,5], "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [3,0,-2]}
   })"_json;
 
 TEST_CASE("cube geometry test")
@@ -274,26 +274,26 @@ TEST_CASE("Brick geometry test")
 }
 fp::Json const HYPERBRICK_DATA =
         R"({
-	  "0":	{"nn_ids": [3,2,1,4],   "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0,0,0]},
-	  "1":  {"nn_ids": [0,2,6,5,4], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0,2,0]},
-	  "2":  {"nn_ids": [1,0,3,7,6], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [300,2,0]},
-	  "3":  {"nn_ids": [0,4,7,2],   "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [300,0,0]},
-	  "4":  {"nn_ids": [3,0,1,5,7], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0,0,-2]},
-	  "5":  {"nn_ids": [6,7,4,1],   "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0,2,-2]},
-	  "6":  {"nn_ids": [1,2,7,5],   "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [300,2,-2]},
-	  "7":  {"nn_ids": [6,2,3,4,5], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [300,0,-2]}
+	  "0":	{"nn_ids": [3,2,1,4],   "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0,0,0]},
+	  "1":  {"nn_ids": [0,2,6,5,4], "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0,2,0]},
+	  "2":  {"nn_ids": [1,0,3,7,6], "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [300,2,0]},
+	  "3":  {"nn_ids": [0,4,7,2],   "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [300,0,0]},
+	  "4":  {"nn_ids": [3,0,1,5,7], "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0,0,-2]},
+	  "5":  {"nn_ids": [6,7,4,1],   "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0,2,-2]},
+	  "6":  {"nn_ids": [1,2,7,5],   "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [300,2,-2]},
+	  "7":  {"nn_ids": [6,2,3,4,5], "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [300,0,-2]}
   })"_json;
 
 fp::Json const HYPER_SQUEEZED_BRICK_DATA =
         R"({
-	  "0":	{"nn_ids": [3,2,1,4],   "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0,0,0]},
-	  "1":  {"nn_ids": [0,2,6,5,4], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0,2,0]},
-	  "2":  {"nn_ids": [1,0,3,7,6], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0.03,2,0]},
-	  "3":  {"nn_ids": [0,4,7,2],   "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0.03,0,0]},
-	  "4":  {"nn_ids": [3,0,1,5,7], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0,0,-2]},
-	  "5":  {"nn_ids": [6,7,4,1],   "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0,2,-2]},
-	  "6":  {"nn_ids": [1,2,7,5],   "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0.03,2,-2]},
-	  "7":  {"nn_ids": [6,2,3,4,5], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0.03,0,-2]}
+	  "0":	{"nn_ids": [3,2,1,4],   "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0,0,0]},
+	  "1":  {"nn_ids": [0,2,6,5,4], "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0,2,0]},
+	  "2":  {"nn_ids": [1,0,3,7,6], "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0.03,2,0]},
+	  "3":  {"nn_ids": [0,4,7,2],   "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0.03,0,0]},
+	  "4":  {"nn_ids": [3,0,1,5,7], "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0,0,-2]},
+	  "5":  {"nn_ids": [6,7,4,1],   "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0,2,-2]},
+	  "6":  {"nn_ids": [1,2,7,5],   "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0.03,2,-2]},
+	  "7":  {"nn_ids": [6,2,3,4,5], "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0.03,0,-2]}
   })"_json;
 TEST_CASE("Hyperstretch geometry test")
 {

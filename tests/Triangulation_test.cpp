@@ -20,34 +20,34 @@ void rescale_triangulation(Real R, Triangulation<Real,Index, SPHERICAL_TRIANGULA
 
 fp::Json const ICOSA_DATA =
         R"({
-	  "0":	{"nn_ids": [4,2,3,1,5],   "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0.0,0.0,100.0]},
-	  "1":  {"nn_ids": [7,6,2,5,0],   "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [89.44271909999158,0.0,44.721359549995796]},
-	  "2":  {"nn_ids": [7,8,3,1,0],   "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [27.639320225002102,85.06508083520399,44.721359549995796]},
-	  "3":  {"nn_ids": [9,8,4,0,2],   "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [-72.36067977499789,52.57311121191337,44.7213595499958]},
-	  "4":  {"nn_ids": [9,10,3,5,0],  "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [-72.3606797749979,-52.57311121191336,44.7213595499958]},
-	  "5":  {"nn_ids": [6,10,4,1,0],  "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [27.639320225002088,-85.065080835204,44.7213595499958]},
-	  "6":  {"nn_ids": [11,7,10,1,5], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [72.36067977499789,-52.57311121191336,-44.72135954999579]},
-	  "7":  {"nn_ids": [11,8,6,2,1],  "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [72.36067977499789,52.57311121191336,-44.72135954999579]},
-	  "8":  {"nn_ids": [11,9,7,3,2],  "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [-27.639320225002095,85.06508083520399,-44.72135954999579]},
-	  "9":  {"nn_ids": [11,8,10,4,3], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [-89.44271909999158,1.0953573965284053e-14,-44.72135954999579]},
-	  "10": {"nn_ids": [11,9,6,4,5],  "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [-27.639320225002113,-85.06508083520399,-44.72135954999579]},
-	  "11": {"nn_ids": [9,8,7,6,10],  "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [1.2246467991473532e-14,0.0,-100.0]}
+	  "0":	{"nn_ids": [4,2,3,1,5],   "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0.0,0.0,100.0]},
+	  "1":  {"nn_ids": [7,6,2,5,0],   "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [89.44271909999158,0.0,44.721359549995796]},
+	  "2":  {"nn_ids": [7,8,3,1,0],   "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [27.639320225002102,85.06508083520399,44.721359549995796]},
+	  "3":  {"nn_ids": [9,8,4,0,2],   "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [-72.36067977499789,52.57311121191337,44.7213595499958]},
+	  "4":  {"nn_ids": [9,10,3,5,0],  "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [-72.3606797749979,-52.57311121191336,44.7213595499958]},
+	  "5":  {"nn_ids": [6,10,4,1,0],  "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [27.639320225002088,-85.065080835204,44.7213595499958]},
+	  "6":  {"nn_ids": [11,7,10,1,5], "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [72.36067977499789,-52.57311121191336,-44.72135954999579]},
+	  "7":  {"nn_ids": [11,8,6,2,1],  "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [72.36067977499789,52.57311121191336,-44.72135954999579]},
+	  "8":  {"nn_ids": [11,9,7,3,2],  "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [-27.639320225002095,85.06508083520399,-44.72135954999579]},
+	  "9":  {"nn_ids": [11,8,10,4,3], "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [-89.44271909999158,1.0953573965284053e-14,-44.72135954999579]},
+	  "10": {"nn_ids": [11,9,6,4,5],  "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [-27.639320225002113,-85.06508083520399,-44.72135954999579]},
+	  "11": {"nn_ids": [9,8,7,6,10],  "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [1.2246467991473532e-14,0.0,-100.0]}
   })"_json;
 
 // This topology was created by hand. The nn_ids order matters and makes the surface well oriented.
 fp::Json const STAR_DATA =
         R"({
-	  "2":	 {"nn_ids": [4, 3, 6, 7, 9, 10],       "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0.0,0.0,0.0]},
-	  "3":  {"nn_ids": [8, 6, 2, 4, 5, 1],         "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [1.0,0.0,0.0]},
-	  "6":  {"nn_ids": [3, 8, 0, 7, 2],            "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0.5, 0.866025, 0.0]},
-	  "7":  {"nn_ids": [2, 6, 0, 9],               "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [-0.5, 0.866025, 0]},
-	  "9": {"nn_ids": [2, 7, 0, 10],               "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [-1,0,0]},
-	  "10": {"nn_ids": [4, 2, 9, 0],               "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [-0.5, -0.866025, 0]},
-	  "4":  {"nn_ids": [3, 2, 10, 0, 5],           "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0.5, -0.866025, 0]},
-	  "5":  {"nn_ids": [3, 4, 0, 1],               "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [1.5, -0.866025,0]},
-	  "1":   {"nn_ids": [3, 5, 0, 8],              "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [2,0,0]},
-	  "8": {"nn_ids": [3, 1, 0, 6],                "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [1.5, 0.866025, 0]},
-	  "0":   {"nn_ids": [6, 8, 1, 5, 4, 10, 9, 7], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0.5,0,-1]}
+	  "2":	 {"nn_ids": [4, 3, 6, 7, 9, 10],       "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0.0,0.0,0.0]},
+	  "3":  {"nn_ids": [8, 6, 2, 4, 5, 1],         "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [1.0,0.0,0.0]},
+	  "6":  {"nn_ids": [3, 8, 0, 7, 2],            "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0.5, 0.866025, 0.0]},
+	  "7":  {"nn_ids": [2, 6, 0, 9],               "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [-0.5, 0.866025, 0]},
+	  "9": {"nn_ids": [2, 7, 0, 10],               "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [-1,0,0]},
+	  "10": {"nn_ids": [4, 2, 9, 0],               "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [-0.5, -0.866025, 0]},
+	  "4":  {"nn_ids": [3, 2, 10, 0, 5],           "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0.5, -0.866025, 0]},
+	  "5":  {"nn_ids": [3, 4, 0, 1],               "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [1.5, -0.866025,0]},
+	  "1":   {"nn_ids": [3, 5, 0, 8],              "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [2,0,0]},
+	  "8": {"nn_ids": [3, 1, 0, 6],                "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [1.5, 0.866025, 0]},
+	  "0":   {"nn_ids": [6, 8, 1, 5, 4, 10, 9, 7], "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0.5,0,-1]}
   })"_json;
 
 template<std::floating_point Real, std::integral Index>
@@ -211,7 +211,7 @@ TEST_CASE("Proper topology change")
     }
 
     SECTION("property test: common_neighbours and two_common_neighbours should give same results apart from ordering") {
-        auto all_data = json_read("../../tests/init_files/egg_it_4.json");
+        auto all_data = json_read("../../tests/init_files/egg_init.json");
         Json nodes = all_data["nodes"];
         Triangulation<double, long, SPHERICAL_TRIANGULATION> sphere(nodes, 0);
         std::array<long, 2> m1m1{-1, -1};

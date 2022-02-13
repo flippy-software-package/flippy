@@ -9,7 +9,7 @@
  * 888    888 888 888  888 888  888 888  888     dynamically triangulated
  * 888    888 888 888 d88P 888 d88P Y88b 888     surfaces
  * 888    888 888 88888P"  88888P"   "Y88888
- *                888      888           888     version 0.2.2-beta
+ *                888      888           888     version 0.2.3-beta
  *                888      888      Y8b d88P
  *                888      888       "Y88P"
  *
@@ -22634,7 +22634,7 @@ struct Nodes
          * Initiating nodes from a Json of a node collection.
          * The nodes in the json file must be sequentially numbered from 0 to Number_of_nodes - 1
          */
-        std::vector<Index> nn_ids_temp;
+        std::vector<Index> nn_ids_temp, verlet_list_temp;
         data.resize((node_dict.size()));
         for (auto const& node: node_dict.items()) {
             auto const& node_id = node.key();
@@ -22649,10 +22649,11 @@ struct Nodes
             Real volume = node.value()["volume"];
 
             nn_ids_temp = std::vector<Index>(node_dict[node_id]["nn_ids"]);
+            verlet_list_temp = std::vector<Index>(node_dict[node_id]["verlet_list"]);
             std::vector<vec3<Real>>
                     nn_distances;
 
-            data[node_index] = (Node<Real, Index>{
+            data[node_index] = Node<Real, Index>{
                     .id{node_index},
                     .area{area},
                     .volume{volume},
@@ -22660,7 +22661,9 @@ struct Nodes
                     .pos{pos},
                     .curvature_vec{curvature_vec},
                     .nn_ids{nn_ids_temp},
-                    .nn_distances{nn_distances}});
+                    .nn_distances{nn_distances},
+                    .verlet_list{verlet_list_temp}
+            };
         }
     }
 
@@ -22724,6 +22727,7 @@ struct Nodes
                     {"pos", {node.pos[0], node.pos[1], node.pos[2]}},
                     {"curvature_vec", {node.curvature_vec[0], node.curvature_vec[1], node.curvature_vec[2]}},
                     {"nn_ids", node.nn_ids},
+                    {"verlet_list", node.verlet_list},
             };
         }
         return json_data;
@@ -24090,7 +24094,7 @@ private:
  * 888    888 888 888  888 888  888 888  888     dynamically triangulated
  * 888    888 888 888 d88P 888 d88P Y88b 888     surfaces
  * 888    888 888 88888P"  88888P"   "Y88888
- *                888      888           888     version 0.2.2-beta
+ *                888      888           888     version 0.2.3-beta
  *                888      888      Y8b d88P
  *                888      888       "Y88P"
  *
