@@ -146,9 +146,6 @@ int main(){
 }
 ```
 
-# misc.
-
-
 # Versioning
 
 Crrent release [![release version](https://img.shields.io/badge/dynamic/json?url=https://gitlab.tudelft.nl/idema-group/flippy/-/raw/master/VERSION.json&query=$.*&color=blue&label=version)](https://gitlab.tudelft.nl/idema-group/flippy/-/releases) is experimental. This means that the API may change significantly. Every input on the usability of `flippy`'s API is very welcome.
@@ -189,6 +186,6 @@ as long as *MAJOR* version is 0 the API is unstable and any *MINOR* update can b
     - a utility class like MonteCarloUpdater, which uses force balance functions to update node positions
 
 
-## licence
+# licence
 
 *flippy* is under MIT License, which means you can do pretty much anything with it. For more information read the `LICENCE` file.
