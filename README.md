@@ -185,6 +185,14 @@ as long as *MAJOR* version is 0 the API is unstable and any *MINOR* update can b
 - force based updater
     - a utility class like MonteCarloUpdater, which uses force balance functions to update node positions
 
+## changes in [![release version](https://img.shields.io/badge/dynamic/json?url=https://gitlab.tudelft.nl/idema-group/flippy/-/raw/master/VERSION.json&query=$.*&color=blue&label=version)](https://gitlab.tudelft.nl/idema-group/flippy/-/releases)
+
+### new features
+  - none
+### breaking changes 
+  - none
+### bugfixes
+  - removed default constructor from `MonteCarloUpdater` since it was implicitly deleted anyway.
 
 # licence
 

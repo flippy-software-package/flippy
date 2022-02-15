@@ -24,7 +24,6 @@ private:
     Index flip_attempt{0}, bond_length_flip_rejection{0}, flip_back{0};
 
 public:
-    MonteCarloUpdater()=default;
     MonteCarloUpdater(fp::Triangulation<Real, Index, triangulation_type>& triangulation_inp,
                       EnergyFunctionParameters const& prms_inp,
                       std::function<Real(fp::Node<Real, Index> const&, fp::Triangulation<Real, Index, triangulation_type> const&, EnergyFunctionParameters const&)> energy_function_inp,
