@@ -9,7 +9,7 @@
  * 888    888 888 888  888 888  888 888  888     dynamically triangulated
  * 888    888 888 888 d88P 888 d88P Y88b 888     surfaces
  * 888    888 888 88888P"  88888P"   "Y88888
- *                888      888           888     version 0.2.3-beta
+ *                888      888           888     version 0.2.4-beta
  *                888      888      Y8b d88P
  *                888      888       "Y88P"
  *

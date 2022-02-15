@@ -9,7 +9,7 @@
  * 888    888 888 888  888 888  888 888  888     dynamically triangulated
  * 888    888 888 888 d88P 888 d88P Y88b 888     surfaces
  * 888    888 888 88888P"  88888P"   "Y88888
- *                888      888           888     version 0.2.3-beta
+ *                888      888           888     version 0.2.4-beta
  *                888      888      Y8b d88P
  *                888      888       "Y88P"
  *
@@ -24108,7 +24108,7 @@ private:
  * 888    888 888 888  888 888  888 888  888     dynamically triangulated
  * 888    888 888 888 d88P 888 d88P Y88b 888     surfaces
  * 888    888 888 88888P"  88888P"   "Y88888
- *                888      888           888     version 0.2.3-beta
+ *                888      888           888     version 0.2.4-beta
  *                888      888      Y8b d88P
  *                888      888       "Y88P"
  *
@@ -24155,6 +24155,7 @@ template<std::floating_point Real, std::integral Index, typename EnergyFunctionP
 class MonteCarloUpdater
 {
 private:
+    static constexpr Real max_float = 3.40282347e+38;
     Real e_old{}, e_new{}, e_diff{};
     fp::Triangulation<Real, Index, triangulation_type>& triangulation;
     EnergyFunctionParameters const& prms;
@@ -24162,7 +24163,7 @@ private:
     RandomNumberEngine& rng;
     std::uniform_real_distribution<Real> unif_distr_on_01;
     Real kBT_{1};
-    Real min_bond_length_square{0.}, max_bond_length_square{MAXFLOAT};
+    Real min_bond_length_square{0.}, max_bond_length_square{max_float};
     Index move_attempt{0}, bond_length_move_rejection{0},move_back{0};
     Index flip_attempt{0}, bond_length_flip_rejection{0}, flip_back{0};
 
