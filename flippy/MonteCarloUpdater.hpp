@@ -20,8 +20,8 @@ private:
     std::uniform_real_distribution<Real> unif_distr_on_01;
     Real kBT_{1};
     Real min_bond_length_square{0.}, max_bond_length_square{max_float};
-    Index move_attempt{0}, bond_length_move_rejection{0},move_back{0};
-    Index flip_attempt{0}, bond_length_flip_rejection{0}, flip_back{0};
+    long move_attempt{0}, bond_length_move_rejection{0},move_back{0};
+    long flip_attempt{0}, bond_length_flip_rejection{0}, flip_back{0};
 
 public:
     MonteCarloUpdater(fp::Triangulation<Real, Index, triangulation_type>& triangulation_inp,
