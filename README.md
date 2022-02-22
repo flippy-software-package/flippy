@@ -66,7 +66,7 @@ double surface_energy_area_volume_ensemble([[maybe_unused]]fp::Node<double, int>
     double A = triangulation.global_geometry().area;
     double dV = V-prms.V_t;
     double dA = A-prms.A_t;
-    double e_tot = (prms.bending_rigidity/2.)*triangulation.global_geometry().dA_K2 + prms.K_V*dV*dV/prms.V_t + prms.K_A*dA*dA/prms.A_t;
+    double e_tot = prms.bending_rigidity*triangulation.global_geometry().unit_bending_energy + prms.K_V*dV*dV/prms.V_t + prms.K_A*dA*dA/prms.A_t;
     return e_tot;
 }
 
@@ -187,12 +187,15 @@ as long as *MAJOR* version is 0 the API is unstable and any *MINOR* update can b
 
 ## changes in [![release version](https://img.shields.io/badge/dynamic/json?url=https://gitlab.tudelft.nl/idema-group/flippy/-/raw/master/VERSION.json&query=$.*&color=blue&label=version)](https://gitlab.tudelft.nl/idema-group/flippy/-/releases)
 
-### new features
-  - none
 ### breaking changes 
-  - none
+  - renamed `global_geometry.dA_K2` and `node.scaled_curvature_energy` to `unit_bending_energy`
+    - `unit_bending_energy` also differs from `scaled_curvature_energy` by a factor of `0.5`
+### new features
+- none
 ### bugfixes
   - removed default constructor from `MonteCarloUpdater` since it was implicitly deleted anyway.
+  - changed update counters types in `MonteCarloUpdater` to long instead of Index to avoid integer overflow.
+  - double check if the stdlib defines M_PI and define it if not.
 
 # licence
 

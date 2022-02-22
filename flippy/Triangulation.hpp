@@ -69,28 +69,28 @@ struct Geometry
 {
   Real area;
   Real volume;
-  Real dA_K2; //local area element times the square of the total curvature
+  Real unit_bending_energy; //local area element times the square of the total curvature
   Geometry()
-          :area(0.), volume(0.), dA_K2(0.) { }
+          :area(0.), volume(0.), unit_bending_energy(0.) { }
   explicit Geometry(Node<Real, Index> const& node)
-          :area(node.area), volume(node.volume), dA_K2(node.scaled_curvature_energy) { }
-  Geometry(Real area_inp, Real volume_inp, Real dA_K2_inp)
-          :area(area_inp), volume(volume_inp), dA_K2(dA_K2_inp) { }
+          :area(node.area), volume(node.volume), unit_bending_energy(node.unit_bending_energy) { }
+  Geometry(Real area_inp, Real volume_inp, Real unit_bending_energy_inp)
+          :area(area_inp), volume(volume_inp), unit_bending_energy(unit_bending_energy_inp) { }
   friend Geometry<Real, Index> operator+(Geometry<Real, Index> const& lhs, Geometry<Real, Index> const& rhs)
   {
-      return Geometry<Real, Index>(lhs.area + rhs.area, lhs.volume + rhs.volume, lhs.dA_K2 + rhs.dA_K2);
+      return Geometry<Real, Index>(lhs.area + rhs.area, lhs.volume + rhs.volume, lhs.unit_bending_energy + rhs.unit_bending_energy);
   }
 
   friend Geometry<Real, Index> operator-(Geometry<Real, Index> const& lhs, Geometry<Real, Index> const& rhs)
   {
-      return Geometry<Real, Index>(lhs.area - rhs.area, lhs.volume - rhs.volume, lhs.dA_K2 - rhs.dA_K2);
+      return Geometry<Real, Index>(lhs.area - rhs.area, lhs.volume - rhs.volume, lhs.unit_bending_energy - rhs.unit_bending_energy);
   }
 
   void operator+=(Node<Real, Index> const& node)
   {
       area += node.area;
       volume += node.volume;
-      dA_K2 += node.scaled_curvature_energy;
+      unit_bending_energy += node.unit_bending_energy;
   }
 
   friend void operator+=(Geometry<Real, Index>& lhs, Geometry<Real, Index> const& rhs)
@@ -225,7 +225,7 @@ public:
          */
         auto anchor_pos_ptr = std::find(nodes_[center_node_id].nn_ids.begin(),
                 nodes_[center_node_id].nn_ids.end(), anchor_id);
-        auto anchor_pos = (Index) (anchor_pos_ptr - nodes_[center_node_id].nn_ids.begin());
+        std::integral auto anchor_pos = (Index) (anchor_pos_ptr - nodes_[center_node_id].nn_ids.begin());
         nodes_[center_node_id].emplace_nn_id(new_value, nodes_[new_value].pos, anchor_pos);
     }
 
@@ -321,7 +321,7 @@ public:
         nodes_.set_area(node_id, area_sum);
         nodes_.set_volume(node_id, nodes_[node_id].pos.dot(face_normal_sum)/((Real) 3.)); // 18=3*6: 6 has the aforementioned justification. 3 is part of the formula for the tetrahedron volume
         nodes_.set_curvature_vec(node_id,  -local_curvature_vec/((Real) 2.*area_sum)); // 2 is part of the formula to calculate the local curvature I just did not divide the vector inside the loop
-        nodes_.set_scaled_curvature_energy(node_id, local_curvature_vec.dot(local_curvature_vec)/((Real) 4.*area_sum)); // 4 is the square of the above two and the area in the denominator is what remains after canceling
+        nodes_.set_unit_bending_energy(node_id, local_curvature_vec.dot(local_curvature_vec)/((Real) 8.*area_sum)); // 8 is 2*4, where 4 is the square of the above two and the area in the denominator is what remains after canceling. 1/ comes from the pre-factor to bending energy
 
     };
 
@@ -483,7 +483,7 @@ public:
         nodes_.set_area(node_id, 0.);
         nodes_.set_volume(node_id, 0.);
         nodes_.set_curvature_vec(node_id,  {0., 0., 0.});
-        nodes_.set_scaled_curvature_energy(node_id, 0.);
+        nodes_.set_unit_bending_energy(node_id, 0.);
 
     }
 

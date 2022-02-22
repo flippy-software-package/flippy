@@ -235,7 +235,6 @@ public:
                          <<j<<" together with the maxIdx: "<<maxIdx
                          <<" produced a wrong region.\n";
                 exit(12);
-                break;
         }
 
     }

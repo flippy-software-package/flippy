@@ -22538,16 +22538,38 @@ using Json = nlohmann::json;
 template<std::floating_point Real, std::integral Index>
 struct Node
 {
+  //! a number between 0 and max number of nodes - 1
   Index id;
+  //! voronoi area associated to the node
   Real area;
+  /**
+   * if the node is part of a closed surface triangulation, then the `volume` gives the volume
+   * of the tetrahedron connected to each voronoi cell sub-triangle and the center of the lab coordinate system  as defined in [1].
+   * This means that the volume of an individual node does not have a proper physical interpretation. Only the sum of all node
+   * volumes, which is given by the triangulation is interpretable as a physical volume of an object.
+   */
   Real volume;
-  Real scaled_curvature_energy;
+  /**
+   * unit_bending energy corresponds to the Helfrich bending energy with bending rigidity 1
+   * \f[
+   *  \mathrm{unit\_bending\_energy} = \frac{1}{2} A_{\mathrm{node}} (2 H_{node})^2
+   * \f]
+   * where \f$ H_{node} \f$ is the mean curvature of the node given by:
+   * \f[
+   * H_{node}^2 = \frac{\vec{K}_{node}}{2A_{node}} \cdot \frac{\vec{K}_{node}}{2A_{node}}
+   * \f],
+   * with  \f$ \vec{K} \f$ denoting the `curvature_vector` member of the node
+   */
+  Real unit_bending_energy;
+  //! position of the node in the lab frame
   vec3<Real> pos;
+  //! curvature vector of the node as defined in [1]
   vec3<Real> curvature_vec;
   //! nn_ids contains the ids of nodes that are connected to this node
   std::vector<Index> nn_ids;
-  //! Verlet list contains the ids of nodes that are close to this node
+  //! distance vectors pointing from the node to it's next neighbours.
   std::vector<vec3<Real>> nn_distances;
+  //! Verlet list contains the ids of nodes that are close to this node
   std::vector<Index> verlet_list;
 
   // unit-tested
@@ -22602,7 +22624,7 @@ struct Node
       os << "node: " << node1.id << '\n'
          << "area: " << node1.area << '\n'
          << "volume: " << node1.volume << '\n'
-         << "scaled_curvature_energy: " << node1.scaled_curvature_energy << '\n'
+         << "unit_bending_energy: " << node1.unit_bending_energy << '\n'
          << "curvature_vec: " << node1.curvature_vec << '\n'
          << "pos: " << node1.pos << '\n'
          << "nn_ids: ";
@@ -22644,7 +22666,7 @@ struct Nodes
 
             auto const& raw_curv = node.value()["curvature_vec"];
             vec3<Real> curvature_vec{(Real) raw_curv[0], (Real) raw_curv[1], (Real) raw_curv[2]};
-            Real scaled_curvature_energy = node.value()["scaled_curvature_energy"];
+            Real unit_bending_energy = node.value()["unit_bending_energy"];
             Real area = node.value()["area"];
             Real volume = node.value()["volume"];
 
@@ -22657,7 +22679,7 @@ struct Nodes
                     .id{node_index},
                     .area{area},
                     .volume{volume},
-                    .scaled_curvature_energy{scaled_curvature_energy},
+                    .unit_bending_energy{unit_bending_energy},
                     .pos{pos},
                     .curvature_vec{curvature_vec},
                     .nn_ids{nn_ids_temp},
@@ -22691,8 +22713,8 @@ struct Nodes
     Real volume(Index node_id)const{return data[node_id].volume;}
     void set_volume(Index node_id, Real new_volume){data[node_id].volume = new_volume;}
 
-    Real scaled_curvature_energy(Index node_id)const{return data[node_id].scaled_curvature_energy;}
-    void set_scaled_curvature_energy(Index node_id, Real new_sce){data[node_id].scaled_curvature_energy=new_sce;}
+    Real unit_bending_energy(Index node_id)const{return data[node_id].unit_bending_energy;}
+    void set_unit_bending_energy(Index node_id, Real new_sce){data[node_id].unit_bending_energy=new_sce;}
 
     //unit-tested
     const auto& nn_ids(Index node_id)const{return data[node_id].nn_ids;}
@@ -22723,7 +22745,7 @@ struct Nodes
             json_data[std::to_string(node.id)] = {
                     {"area", node.area},
                     {"volume", node.volume},
-                    {"scaled_curvature_energy", node.scaled_curvature_energy},
+                    {"unit_bending_energy", node.unit_bending_energy},
                     {"pos", {node.pos[0], node.pos[1], node.pos[2]}},
                     {"curvature_vec", {node.curvature_vec[0], node.curvature_vec[1], node.curvature_vec[2]}},
                     {"nn_ids", node.nn_ids},
@@ -22823,6 +22845,10 @@ static std::string stream_particle(std::string const& name, auto const& vec, std
 #include <unordered_map>
 #include <concepts>
 #include <type_traits>
+
+#ifndef M_PI
+#define M_PI 3.14159265358979323846	/* pi */
+#endif
 
 /**
  * The API stability of the functions in the implementation namespace is not guaranteed!
@@ -23046,7 +23072,6 @@ public:
                          <<j<<" together with the maxIdx: "<<maxIdx
                          <<" produced a wrong region.\n";
                 exit(12);
-                break;
         }
 
     }
@@ -23367,28 +23392,28 @@ struct Geometry
 {
   Real area;
   Real volume;
-  Real dA_K2; //local area element times the square of the total curvature
+  Real unit_bending_energy; //local area element times the square of the total curvature
   Geometry()
-          :area(0.), volume(0.), dA_K2(0.) { }
+          :area(0.), volume(0.), unit_bending_energy(0.) { }
   explicit Geometry(Node<Real, Index> const& node)
-          :area(node.area), volume(node.volume), dA_K2(node.scaled_curvature_energy) { }
-  Geometry(Real area_inp, Real volume_inp, Real dA_K2_inp)
-          :area(area_inp), volume(volume_inp), dA_K2(dA_K2_inp) { }
+          :area(node.area), volume(node.volume), unit_bending_energy(node.unit_bending_energy) { }
+  Geometry(Real area_inp, Real volume_inp, Real unit_bending_energy_inp)
+          :area(area_inp), volume(volume_inp), unit_bending_energy(unit_bending_energy_inp) { }
   friend Geometry<Real, Index> operator+(Geometry<Real, Index> const& lhs, Geometry<Real, Index> const& rhs)
   {
-      return Geometry<Real, Index>(lhs.area + rhs.area, lhs.volume + rhs.volume, lhs.dA_K2 + rhs.dA_K2);
+      return Geometry<Real, Index>(lhs.area + rhs.area, lhs.volume + rhs.volume, lhs.unit_bending_energy + rhs.unit_bending_energy);
   }
 
   friend Geometry<Real, Index> operator-(Geometry<Real, Index> const& lhs, Geometry<Real, Index> const& rhs)
   {
-      return Geometry<Real, Index>(lhs.area - rhs.area, lhs.volume - rhs.volume, lhs.dA_K2 - rhs.dA_K2);
+      return Geometry<Real, Index>(lhs.area - rhs.area, lhs.volume - rhs.volume, lhs.unit_bending_energy - rhs.unit_bending_energy);
   }
 
   void operator+=(Node<Real, Index> const& node)
   {
       area += node.area;
       volume += node.volume;
-      dA_K2 += node.scaled_curvature_energy;
+      unit_bending_energy += node.unit_bending_energy;
   }
 
   friend void operator+=(Geometry<Real, Index>& lhs, Geometry<Real, Index> const& rhs)
@@ -23523,7 +23548,7 @@ public:
          */
         auto anchor_pos_ptr = std::find(nodes_[center_node_id].nn_ids.begin(),
                 nodes_[center_node_id].nn_ids.end(), anchor_id);
-        auto anchor_pos = (Index) (anchor_pos_ptr - nodes_[center_node_id].nn_ids.begin());
+        std::integral auto anchor_pos = (Index) (anchor_pos_ptr - nodes_[center_node_id].nn_ids.begin());
         nodes_[center_node_id].emplace_nn_id(new_value, nodes_[new_value].pos, anchor_pos);
     }
 
@@ -23619,7 +23644,7 @@ public:
         nodes_.set_area(node_id, area_sum);
         nodes_.set_volume(node_id, nodes_[node_id].pos.dot(face_normal_sum)/((Real) 3.)); // 18=3*6: 6 has the aforementioned justification. 3 is part of the formula for the tetrahedron volume
         nodes_.set_curvature_vec(node_id,  -local_curvature_vec/((Real) 2.*area_sum)); // 2 is part of the formula to calculate the local curvature I just did not divide the vector inside the loop
-        nodes_.set_scaled_curvature_energy(node_id, local_curvature_vec.dot(local_curvature_vec)/((Real) 4.*area_sum)); // 4 is the square of the above two and the area in the denominator is what remains after canceling
+        nodes_.set_unit_bending_energy(node_id, local_curvature_vec.dot(local_curvature_vec)/((Real) 8.*area_sum)); // 8 is 2*4, where 4 is the square of the above two and the area in the denominator is what remains after canceling. 1/ comes from the pre-factor to bending energy
 
     };
 
@@ -23781,7 +23806,7 @@ public:
         nodes_.set_area(node_id, 0.);
         nodes_.set_volume(node_id, 0.);
         nodes_.set_curvature_vec(node_id,  {0., 0., 0.});
-        nodes_.set_scaled_curvature_energy(node_id, 0.);
+        nodes_.set_unit_bending_energy(node_id, 0.);
 
     }
 
@@ -24164,8 +24189,8 @@ private:
     std::uniform_real_distribution<Real> unif_distr_on_01;
     Real kBT_{1};
     Real min_bond_length_square{0.}, max_bond_length_square{max_float};
-    Index move_attempt{0}, bond_length_move_rejection{0},move_back{0};
-    Index flip_attempt{0}, bond_length_flip_rejection{0}, flip_back{0};
+    long move_attempt{0}, bond_length_move_rejection{0},move_back{0};
+    long flip_attempt{0}, bond_length_flip_rejection{0}, flip_back{0};
 
 public:
     MonteCarloUpdater(fp::Triangulation<Real, Index, triangulation_type>& triangulation_inp,

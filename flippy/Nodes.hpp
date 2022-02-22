@@ -20,16 +20,38 @@ using Json = nlohmann::json;
 template<std::floating_point Real, std::integral Index>
 struct Node
 {
+  //! a number between 0 and max number of nodes - 1
   Index id;
+  //! voronoi area associated to the node
   Real area;
+  /**
+   * if the node is part of a closed surface triangulation, then the `volume` gives the volume
+   * of the tetrahedron connected to each voronoi cell sub-triangle and the center of the lab coordinate system  as defined in [1].
+   * This means that the volume of an individual node does not have a proper physical interpretation. Only the sum of all node
+   * volumes, which is given by the triangulation is interpretable as a physical volume of an object.
+   */
   Real volume;
-  Real scaled_curvature_energy;
+  /**
+   * unit_bending energy corresponds to the Helfrich bending energy with bending rigidity 1
+   * \f[
+   *  \mathrm{unit\_bending\_energy} = \frac{1}{2} A_{\mathrm{node}} (2 H_{node})^2
+   * \f]
+   * where \f$ H_{node} \f$ is the mean curvature of the node given by:
+   * \f[
+   * H_{node}^2 = \frac{\vec{K}_{node}}{2A_{node}} \cdot \frac{\vec{K}_{node}}{2A_{node}}
+   * \f],
+   * with  \f$ \vec{K} \f$ denoting the `curvature_vector` member of the node
+   */
+  Real unit_bending_energy;
+  //! position of the node in the lab frame
   vec3<Real> pos;
+  //! curvature vector of the node as defined in [1]
   vec3<Real> curvature_vec;
   //! nn_ids contains the ids of nodes that are connected to this node
   std::vector<Index> nn_ids;
-  //! Verlet list contains the ids of nodes that are close to this node
+  //! distance vectors pointing from the node to it's next neighbours.
   std::vector<vec3<Real>> nn_distances;
+  //! Verlet list contains the ids of nodes that are close to this node
   std::vector<Index> verlet_list;
 
   // unit-tested
@@ -84,7 +106,7 @@ struct Node
       os << "node: " << node1.id << '\n'
          << "area: " << node1.area << '\n'
          << "volume: " << node1.volume << '\n'
-         << "scaled_curvature_energy: " << node1.scaled_curvature_energy << '\n'
+         << "unit_bending_energy: " << node1.unit_bending_energy << '\n'
          << "curvature_vec: " << node1.curvature_vec << '\n'
          << "pos: " << node1.pos << '\n'
          << "nn_ids: ";
@@ -126,7 +148,7 @@ struct Nodes
 
             auto const& raw_curv = node.value()["curvature_vec"];
             vec3<Real> curvature_vec{(Real) raw_curv[0], (Real) raw_curv[1], (Real) raw_curv[2]};
-            Real scaled_curvature_energy = node.value()["scaled_curvature_energy"];
+            Real unit_bending_energy = node.value()["unit_bending_energy"];
             Real area = node.value()["area"];
             Real volume = node.value()["volume"];
 
@@ -139,7 +161,7 @@ struct Nodes
                     .id{node_index},
                     .area{area},
                     .volume{volume},
-                    .scaled_curvature_energy{scaled_curvature_energy},
+                    .unit_bending_energy{unit_bending_energy},
                     .pos{pos},
                     .curvature_vec{curvature_vec},
                     .nn_ids{nn_ids_temp},
@@ -173,8 +195,8 @@ struct Nodes
     Real volume(Index node_id)const{return data[node_id].volume;}
     void set_volume(Index node_id, Real new_volume){data[node_id].volume = new_volume;}
 
-    Real scaled_curvature_energy(Index node_id)const{return data[node_id].scaled_curvature_energy;}
-    void set_scaled_curvature_energy(Index node_id, Real new_sce){data[node_id].scaled_curvature_energy=new_sce;}
+    Real unit_bending_energy(Index node_id)const{return data[node_id].unit_bending_energy;}
+    void set_unit_bending_energy(Index node_id, Real new_sce){data[node_id].unit_bending_energy=new_sce;}
 
     //unit-tested
     const auto& nn_ids(Index node_id)const{return data[node_id].nn_ids;}
@@ -205,7 +227,7 @@ struct Nodes
             json_data[std::to_string(node.id)] = {
                     {"area", node.area},
                     {"volume", node.volume},
-                    {"scaled_curvature_energy", node.scaled_curvature_energy},
+                    {"unit_bending_energy", node.unit_bending_energy},
                     {"pos", {node.pos[0], node.pos[1], node.pos[2]}},
                     {"curvature_vec", {node.curvature_vec[0], node.curvature_vec[1], node.curvature_vec[2]}},
                     {"nn_ids", node.nn_ids},

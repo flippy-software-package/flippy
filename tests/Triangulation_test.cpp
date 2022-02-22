@@ -20,34 +20,34 @@ void rescale_triangulation(Real R, Triangulation<Real,Index, SPHERICAL_TRIANGULA
 
 fp::Json const ICOSA_DATA =
         R"({
-	  "0":	{"nn_ids": [4,2,3,1,5],   "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0.0,0.0,100.0]},
-	  "1":  {"nn_ids": [7,6,2,5,0],   "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [89.44271909999158,0.0,44.721359549995796]},
-	  "2":  {"nn_ids": [7,8,3,1,0],   "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [27.639320225002102,85.06508083520399,44.721359549995796]},
-	  "3":  {"nn_ids": [9,8,4,0,2],   "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [-72.36067977499789,52.57311121191337,44.7213595499958]},
-	  "4":  {"nn_ids": [9,10,3,5,0],  "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [-72.3606797749979,-52.57311121191336,44.7213595499958]},
-	  "5":  {"nn_ids": [6,10,4,1,0],  "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [27.639320225002088,-85.065080835204,44.7213595499958]},
-	  "6":  {"nn_ids": [11,7,10,1,5], "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [72.36067977499789,-52.57311121191336,-44.72135954999579]},
-	  "7":  {"nn_ids": [11,8,6,2,1],  "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [72.36067977499789,52.57311121191336,-44.72135954999579]},
-	  "8":  {"nn_ids": [11,9,7,3,2],  "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [-27.639320225002095,85.06508083520399,-44.72135954999579]},
-	  "9":  {"nn_ids": [11,8,10,4,3], "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [-89.44271909999158,1.0953573965284053e-14,-44.72135954999579]},
-	  "10": {"nn_ids": [11,9,6,4,5],  "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [-27.639320225002113,-85.06508083520399,-44.72135954999579]},
-	  "11": {"nn_ids": [9,8,7,6,10],  "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [1.2246467991473532e-14,0.0,-100.0]}
+	  "0":	{"nn_ids": [4,2,3,1,5],   "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "unit_bending_energy": 0, "pos": [0.0,0.0,100.0]},
+	  "1":  {"nn_ids": [7,6,2,5,0],   "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "unit_bending_energy": 0, "pos": [89.44271909999158,0.0,44.721359549995796]},
+	  "2":  {"nn_ids": [7,8,3,1,0],   "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "unit_bending_energy": 0, "pos": [27.639320225002102,85.06508083520399,44.721359549995796]},
+	  "3":  {"nn_ids": [9,8,4,0,2],   "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "unit_bending_energy": 0, "pos": [-72.36067977499789,52.57311121191337,44.7213595499958]},
+	  "4":  {"nn_ids": [9,10,3,5,0],  "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "unit_bending_energy": 0, "pos": [-72.3606797749979,-52.57311121191336,44.7213595499958]},
+	  "5":  {"nn_ids": [6,10,4,1,0],  "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "unit_bending_energy": 0, "pos": [27.639320225002088,-85.065080835204,44.7213595499958]},
+	  "6":  {"nn_ids": [11,7,10,1,5], "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "unit_bending_energy": 0, "pos": [72.36067977499789,-52.57311121191336,-44.72135954999579]},
+	  "7":  {"nn_ids": [11,8,6,2,1],  "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "unit_bending_energy": 0, "pos": [72.36067977499789,52.57311121191336,-44.72135954999579]},
+	  "8":  {"nn_ids": [11,9,7,3,2],  "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "unit_bending_energy": 0, "pos": [-27.639320225002095,85.06508083520399,-44.72135954999579]},
+	  "9":  {"nn_ids": [11,8,10,4,3], "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "unit_bending_energy": 0, "pos": [-89.44271909999158,1.0953573965284053e-14,-44.72135954999579]},
+	  "10": {"nn_ids": [11,9,6,4,5],  "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "unit_bending_energy": 0, "pos": [-27.639320225002113,-85.06508083520399,-44.72135954999579]},
+	  "11": {"nn_ids": [9,8,7,6,10],  "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "unit_bending_energy": 0, "pos": [1.2246467991473532e-14,0.0,-100.0]}
   })"_json;
 
 // This topology was created by hand. The nn_ids order matters and makes the surface well oriented.
 fp::Json const STAR_DATA =
         R"({
-	  "2":	 {"nn_ids": [4, 3, 6, 7, 9, 10],       "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0.0,0.0,0.0]},
-	  "3":  {"nn_ids": [8, 6, 2, 4, 5, 1],         "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [1.0,0.0,0.0]},
-	  "6":  {"nn_ids": [3, 8, 0, 7, 2],            "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0.5, 0.866025, 0.0]},
-	  "7":  {"nn_ids": [2, 6, 0, 9],               "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [-0.5, 0.866025, 0]},
-	  "9": {"nn_ids": [2, 7, 0, 10],               "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [-1,0,0]},
-	  "10": {"nn_ids": [4, 2, 9, 0],               "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [-0.5, -0.866025, 0]},
-	  "4":  {"nn_ids": [3, 2, 10, 0, 5],           "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0.5, -0.866025, 0]},
-	  "5":  {"nn_ids": [3, 4, 0, 1],               "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [1.5, -0.866025,0]},
-	  "1":   {"nn_ids": [3, 5, 0, 8],              "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [2,0,0]},
-	  "8": {"nn_ids": [3, 1, 0, 6],                "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [1.5, 0.866025, 0]},
-	  "0":   {"nn_ids": [6, 8, 1, 5, 4, 10, 9, 7], "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "scaled_curvature_energy": 0, "pos": [0.5,0,-1]}
+	  "2":	 {"nn_ids": [4, 3, 6, 7, 9, 10],       "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "unit_bending_energy": 0, "pos": [0.0,0.0,0.0]},
+	  "3":  {"nn_ids": [8, 6, 2, 4, 5, 1],         "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "unit_bending_energy": 0, "pos": [1.0,0.0,0.0]},
+	  "6":  {"nn_ids": [3, 8, 0, 7, 2],            "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "unit_bending_energy": 0, "pos": [0.5, 0.866025, 0.0]},
+	  "7":  {"nn_ids": [2, 6, 0, 9],               "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "unit_bending_energy": 0, "pos": [-0.5, 0.866025, 0]},
+	  "9": {"nn_ids": [2, 7, 0, 10],               "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "unit_bending_energy": 0, "pos": [-1,0,0]},
+	  "10": {"nn_ids": [4, 2, 9, 0],               "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "unit_bending_energy": 0, "pos": [-0.5, -0.866025, 0]},
+	  "4":  {"nn_ids": [3, 2, 10, 0, 5],           "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "unit_bending_energy": 0, "pos": [0.5, -0.866025, 0]},
+	  "5":  {"nn_ids": [3, 4, 0, 1],               "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "unit_bending_energy": 0, "pos": [1.5, -0.866025,0]},
+	  "1":   {"nn_ids": [3, 5, 0, 8],              "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "unit_bending_energy": 0, "pos": [2,0,0]},
+	  "8": {"nn_ids": [3, 1, 0, 6],                "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "unit_bending_energy": 0, "pos": [1.5, 0.866025, 0]},
+	  "0":   {"nn_ids": [6, 8, 1, 5, 4, 10, 9, 7], "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "unit_bending_energy": 0, "pos": [0.5,0,-1]}
   })"_json;
 
 template<std::floating_point Real, std::integral Index>
@@ -96,16 +96,14 @@ TEST_CASE("Triangulator Instantiation: correct  node count and global geometry")
             float precision = 0.14f*niter_inv;
             auto unit_sphere_volume = Approx(4.*M_PI/3.).epsilon(precision);
             auto unit_sphere_area = Approx(4.*M_PI).epsilon(precision);
-            auto four_PI = Approx(16.*M_PI).epsilon(precision);
+            auto eight_PI = Approx(8.*M_PI).epsilon(precision);
             CHECK(trg.global_geometry().volume==unit_sphere_volume);
             CHECK(trg.global_geometry().area==unit_sphere_area);
-            CHECK(trg.global_geometry().dA_K2==four_PI);
+            CHECK(trg.global_geometry().unit_bending_energy==eight_PI);
         }
 
     }
 }
-
-
 
 TEST_CASE("Proper move")
 {
@@ -137,8 +135,8 @@ TEST_CASE("Proper move")
                 ==Approx(0).margin(0.001));
         for (int i = 0; i<icosa_triangulation.size(); ++i) {
             CHECK(copy_icosa_triangulation.nodes_[i].area==Approx(icosa_triangulation.nodes_[i].area).margin(0.01));
-            CHECK(copy_icosa_triangulation.nodes_[i].scaled_curvature_energy
-                    ==Approx(icosa_triangulation.nodes_[i].scaled_curvature_energy).margin(0.01));
+            CHECK(copy_icosa_triangulation.nodes_[i].unit_bending_energy
+                    ==Approx(icosa_triangulation.nodes_[i].unit_bending_energy).margin(0.01));
             CHECK(copy_icosa_triangulation.nodes_[i].id==icosa_triangulation.nodes_[i].id);
             CHECK(copy_icosa_triangulation.nodes_[i].nn_ids==icosa_triangulation.nodes_[i].nn_ids);
             for (std::size_t j = 0; j<copy_icosa_triangulation.nodes_[i].nn_ids.size(); ++j) {

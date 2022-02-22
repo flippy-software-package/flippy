@@ -16,7 +16,7 @@ double surface_energy_area_volume_ensemble([[maybe_unused]]fp::Node<double, int>
     double A = triangulation.global_geometry().area;
     double dV = V-prms.V_t;
     double dA = A-prms.A_t;
-    double e_tot = (prms.bending_rigidity/2.)*triangulation.global_geometry().dA_K2 + prms.K_V*dV*dV/prms.V_t + prms.K_A*dA*dA/prms.A_t;
+    double e_tot = prms.bending_rigidity*triangulation.global_geometry().unit_bending_energy + prms.K_V*dV*dV/prms.V_t + prms.K_A*dA*dA/prms.A_t;
     return e_tot;
 }
 
