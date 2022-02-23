@@ -24189,8 +24189,8 @@ private:
     std::uniform_real_distribution<Real> unif_distr_on_01;
     Real kBT_{1};
     Real min_bond_length_square{0.}, max_bond_length_square{max_float};
-    long move_attempt{0}, bond_length_move_rejection{0},move_back{0};
-    long flip_attempt{0}, bond_length_flip_rejection{0}, flip_back{0};
+    unsigned long move_attempt{0}, bond_length_move_rejection{0},move_back{0};
+    unsigned long flip_attempt{0}, bond_length_flip_rejection{0}, flip_back{0};
 
 public:
     MonteCarloUpdater(fp::Triangulation<Real, Index, triangulation_type>& triangulation_inp,
@@ -24293,12 +24293,12 @@ public:
     void reset_kBT(Real kBT){kBT_=kBT;}
 
     Real kBT(){return kBT_;}
-    Index move_attempt_count() const {return move_attempt;}
-    Index bond_length_move_rejection_count() const {return bond_length_move_rejection;}
-    Index move_back_count() const {return move_back;}
-    Index flip_attempt_count() const {return flip_attempt;}
-    Index bond_length_flip_rejection_count() const {return bond_length_flip_rejection;}
-    Index flip_back_count() const {return flip_back;}
+    [[nodiscard]] unsigned long move_attempt_count() const {return move_attempt;}
+    [[nodiscard]] unsigned long bond_length_move_rejection_count() const {return bond_length_move_rejection;}
+    [[nodiscard]] unsigned long move_back_count() const {return move_back;}
+    [[nodiscard]] unsigned long flip_attempt_count() const {return flip_attempt;}
+    [[nodiscard]] unsigned long bond_length_flip_rejection_count() const {return bond_length_flip_rejection;}
+    [[nodiscard]] unsigned long flip_back_count() const {return flip_back;}
 
 
 };
