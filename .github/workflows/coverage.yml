@@ -1,12 +1,9 @@
 name: Run Test Suite
 
 on:
-  workflow_dispatch:
-    inputs:
-      name:
-        description: 'Person to greet'
-        default: 'World'
-        required: true
+  push:
+   branches:
+     - master
 
 jobs:
   test_single_header:

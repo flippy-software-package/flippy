@@ -1,12 +1,10 @@
 name: windows test suite
 
 on:
-  workflow_dispatch:
-    inputs:
-      name:
-        description: 'Person to greet'
-        default: 'World'
-        required: true
+  on:
+  push:
+   branches:
+     - master
 
   test:
       runs-on: windows-latest
