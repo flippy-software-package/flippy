@@ -21,6 +21,4 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: test_single_header
-      - run: |
-          echo 'testing'
-          echo 'done testing'
+      - run: echo 'testing'
