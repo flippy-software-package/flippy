@@ -12,6 +12,8 @@ jobs:
   test_single_header:
     runs-on: self-hosted
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
       - name: test_single_header
         run: |
           echo 'testing'
