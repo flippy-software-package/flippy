@@ -1,11 +1,11 @@
 name: windows test suite
 
 on:
-  on:
   push:
    branches:
      - master
 
+jobs:
   test:
       runs-on: windows-latest
       steps:
