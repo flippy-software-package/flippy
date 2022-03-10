@@ -1,0 +1,39 @@
+# This is a basic workflow that is manually triggered
+
+name: Manual workflow
+
+# Controls when the action will run. Workflow runs when manually triggered using the UI
+# or API.
+on:
+  push:
+   branches:
+     - master
+   
+jobs:
+  test_single_header:
+    runs-on: self-hosted
+    steps:
+      - name: test_single_header
+      - run: |
+          echo 'testing'
+          cd tests/
+          bash build_tests_for_single_header_flippy
+          cd cmake-build-default
+          ./flippy_test
+          echo 'done testing'
+          
+  test:
+    runs-on: self-hosted
+    steps:
+      - name: test
+      - run: |
+          echo 'testing'
+           cd tests/
+           bash build_tests
+           cd cmake-build-default
+          ./flippy_test
+          cd ..
+          ./do_tests
+          echo "done testing"
+          
+          
