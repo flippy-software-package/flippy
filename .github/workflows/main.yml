@@ -15,7 +15,8 @@ jobs:
       - name: test_single_header
         run: |
           echo 'testing'
-          cd tests/
+          ls
+          cd flippy/tests/
           bash build_tests_for_single_header_flippy
           cd cmake-build-default
           ./flippy_test
