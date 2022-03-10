@@ -22374,159 +22374,6 @@ public:
 
 
 
-// begin --- debug_utils.hpp --- 
-
-#ifndef FLIPPY_DEBUG_UTILS_H
-#define FLIPPY_DEBUG_UTILS_H
-#include <iostream>
-#include <chrono>
-#include <ctime>
-#include <utility>
-
-namespace fp {
-
-#if LOGGING_ON
-#define LOGN(x) std::cout<< #x <<": "; fp::print(x)
-#else
-#define LOGN(x)
-#endif
-
-#if LOGGING_ON
-#define LOG(...) fp::print(__VA_ARGS__)
-#else
-#define LOG(...);
-#endif
-
-#if PRINTING_ON
-#define PRINT(...) fp::print(__VA_ARGS__)
-#else
-#define PRINT(...)
-#endif
-
-static void print();
-
-template<template<typename, typename> typename C, typename T>
-static void print(const C<T, std::allocator<T>>& output);
-
-template<typename Tfirst, typename... Trest>
-static void print(const Tfirst& first, const Trest& ... rest);
-
-struct HumanReadableTime{
-  std::string unit;
-  std::string unit_fine;
-  long diff;
-  long diff_fine;
-  long diff_ns;
-};
-
-// ------------------------ IMPLEMENTATIONS ---------------------------- //
-
-[[maybe_unused]] void print() { std::cout << '\n'; }
-
-template<template<typename, typename> typename C, typename T>
-[[maybe_unused]] void print(const C<T, std::allocator<T>>& output)
-{
-    std::cout << "{";
-    auto last = output.size() - 1;
-    for (unsigned long i = 0; i<last; ++i) {
-        std::cout << output[i] << ", ";
-    }
-    std::cout << output[last] << "}" << std::endl;
-}
-
-template<typename Tfirst, typename... Trest>
-[[maybe_unused]] void print(const Tfirst& first, const Trest& ... rest)
-{
-    std::cout << first << ' ';
-    print(rest...);
-}
-
-static HumanReadableTime human_readable_time(long diff){
-    std::string unit;
-    std::string unit_fine;
-    long diff_ns = diff;
-    long diff_fine = diff;
-    if (diff/1.e3l<1.l) { unit = " ns"; }
-    else if (diff/1.e6l<1.l) {
-        unit = " µs";
-        diff /= 1.e3l;
-    }
-    else if (diff/1.e9l<1.l) {
-        unit = " ms";
-        diff /= 1.e6l;
-        unit_fine = " µs";
-        diff_fine /= 1.e3l;
-    }
-    else if (diff/(1.e9l*60.l)<1.l) {
-        unit = " s";
-        diff /= 1e9l;
-        unit_fine = " ms";
-        diff_fine /= 1e6l;
-    }
-    else if (diff/(1.e9l*3600.l)<1.l) {
-        unit = " m";
-        diff /= 6.e10l;
-        unit_fine = " s";
-        diff_fine /= 1.e9l;
-    }
-    else {
-        unit = " h";
-        diff /= 36.e11l;
-        unit_fine = " m";
-        diff_fine /= 6.e10l;
-    }
-    return {.unit=unit, .unit_fine=unit_fine, .diff=diff,
-            .diff_fine=diff_fine, .diff_ns=diff_ns};
-}
-
-class Timer
-{
-/**
- * this class keeps time form its creation to destrtuction. I.e. it can
- * time the duration of a scope.
- *
- * */
-private:
-    using Clock =
-    std::conditional_t<std::chrono::high_resolution_clock::is_steady,
-                       std::chrono::high_resolution_clock,
-                       std::chrono::steady_clock>;
-    Clock::time_point Start = Clock::now();
-    Clock::time_point Now;
-    bool stopped=false;
-public:
-    std::string scope_name = "GLOBAL (guess)";
-    [[maybe_unused]] Timer() = default;
-    [[maybe_unused]] explicit Timer(std::string  _scope_name)
-            :scope_name(std::move(_scope_name)) { };
-    void restart(){Start = Clock::now();}
-    HumanReadableTime stop()
-    {
-        Now = Clock::now();
-        long diff_ = std::chrono::duration_cast<std::chrono::nanoseconds>
-                (Now - Start).count();
-
-        HumanReadableTime hrt = human_readable_time(diff_);
-
-        auto end = std::chrono::system_clock::now();
-        auto end_time = std::chrono::system_clock::to_time_t(end);
-        std::cout << "this timer ran in the following scope: " << scope_name << '\n';
-        std::cout << "finished computation at " << std::ctime(&end_time)
-        << "elapsed time: " << hrt.diff << hrt.unit << " (" << hrt.diff_fine << hrt.unit_fine << ")" << '\n';
-        stopped = true;
-        return hrt;
-    }
-
-    ~Timer() { if(not stopped){stop();} }
-};
-
-}
-#endif
-
-// end --- debug_utils.hpp --- 
-
-
-
 namespace fp {
 using Json = nlohmann::json;
 
@@ -23019,7 +22866,6 @@ public:
                          <<j<<" together with the maxIdx: "<<maxIdx
                          <<" produced a wrong region.\n";
                 exit(12);
-                break;
         }
     }
 
@@ -23254,7 +23100,6 @@ public:
         for(Index i=0; i<n_width;++i) {
             for (Index j = 0; j<n_length; ++j) {
                 Index id = ij_to_id(i, j);
-                fp::print(i, j, id, id_to_i(id), id_to_j(id));
             }
         }
         // populate_bulk
@@ -23649,8 +23494,8 @@ public:
     };
 
 
-    static std::tuple<Real, vec3<Real>> partial_voronoi_area_and_volume_of_node(vec3<Real> const& lij,
-            vec3<Real> const& lij_p_1)
+    static std::tuple<Real, vec3<Real>> partial_voronoi_area_and_face_normal_of_node_in_a_triangle(vec3<Real> const& lij,
+                                                                                                   vec3<Real> const& lij_p_1)
     {
         /** This function returns values of eqn.'s (82) & (84) from the paper [1]
          * Every node has its associated voronoi area and each voronoi area can be subdivided into parts that are
@@ -23659,12 +23504,12 @@ public:
          */
         Real area, face_normal_norm;
         vec3<Real> un_noremd_face_normal;
-        //precalculating this normal and its norm, will be needed in area calc. If all triangles are oriented as right
-        // handed then this normal will point outwards
+        //precalculating this normal and its norm, will be needed in area calc. If all triangles are oriented as
+        // right-handed, then this normal will point outwards
         un_noremd_face_normal = lij.cross(lij_p_1);
         face_normal_norm = un_noremd_face_normal.norm();
         area = mixed_area(lij, lij_p_1, face_normal_norm/2.);
-        return std::make_tuple(area, (area/face_normal_norm)*un_noremd_face_normal);
+        return std::make_tuple(area, un_noremd_face_normal);
     }
 
     static Real mixed_area(vec3<Real> const& lij, vec3<Real> const& lij_p_1, Real triangle_area, Real cot_at_j, Real cot_at_j_p_1){
@@ -23795,7 +23640,6 @@ public:
             update_global_geometry(empty, Geometry<Real, Index>(nodes_[node_id]));
         }
         for (auto node_id: boundary_nodes_ids) {
-            fp::print(node_id);
             update_boundary_node_geometry(node_id);
             update_global_geometry(empty, Geometry<Real, Index>(nodes_[node_id]));
         }
@@ -24096,7 +23940,6 @@ private:
                     triang.id_to_i(node_id)*width/n_width,
                     0.
             };
-            fp::print(node_id, triang.nn_ids[node_id]);
             node.nn_ids = triang.nn_ids[node_id];
             nodes_.data.push_back(node);
             if(triang.is_bulk[node_id]){bulk_nodes_ids.push_back(node_id);}

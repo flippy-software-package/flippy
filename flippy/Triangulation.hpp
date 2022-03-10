@@ -4,7 +4,6 @@
 #include<optional>
 #include "Nodes.hpp"
 #include "vec3.hpp"
-#include "utilities/debug_utils.hpp"
 #include "utilities/utils.hpp"
 #include "Triangulator.hpp"
 
@@ -326,8 +325,8 @@ public:
     };
 
 
-    static std::tuple<Real, vec3<Real>> partial_voronoi_area_and_volume_of_node(vec3<Real> const& lij,
-            vec3<Real> const& lij_p_1)
+    static std::tuple<Real, vec3<Real>> partial_voronoi_area_and_face_normal_of_node_in_a_triangle(vec3<Real> const& lij,
+                                                                                                   vec3<Real> const& lij_p_1)
     {
         /** This function returns values of eqn.'s (82) & (84) from the paper [1]
          * Every node has its associated voronoi area and each voronoi area can be subdivided into parts that are
@@ -336,12 +335,12 @@ public:
          */
         Real area, face_normal_norm;
         vec3<Real> un_noremd_face_normal;
-        //precalculating this normal and its norm, will be needed in area calc. If all triangles are oriented as right
-        // handed then this normal will point outwards
+        //precalculating this normal and its norm, will be needed in area calc. If all triangles are oriented as
+        // right-handed, then this normal will point outwards
         un_noremd_face_normal = lij.cross(lij_p_1);
         face_normal_norm = un_noremd_face_normal.norm();
         area = mixed_area(lij, lij_p_1, face_normal_norm/2.);
-        return std::make_tuple(area, (area/face_normal_norm)*un_noremd_face_normal);
+        return std::make_tuple(area, un_noremd_face_normal);
     }
 
     static Real mixed_area(vec3<Real> const& lij, vec3<Real> const& lij_p_1, Real triangle_area, Real cot_at_j, Real cot_at_j_p_1){
@@ -472,7 +471,6 @@ public:
             update_global_geometry(empty, Geometry<Real, Index>(nodes_[node_id]));
         }
         for (auto node_id: boundary_nodes_ids) {
-            fp::print(node_id);
             update_boundary_node_geometry(node_id);
             update_global_geometry(empty, Geometry<Real, Index>(nodes_[node_id]));
         }
@@ -773,7 +771,6 @@ private:
                     triang.id_to_i(node_id)*width/n_width,
                     0.
             };
-            fp::print(node_id, triang.nn_ids[node_id]);
             node.nn_ids = triang.nn_ids[node_id];
             nodes_.data.push_back(node);
             if(triang.is_bulk[node_id]){bulk_nodes_ids.push_back(node_id);}

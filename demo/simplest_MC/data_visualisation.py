@@ -217,18 +217,19 @@ class SingleTimeFrameImporter(object):
         else:
             self.face_curves = np.array(face_curves)
 
-    def build_polygon(self):
+    def build_polygon(self, alpha):
         cmap = [cm.get_cmap('Reds')(c) for c in self.face_curves]
         return Poly3DCollection(self.faces,
-                         edgecolors='k', linewidths=0.5, facecolors=cmap, alpha=1,
+                         edgecolors='k', linewidths=0.5, facecolors=cmap, alpha=alpha,
                          norm=LogNorm(vmin=self.face_curve_min, vmax=self.face_curve_max)
                          ), cmap
 
 
     def make_polygon(self, stretch=1.1, **kwargs):
         no_box = kwargs.get("no_box", True)
+        alpha = kwargs.get("alpha", 1)
         self._make_empty_figure()
-        polygons, cmap = self.build_polygon()
+        polygons, cmap = self.build_polygon(alpha=alpha)
         self.ax.add_collection3d(polygons)
 
         if no_box:
@@ -302,7 +303,7 @@ if __name__ == '__main__':
     import json
 
     egg_init = SingleTimeFrameImporter.egg_import(f'test_run_init.json')
-    egg_init.make_polygon(no_box=False)
+    egg_init.make_polygon()
     egg_final = SingleTimeFrameImporter.egg_import(f'test_run_final.json')
-    egg_final.make_polygon()
+    egg_final.make_polygon(alpha=0.8)
     plt.show()

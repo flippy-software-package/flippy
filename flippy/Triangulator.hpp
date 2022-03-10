@@ -182,7 +182,6 @@ public:
                          <<j<<" together with the maxIdx: "<<maxIdx
                          <<" produced a wrong region.\n";
                 exit(12);
-                break;
         }
     }
 
@@ -417,7 +416,6 @@ public:
         for(Index i=0; i<n_width;++i) {
             for (Index j = 0; j<n_length; ++j) {
                 Index id = ij_to_id(i, j);
-                fp::print(i, j, id, id_to_i(id), id_to_j(id));
             }
         }
         // populate_bulk

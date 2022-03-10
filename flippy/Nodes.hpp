@@ -7,7 +7,6 @@
 #include "external/json.hpp"
 
 #include "vec3.hpp"
-#include "utilities/debug_utils.hpp"
 
 namespace fp {
 using Json = nlohmann::json;
