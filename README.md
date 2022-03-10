@@ -1,4 +1,4 @@
-[![pipeline status](https://gitlab.tudelft.nl/idema-group/flippy/badges/master/pipeline.svg)](https://gitlab.tudelft.nl/idema-group/flippy/-/commits/master)
+![windows pipeline status](https://github.com/flippy-software-package/flippy/actions/workflows/windows_test.yml/badge.svg)
 [![coverage report](https://gitlab.tudelft.nl/idema-group/flippy/badges/master/coverage.svg)](https://gitlab.tudelft.nl/idema-group/flippy/-/commits/master)
 [![release version](https://img.shields.io/badge/dynamic/json?url=https://gitlab.tudelft.nl/idema-group/flippy/-/raw/master/VERSION.json&query=$.*&color=blue&label=version)](https://gitlab.tudelft.nl/idema-group/flippy/-/releases)
 [![licence](https://img.shields.io/badge/licence-MIT-green)](https://gitlab.tudelft.nl/idema-group/flippy/-/blob/master/LICENSE)
@@ -8,8 +8,6 @@
 <img src="assets/flippy.png" alt="flippy" width="300"/> 
 
 c++ package for dynamically triangulated membrane simulations.
-
-[[_TOC_]]
 
 # Gallery
 

@@ -1,5 +1,6 @@
 .DS_Store
 .directory
+actions-runner
 CMakeLists.txt
 assets/flippy.psd
 cmake-build*
