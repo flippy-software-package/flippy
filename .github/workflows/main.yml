@@ -10,9 +10,13 @@ on:
 
 jobs:
   test_single_header:
-    runs-on: ubuntu-latest
-
-
+    runs-on: self-hosted
     steps:
       - name: test_single_header
-        run: echo 'testing'
+        run: |
+          echo 'testing'
+          cd tests/
+          bash build_tests_for_single_header_flippy
+          cd cmake-build-default
+          ./flippy_test
+          echo 'done testing'
