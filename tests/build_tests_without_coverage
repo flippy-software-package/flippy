@@ -5,4 +5,5 @@ if [ -d $cmakeDir ]; then
 fi
 mkdir cmake-build-default
 cd $cmakeDir || exit
-cmake --build ..
+cmake ..
+cmake --build .
