@@ -1,4 +1,4 @@
-name: windows test suite
+name: linux test suite
 
 on:
   push:
