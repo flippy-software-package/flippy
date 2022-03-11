@@ -17,8 +17,8 @@ jobs:
           run: |
             echo 'testing'
             cd tests/
-            bash build_tests_without_coverage
-            cd cmake-build-default
-            ls
+            bash create_cmake_dir
+            cmake -D CMAKE_CXX_COMPILER=g++-11 ..
+            cmake --build .
             ./flippy_test
             echo "done testing"
