@@ -18,4 +18,5 @@ jobs:
             bash build_tests_without_coverage
             cd cmake-build-default
             ls
+            ./flippy_test
             echo "done testing"
