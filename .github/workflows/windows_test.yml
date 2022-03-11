@@ -17,7 +17,7 @@ jobs:
             cd tests/
             bash build_tests_without_coverage
             cd cmake-build-default
-            ./flippy_test
+            ./flippy_test.exe
             cd ..
             ./do_tests
             echo "done testing"
