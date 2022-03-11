@@ -12,7 +12,7 @@ jobs:
         - name: Checkout repository
           uses: actions/checkout@v3
         - name: install gcc-11
-          run: apt install g++-11
+          run: sudo apt install g++-11
         - name: test
           run: |
             echo 'testing'
