@@ -18,6 +18,7 @@ jobs:
             echo 'testing'
             cd tests/
             bash create_cmake_dir
+            cd cmake-build-default
             cmake -D CMAKE_CXX_COMPILER=g++-11 ..
             cmake --build .
             ./flippy_test
