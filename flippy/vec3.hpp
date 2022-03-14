@@ -4,17 +4,10 @@
 #include <ostream>
 #include <iostream>
 #include <cmath>
-#include <concepts>
+#include "custom_concepts.hpp"
 
 
 namespace fp{
-#if __cpp_concepts >= 201907L
-template<class T> concept floating_point_number = std::is_floating_point_v<T>;
-#else
-template<class T> concept floating_point_number = std::is_floating_point_v<T>;
-//    using floating_point_number =
-#endif
-
 /**
  * Internal implementation of a 3D vector.
  *

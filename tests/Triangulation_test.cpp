@@ -2,7 +2,7 @@
 #include <array>
 #include <iostream>
 
-#define TESTING_TRIANGULATION = 1
+#define TESTING_FLIPPY_TRIANGULATION_ndh6jclc0qnp274b = 1
 #include "flippy.hpp"
 //#include "code_utils.hpp"
 using namespace fp;

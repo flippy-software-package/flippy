@@ -16,7 +16,7 @@ using Json = nlohmann::json;
    * I.e. it will never check if the curvature is the norm of the curvature vector or if the nn_ids and nn_distances are in the correct order.
    * However it does check the data for consistency. It will match the length of nn_ids and nn_distances. And pop and add both of them together.
    */
-template<std::floating_point Real, std::integral Index>
+template<floating_point_number Real, integer_number Index>
 struct Node
 {
   //! a number between 0 and max number of nodes - 1
@@ -124,7 +124,7 @@ struct Node
 
 };
 
-template<std::floating_point Real, std::integral Index>
+template<floating_point_number Real, integer_number Index>
 struct Nodes
 {
     std::vector<Node<Real, Index>> data;

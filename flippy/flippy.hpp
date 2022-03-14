@@ -43,6 +43,7 @@
 #ifndef FLIPPY_FLIPPY_HPP
 #define FLIPPY_FLIPPY_HPP
 #include "external/json.hpp"
+#include "custom_concepts.hpp"
 #include "vec3.hpp"
 #include "utilities/utils.hpp"
 #include "Nodes.hpp"

@@ -1,6 +1,6 @@
 #include "external/catch.hpp"
 #include <iostream>
-#define TESTING_TRIANGULATION = 1
+#define TESTING_FLIPPY_TRIANGULATION_ndh6jclc0qnp274b = 1
 #include "flippy.hpp"
 using namespace fp;
 const double EPSILON = 1e-9;

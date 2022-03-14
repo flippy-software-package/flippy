@@ -1,13 +1,13 @@
 #ifndef FLIPPY_MONTECARLOUPDATER_HPP
 #define FLIPPY_MONTECARLOUPDATER_HPP
-#include <concepts>
+#include "custom_concepts.hpp"
 #include <random>
 #include "Nodes.hpp"
 #include "Triangulation.hpp"
 
 namespace fp {
 
-template<std::floating_point Real, std::integral Index, typename EnergyFunctionParameters, typename RandomNumberEngine, TriangulationType triangulation_type>
+template<floating_point_number Real, integer_number Index, typename EnergyFunctionParameters, typename RandomNumberEngine, TriangulationType triangulation_type>
 class MonteCarloUpdater
 {
 private:

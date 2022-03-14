@@ -5,8 +5,7 @@
 #include <vector>
 #include <unordered_set>
 #include <unordered_map>
-#include <concepts>
-#include <type_traits>
+#include "custom_concepts.hpp"
 #include "vec3.hpp"
 
 #ifndef M_PI
@@ -19,7 +18,7 @@
  * Since flippy is a headers only library this could not be hidden in source files.
  */
 namespace fp::implementation{
-template<std::floating_point Real, std::integral Index>
+template<floating_point_number Real, integer_number Index>
 struct SimpleNodeData{
   std::string hash{};
   Index id{};

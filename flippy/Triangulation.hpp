@@ -39,7 +39,7 @@ static constexpr int BOND_DONATION_CUTOFF = 4; // a node needs to have more than
  *```
  *
  * */
-template<std::integral Index>
+template<integer_number Index>
 struct BondFlipData
 {
   bool flipped = false;
@@ -50,7 +50,7 @@ struct BondFlipData
 /**
  * A helper struct;  makes addition and subtraction on a ring easier.
  * */
-template<std::integral Index>
+template<integer_number Index>
 struct Neighbors
 {
   Index j_m_1{-1};  //neighbor j+1
@@ -63,7 +63,7 @@ struct Neighbors
 /**
  * A helper struct (template) that is used by the triangulation to pass data around in one convenient package.
  */
-template<std::floating_point Real, std::integral Index>
+template<floating_point_number Real, integer_number Index>
 struct Geometry
 {
   Real area;
@@ -125,7 +125,7 @@ enum TriangulationType{
  * pp. 35–57 <https://doi.org/10.1007/978-3-662-05105-4_2>.
  *
  */
-template<std::floating_point Real, std::integral Index, TriangulationType triangulation_type=SPHERICAL_TRIANGULATION>
+template<floating_point_number Real, integer_number Index, TriangulationType triangulation_type=SPHERICAL_TRIANGULATION>
 class Triangulation
 {
 private:
@@ -485,7 +485,7 @@ public:
 
     }
 
-#ifdef TESTING_TRIANGULATION
+#ifdef TESTING_FLIPPY_TRIANGULATION_ndh6jclc0qnp274b
 public:
 #else
 private:
