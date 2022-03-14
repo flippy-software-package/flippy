@@ -11,8 +11,10 @@ jobs:
       steps:
         - name: Checkout repository
           uses: actions/checkout@v3
-        - name: install minGW
-          run: sudo apt install mingw-w64
+        - name: Set up MinGW
+          uses: egor-tensin/setup-mingw@v2
+          with:
+            platform: x64
         - name: test
           run: |
             echo 'testing'

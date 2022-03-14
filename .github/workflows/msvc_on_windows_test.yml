@@ -20,7 +20,6 @@ jobs:
             cd cmake-build-default || exit 1
             cmake -S .. -B .
             cmake --build . --config Release
-            cd Release
             ls
             ./flippy_test.exe
             echo "done testing"
