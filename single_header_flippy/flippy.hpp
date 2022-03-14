@@ -22517,8 +22517,8 @@ struct Nodes
             Real area = node.value()["area"];
             Real volume = node.value()["volume"];
 
-            nn_ids_temp = std::vector<Index>(node_dict[node_id]["nn_ids"]);
-            verlet_list_temp = std::vector<Index>(node_dict[node_id]["verlet_list"]);
+            nn_ids_temp = node_dict[node_id]["nn_ids"].get<std::vector<Index>>();
+            verlet_list_temp = node_dict[node_id]["verlet_list"].get<std::vector<Index>>();
             std::vector<vec3<Real>>
                     nn_distances;
 
