@@ -11,12 +11,15 @@ jobs:
       steps:
         - name: Checkout repository
           uses: actions/checkout@v3
-        - name: install minGW
-          run: choco install mingw
+        - name: Set up GCC
+          uses: egor-tensin/setup-gcc@v1
+          with:
+            version: latest
+            platform: x64
         - name: test
           run: |
             echo 'testing'
-            which g++-10
+            which g++
             cd tests/
             bash create_cmake_dir
             cd cmake-build-default || exit 1
