@@ -22,5 +22,7 @@ jobs:
             ls
             cd x64
             ls
-            ./flippy_test
+            cd Release
+            ls
+            ./flippy_test.exe
             echo "done testing"
