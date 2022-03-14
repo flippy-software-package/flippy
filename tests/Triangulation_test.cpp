@@ -18,6 +18,13 @@ void rescale_triangulation(Real R, Triangulation<Real,Index, SPHERICAL_TRIANGULA
     tr.make_verlet_list();
 }
 static constexpr auto max_float = 3.40282347e+38F;
+
+template<typename Index>
+std::vector<Index> rotate_left(std::vector<Index> v){
+    std::rotate(v.begin(), v.begin() + 1, v.end());
+    return v;
+}
+
 fp::Json const ICOSA_DATA =
         R"({
 	  "0":	{"nn_ids": [4,2,3,1,5],   "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "unit_bending_energy": 0, "pos": [0.0,0.0,100.0]},
@@ -169,14 +176,24 @@ TEST_CASE("Proper topology change")
     SECTION("Property check: unflip reverses flip"){
         double r_init = 1;
         Triangulation<double, long, SPHERICAL_TRIANGULATION> sphere(10, r_init, 0);
+        std::random_device rd;
+        std::mt19937_64 rng(rd());
+        std::uniform_int_distribution<long> rid(0, sphere.size()-1);
         for(int repeat=0; repeat<10; ++repeat) {
-            long rand_node_id = rand()%sphere.size();
+            long rand_node_id = rid(rng);
             auto nn_ids = sphere[rand_node_id].nn_ids;
-            long rand_nn_id = nn_ids[rand()%nn_ids.size()];
+            std::uniform_int_distribution<long> r_nn_id(0, (long)nn_ids.size()-1);
+            long rand_nn_id = nn_ids[r_nn_id(rng)];
+            auto global_geometry_ORIGINAL = sphere.global_geometry();
             auto bfd = sphere.flip_bond(rand_node_id, rand_nn_id, 0, max_float);
             sphere.unflip_bond(rand_node_id, rand_nn_id, bfd);
+            auto global_geometry_AFTER_FLIP_BACKFLIP = sphere.global_geometry();
             CHECK(bfd.flipped==true);
-            CHECK(nn_ids==sphere[rand_node_id].nn_ids);
+            CHECK(global_geometry_ORIGINAL.area==global_geometry_AFTER_FLIP_BACKFLIP.area);
+            CHECK(global_geometry_ORIGINAL.volume==global_geometry_AFTER_FLIP_BACKFLIP.volume);
+            CHECK(global_geometry_ORIGINAL.unit_bending_energy==global_geometry_AFTER_FLIP_BACKFLIP.unit_bending_energy);
+            bool nn_ids_are_directly_equal_or_equal_after_odd_perm = (nn_ids==sphere[rand_node_id].nn_ids)||(nn_ids==rotate_left(sphere[rand_node_id].nn_ids));
+            CHECK(nn_ids_are_directly_equal_or_equal_after_odd_perm);
         }
     }
     SECTION("CHECK two common neighbours and normal common neighbours on icosa examples") {
