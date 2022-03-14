@@ -20,7 +20,7 @@ jobs:
             cd tests/
             bash create_cmake_dir
             cd cmake-build-default || exit 1
-            cmake -D CMAKE_CXX_COMPILER=mingw-w64 -S .. -B .
+            cmake -D CMAKE_CXX_COMPILER=mingw -S .. -B .
             cmake --build . --config Release
             ls
             cd Release
