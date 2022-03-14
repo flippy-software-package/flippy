@@ -32,13 +32,14 @@ set_source_files_properties(../external
         COMPILE_FLAGS -W0
         )
 
-add_executable(${PROJECT_NAME} main.cpp
-        vec3_test.cpp
-        Nodes_test.cpp
-        local_geometry_test.cpp
-        Triangulation_test.cpp
-        Triangulator_test.cpp
-        )
+add_executable(${PROJECT_NAME} main.cpp)
+#add_executable(${PROJECT_NAME} main.cpp
+#        vec3_test.cpp
+#        Nodes_test.cpp
+#        local_geometry_test.cpp
+#        Triangulation_test.cpp
+#        Triangulator_test.cpp
+#        )
 
 enable_testing()
 add_test(${PROJECT_NAME} ${PROJECT_NAME})

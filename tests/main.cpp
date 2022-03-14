@@ -1,7 +1,14 @@
-#define CATCH_CONFIG_MAIN
-#define CATCH_CONFIG_ENABLE_BENCHMARKING
+//#define CATCH_CONFIG_MAIN
+//#define CATCH_CONFIG_ENABLE_BENCHMARKING
+//
+//#include "external/catch.hpp"
+//
+//TEST_CASE( "1: All test cases reside in other .cpp files (empty)", "[multi-file:1]" ) {
+//}
 
-#include "external/catch.hpp"
+#include <iostream>
 
-TEST_CASE( "1: All test cases reside in other .cpp files (empty)", "[multi-file:1]" ) {
+int main(){
+    std::cout<<"hello\n";
+    return 0;
 }
