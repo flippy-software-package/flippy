@@ -9,8 +9,6 @@ jobs:
   test:
       runs-on: windows-latest
       steps:
-        - name: Setup tmate session
-          uses: mxschmitt/action-tmate@v3
         - name: Checkout repository
           uses: actions/checkout@v3
         - name: Set up MinGW
@@ -31,3 +29,5 @@ jobs:
             make
             ./flippy_test.exe
             echo "done testing"
+        - name: Setup tmate session
+          uses: mxschmitt/action-tmate@v3
