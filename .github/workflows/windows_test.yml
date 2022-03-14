@@ -1,4 +1,4 @@
-name: windows test suite
+name: MSVC on windows test suite
 
 on:
   push:
@@ -16,7 +16,7 @@ jobs:
             echo 'testing'
             cd tests/
             bash build_tests_without_coverage
-            cd cmake-build-default
+            cd cmake-build-default/Debug
             ls
             ./flippy_test
             echo "done testing"

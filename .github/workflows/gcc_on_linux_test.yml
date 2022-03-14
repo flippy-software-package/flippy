@@ -1,4 +1,4 @@
-name: linux test suite
+name: gcc on linux test suite
 
 on:
   push:
