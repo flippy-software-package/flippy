@@ -22,7 +22,7 @@ jobs:
             cd tests/
             bash create_cmake_dir
             cd cmake-build-default || exit 1
-            cmake -D CMAKE_CXX_COMPILER=g++ -S .. -B .
+            cmake -D CMAKE_CXX_COMPILER=i686-w64-mingw64-g++ -S .. -B .
             make
             ./flippy_test.exe
             echo "done testing"
