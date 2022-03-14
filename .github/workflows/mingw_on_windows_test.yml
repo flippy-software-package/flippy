@@ -1,4 +1,4 @@
-name: MSVC on windows test suite
+name: minGW on windows test suite
 
 on:
   push:
@@ -11,18 +11,17 @@ jobs:
       steps:
         - name: Checkout repository
           uses: actions/checkout@v3
+        - name: install minGW
+          run: sudo apt install mingw-w64
         - name: test
           run: |
             echo 'testing'
             ls
             cd tests/
-            bash build_tests_without_coverage
-            ls
+            bash create_cmake_dir
             cd cmake-build-default || exit 1
-            ls
-            cd x64
-            ls
-            cd Release
+            cmake -D CMAKE_CXX_COMPILER=mingw-w64 -S .. -B .
+            cmake --build . --config Release
             ls
             ./flippy_test.exe
             echo "done testing"
