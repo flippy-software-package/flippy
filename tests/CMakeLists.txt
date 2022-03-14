@@ -5,7 +5,11 @@ set(CXX_STANDARD_REQUIRED ON)
 
 set(CMAKE_BUILD_TYPE Release)
 
-#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic")
+if (${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
+    MESSAGE("building for MSVC")
+else()
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic")
+endif ()
 message(${CMAKE_CXX_COMPILER_ID})
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} -g")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} -O3")

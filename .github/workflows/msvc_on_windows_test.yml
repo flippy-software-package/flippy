@@ -21,5 +21,6 @@ jobs:
             cmake -S .. -B .
             cmake --build . --config Release
             ls
-            ./flippy_test.exe
+            cd Release
+            ls
             echo "done testing"
