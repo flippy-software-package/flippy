@@ -14,9 +14,11 @@ jobs:
         - name: test
           run: |
             echo 'testing'
+            ls
             cd tests/
             bash build_tests_without_coverage
-            cd cmake-build-default
-            cd Debug
             ls
+            cd cmake-build-default/Debug
+            ls
+            ./flippy_test
             echo "done testing"
