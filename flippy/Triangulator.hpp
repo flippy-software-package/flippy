@@ -26,7 +26,7 @@ struct SimpleNodeData{
   std::unordered_set<std::string> nn_hashes{};
 };
 
-template<std::floating_point Real, std::integral Index>
+template<floating_point_number Real, integer_number Index>
 class IcosahedronSubTriangulation
 {
 public:
@@ -348,7 +348,7 @@ public:
     }
 };
 
-template<std::floating_point Real, std::integral Index>
+template<floating_point_number Real, integer_number Index>
 class PlanarTriangulation{
     Index n_length;
 public:
