@@ -19,7 +19,9 @@ jobs:
           run: |
             echo 'testing'
             which g++
-            which i686-w64-mingw64-g++
+            which g++11
+            which g++-10
+            which g++-11
             cd tests/
             bash create_cmake_dir
             cd cmake-build-default || exit 1
