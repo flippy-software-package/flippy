@@ -20,7 +20,7 @@ jobs:
             cd tests/
             bash create_cmake_dir
             cd cmake-build-default || exit 1
-            cmake -D CMAKE_CXX_COMPILER=/c/ProgramData/Chocolatey/bin/g++ -S .. -B .
+            cmake -D CMAKE_CXX_COMPILER=g++ -S .. -B .
             cmake --build . --config Release
             ./flippy_test.exe
             echo "done testing"
