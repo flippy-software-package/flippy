@@ -1,4 +1,4 @@
-name: gcc on linux test suite
+name: clang on linux test suite
 
 on:
   push:
@@ -11,15 +11,15 @@ jobs:
       steps:
         - name: Checkout repository
           uses: actions/checkout@v3
-        - name: install clang-13
-          run: sudo apt install clang-13
+        - name: install clang-12
+          run: sudo apt install clang-12
         - name: test
           run: |
             echo 'testing'
             cd tests/
             bash create_cmake_dir
             cd cmake-build-default
-            cmake -D CMAKE_CXX_COMPILER=clang++-13 ..
+            cmake -D CMAKE_CXX_COMPILER=clang++-12 ..
             cmake --build .
             ./flippy_test
             echo "done testing"
