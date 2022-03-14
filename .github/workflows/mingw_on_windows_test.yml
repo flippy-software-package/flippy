@@ -22,7 +22,7 @@ jobs:
             cd tests/
             bash create_cmake_dir
             cd cmake-build-default || exit 1
-            cmake -G "MinGW Makefiles" -S .. -B .
+            cmake -D CMAKE_CXX_COMPILER="/c/ProgramData/chocolatey/lib/mingw/tools/install/mingw64/bin/g++" -S .. -B .
             make
             ./flippy_test.exe
             echo "done testing"
