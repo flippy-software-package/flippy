@@ -224,7 +224,7 @@ public:
          */
         auto anchor_pos_ptr = std::find(nodes_[center_node_id].nn_ids.begin(),
                 nodes_[center_node_id].nn_ids.end(), anchor_id);
-        std::integral auto anchor_pos = (Index) (anchor_pos_ptr - nodes_[center_node_id].nn_ids.begin());
+        integer_number auto anchor_pos = (Index) (anchor_pos_ptr - nodes_[center_node_id].nn_ids.begin());
         nodes_[center_node_id].emplace_nn_id(new_value, nodes_[new_value].pos, anchor_pos);
     }
 
@@ -289,7 +289,7 @@ public:
         Real area_sum = 0.;
         vec3<Real> face_normal_sum{0., 0., 0.}, local_curvature_vec{0., 0., 0.};
         vec3<Real> face_normal;
-        std::integral auto nn_number = (Index) nodes_.nn_ids(node_id).size();
+        integer_number auto nn_number = (Index) nodes_.nn_ids(node_id).size();
         Index j_p_1;
 
         Real face_area, face_normal_norm;
@@ -660,7 +660,7 @@ private:
     {
 
         Index j = nodes_.find_nns_loc_idx(node_id_0, node_id_1);
-        std::integral auto nn_number = (Index)nodes_.nn_ids(node_id_0).size();
+        integer_number auto nn_number = (Index)nodes_.nn_ids(node_id_0).size();
         Index j_p_1 = Neighbors<Index>::plus_one(j, nn_number);
         Index j_m_1 = Neighbors<Index>::plus_one(j, nn_number);
         std::array<Index, 2> res{nodes_.nn_id(node_id_0,j_m_1),
