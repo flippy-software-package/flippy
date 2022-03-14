@@ -4,7 +4,7 @@
 
 #define TESTING_TRIANGULATION = 1
 #include "flippy.hpp"
-
+//#include "code_utils.hpp"
 using namespace fp;
 
 template <typename Real, typename Index>
@@ -154,10 +154,10 @@ TEST_CASE("Proper topology change")
     SECTION("flip_bond unit test"){
         Triangulation<double, long, SPHERICAL_TRIANGULATION> icosa(ICOSA_DATA, 0);
         icosa.orient_surface_of_a_sphere();
-//        fp::print(icosa[0].nn_ids);
-//        fp::print(icosa[1].nn_ids);
-//        fp::print(icosa[2].nn_ids);
-//        fp::print(icosa[7].nn_ids);
+//        cutils::print(icosa[0].nn_ids);
+//        cutils::print(icosa[1].nn_ids);
+//        cutils::print(icosa[2].nn_ids);
+//        cutils::print(icosa[7].nn_ids);
         auto bfd = icosa.flip_bond(1,2, 0, max_float);
         CHECK(bfd.flipped==true);
         CHECK(icosa[1].nn_ids==std::vector<long>{6,7,0,5});
