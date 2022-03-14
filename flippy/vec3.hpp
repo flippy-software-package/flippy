@@ -6,7 +6,14 @@
 #include <cmath>
 #include <concepts>
 
+
 namespace fp{
+#if __cpp_concepts >= 201907L
+template<class T> concept floating_point_number = std::is_floating_point_v<T>;
+#else
+template<class T> concept floating_point_number = std::is_floating_point_v<T>;
+//    using floating_point_number =
+#endif
 
 /**
  * Internal implementation of a 3D vector.
@@ -28,7 +35,7 @@ namespace fp{
  *  assert(((v1-v2)==fp::vec3<double>{1.,0.,-1.}));
  * ```
  */
-template<std::floating_point Real>
+template<floating_point_number Real>
 class vec3
 {
 public:

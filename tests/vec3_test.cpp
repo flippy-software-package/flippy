@@ -1,7 +1,8 @@
 #define CATCH_CONFIG_ENABLE_BENCHMARKING
 #include "catch.hpp"
 
-#include "flippy.hpp"
+//#include "flippy.hpp"
+#include "vec3.hpp"
 
 const double EPSILON = 1e-9;
 
@@ -38,6 +39,7 @@ TEST_CASE("proper initiation for vec3"){
 	fp::vec3<double> v1{};
 	v1=v0;
 	CHECK(v1==v0);
+
   }
 
 }
