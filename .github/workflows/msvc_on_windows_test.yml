@@ -14,13 +14,11 @@ jobs:
         - name: test
           run: |
             echo 'testing'
-            ls
             cd tests/
             bash create_cmake_dir
             cd cmake-build-default || exit 1
             cmake -S .. -B .
             cmake --build . --config Release
-            ls
             cd Release
-            ls
+            ./flippy_test.exe
             echo "done testing"
