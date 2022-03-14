@@ -20,7 +20,7 @@ jobs:
             ls
             cd cmake-build-default || exit 1
             ls
-            cd Debug 
+            cd x64
             ls
             ./flippy_test
             echo "done testing"
