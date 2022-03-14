@@ -17,7 +17,7 @@ void rescale_triangulation(Real R, Triangulation<Real,Index, SPHERICAL_TRIANGULA
     tr.make_global_geometry();
     tr.make_verlet_list();
 }
-
+static constexpr auto max_float = 3.40282347e+38F;
 fp::Json const ICOSA_DATA =
         R"({
 	  "0":	{"nn_ids": [4,2,3,1,5],   "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "unit_bending_energy": 0, "pos": [0.0,0.0,100.0]},
@@ -158,7 +158,7 @@ TEST_CASE("Proper topology change")
 //        fp::print(icosa[1].nn_ids);
 //        fp::print(icosa[2].nn_ids);
 //        fp::print(icosa[7].nn_ids);
-        auto bfd = icosa.flip_bond(1,2, 0, MAXFLOAT);
+        auto bfd = icosa.flip_bond(1,2, 0, max_float);
         CHECK(bfd.flipped==true);
         CHECK(icosa[1].nn_ids==std::vector<long>{6,7,0,5});
         CHECK(icosa[2].nn_ids==std::vector<long>{3,0,7,8});
@@ -173,7 +173,7 @@ TEST_CASE("Proper topology change")
             long rand_node_id = rand()%sphere.size();
             auto nn_ids = sphere[rand_node_id].nn_ids;
             long rand_nn_id = nn_ids[rand()%nn_ids.size()];
-            auto bfd = sphere.flip_bond(rand_node_id, rand_nn_id, 0, MAXFLOAT);
+            auto bfd = sphere.flip_bond(rand_node_id, rand_nn_id, 0, max_float);
             sphere.unflip_bond(rand_node_id, rand_nn_id, bfd);
             CHECK(bfd.flipped==true);
             CHECK(nn_ids==sphere[rand_node_id].nn_ids);
