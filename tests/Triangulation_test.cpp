@@ -4,10 +4,9 @@
 
 #define TESTING_FLIPPY_TRIANGULATION_ndh6jclc0qnp274b = 1
 #include "flippy.hpp"
-//#include "code_utils.hpp"
 using namespace fp;
 
-template <typename Real, typename Index>
+template <floating_point_number Real, integer_number Index>
 void rescale_triangulation(Real R, Triangulation<Real,Index, SPHERICAL_TRIANGULATION>& tr)
 {
     tr.R_initial=R;
@@ -57,7 +56,7 @@ fp::Json const STAR_DATA =
 	  "0":   {"nn_ids": [6, 8, 1, 5, 4, 10, 9, 7], "verlet_list": [], "curvature_vec": [0,0,0], "area": 0, "volume": 0, "unit_bending_energy": 0, "pos": [0.5,0,-1]}
   })"_json;
 
-template<std::floating_point Real, std::integral Index>
+template<floating_point_number Real, integer_number Index>
 void radius_scaling_test(Triangulation<Real, Index, SPHERICAL_TRIANGULATION> const& triangulation, Real r_init){
     auto target = Approx(r_init).margin(0.001);
     auto mc = triangulation.calculate_mass_center();
