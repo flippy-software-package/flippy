@@ -33,7 +33,7 @@ set_source_files_properties(../external
         )
 
 add_executable(${PROJECT_NAME} main.cpp
-        vec3_test.cpp
+        vec3_test.cpp)
 #        Nodes_test.cpp
 #        local_geometry_test.cpp
 #        Triangulation_test.cpp

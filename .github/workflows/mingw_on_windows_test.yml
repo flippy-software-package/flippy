@@ -23,6 +23,4 @@ jobs:
             cmake -D CMAKE_CXX_COMPILER=mingw -S .. -B .
             cmake --build . --config Release
             ls
-            cd Release
-            ls
             echo "done testing"
