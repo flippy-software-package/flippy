@@ -22,6 +22,5 @@ jobs:
             cd cmake-build-default || exit 1
             cmake -G "MinGW Makefiles" -S .. -B .
             make
-#            cmake --build . --config Release
             ./flippy_test.exe
             echo "done testing"
