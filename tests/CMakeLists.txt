@@ -7,12 +7,13 @@ set(CMAKE_BUILD_TYPE Release)
 
 if (${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
     MESSAGE("building for MSVC")
+    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} -O2")
 else()
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic")
+    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} -O3")
 endif ()
 message(${CMAKE_CXX_COMPILER_ID})
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} -g")
-set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} -O3")
 
 include_directories(.)
 include_directories(external)
@@ -33,12 +34,12 @@ set_source_files_properties(../external
         )
 
 add_executable(${PROJECT_NAME} main.cpp
-        vec3_test.cpp)
+        vec3_test.cpp
 #        Nodes_test.cpp
-#        local_geometry_test.cpp
+        local_geometry_test.cpp
 #        Triangulation_test.cpp
 #        Triangulator_test.cpp
-#        )
+        )
 
 enable_testing()
 add_test(${PROJECT_NAME} ${PROJECT_NAME})
