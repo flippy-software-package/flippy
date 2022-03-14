@@ -17,8 +17,6 @@ jobs:
             cd tests/
             bash build_tests_without_coverage
             cd cmake-build-default
-            ls
             cd Debug
             ls
-            dir
             echo "done testing"
