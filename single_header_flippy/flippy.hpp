@@ -58,6 +58,29 @@
 
 
 
+// begin --- custom_concepts.hpp --- 
+
+#ifndef FLIPPY_CUSTOM_CONCEPTS_HPP
+#define FLIPPY_CUSTOM_CONCEPTS_HPP
+#include <concepts>
+
+namespace fp{
+/**
+ * Here we implement the concepts of a floating point number and integral number.
+ * Since apple clang does not implement concepts fully we need to do this here.
+ */
+template<class T> concept floating_point_number = std::is_floating_point_v<T>;
+template<class T> concept integer_number = std::is_integral_v<T>;
+}
+
+
+#endif //FLIPPY_CUSTOM_CONCEPTS_HPP
+
+
+// end --- custom_concepts.hpp --- 
+
+
+
 // begin --- Triangulation.hpp --- 
 
 #ifndef FLIPPY_TRIANGULATION_HPP
@@ -22180,10 +22203,9 @@ inline nlohmann::json::json_pointer operator "" _json_pointer(const char* s, std
 #include <ostream>
 #include <iostream>
 #include <cmath>
-#include <concepts>
+
 
 namespace fp{
-
 /**
  * Internal implementation of a 3D vector.
  *
@@ -22204,7 +22226,7 @@ namespace fp{
  *  assert(((v1-v2)==fp::vec3<double>{1.,0.,-1.}));
  * ```
  */
-template<std::floating_point Real>
+template<floating_point_number Real>
 class vec3
 {
 public:
@@ -22382,7 +22404,7 @@ using Json = nlohmann::json;
    * I.e. it will never check if the curvature is the norm of the curvature vector or if the nn_ids and nn_distances are in the correct order.
    * However it does check the data for consistency. It will match the length of nn_ids and nn_distances. And pop and add both of them together.
    */
-template<std::floating_point Real, std::integral Index>
+template<floating_point_number Real, integer_number Index>
 struct Node
 {
   //! a number between 0 and max number of nodes - 1
@@ -22490,7 +22512,7 @@ struct Node
 
 };
 
-template<std::floating_point Real, std::integral Index>
+template<floating_point_number Real, integer_number Index>
 struct Nodes
 {
     std::vector<Node<Real, Index>> data;
@@ -22664,16 +22686,6 @@ template<typename T>
     std::filesystem::create_directories(dir);
 }
 
-
-
-static std::string stream_particle(std::string const& name, auto const& vec, std::stringstream& s){
-        s<<name<<' '<<stream_vec3(vec)<<'\n';
-        return s.str();
-}
-
-[[maybe_unused]] static void stream_xyz_data(){
-
-}
 }
 #endif
 
@@ -22690,8 +22702,6 @@ static std::string stream_particle(std::string const& name, auto const& vec, std
 #include <vector>
 #include <unordered_set>
 #include <unordered_map>
-#include <concepts>
-#include <type_traits>
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846	/* pi */
@@ -22703,7 +22713,7 @@ static std::string stream_particle(std::string const& name, auto const& vec, std
  * Since flippy is a headers only library this could not be hidden in source files.
  */
 namespace fp::implementation{
-template<std::floating_point Real, std::integral Index>
+template<floating_point_number Real, integer_number Index>
 struct SimpleNodeData{
   std::string hash{};
   Index id{};
@@ -22711,7 +22721,7 @@ struct SimpleNodeData{
   std::unordered_set<std::string> nn_hashes{};
 };
 
-template<std::floating_point Real, std::integral Index>
+template<floating_point_number Real, integer_number Index>
 class IcosahedronSubTriangulation
 {
 public:
@@ -23033,7 +23043,7 @@ public:
     }
 };
 
-template<std::floating_point Real, std::integral Index>
+template<floating_point_number Real, integer_number Index>
 class PlanarTriangulation{
     Index n_length;
 public:
@@ -23208,7 +23218,7 @@ static constexpr int BOND_DONATION_CUTOFF = 4; // a node needs to have more than
  *```
  *
  * */
-template<std::integral Index>
+template<integer_number Index>
 struct BondFlipData
 {
   bool flipped = false;
@@ -23219,7 +23229,7 @@ struct BondFlipData
 /**
  * A helper struct;  makes addition and subtraction on a ring easier.
  * */
-template<std::integral Index>
+template<integer_number Index>
 struct Neighbors
 {
   Index j_m_1{-1};  //neighbor j+1
@@ -23232,7 +23242,7 @@ struct Neighbors
 /**
  * A helper struct (template) that is used by the triangulation to pass data around in one convenient package.
  */
-template<std::floating_point Real, std::integral Index>
+template<floating_point_number Real, integer_number Index>
 struct Geometry
 {
   Real area;
@@ -23294,7 +23304,7 @@ enum TriangulationType{
  * pp. 35–57 <https://doi.org/10.1007/978-3-662-05105-4_2>.
  *
  */
-template<std::floating_point Real, std::integral Index, TriangulationType triangulation_type=SPHERICAL_TRIANGULATION>
+template<floating_point_number Real, integer_number Index, TriangulationType triangulation_type=SPHERICAL_TRIANGULATION>
 class Triangulation
 {
 private:
@@ -23393,7 +23403,7 @@ public:
          */
         auto anchor_pos_ptr = std::find(nodes_[center_node_id].nn_ids.begin(),
                 nodes_[center_node_id].nn_ids.end(), anchor_id);
-        std::integral auto anchor_pos = (Index) (anchor_pos_ptr - nodes_[center_node_id].nn_ids.begin());
+        integer_number auto anchor_pos = (Index) (anchor_pos_ptr - nodes_[center_node_id].nn_ids.begin());
         nodes_[center_node_id].emplace_nn_id(new_value, nodes_[new_value].pos, anchor_pos);
     }
 
@@ -23458,7 +23468,7 @@ public:
         Real area_sum = 0.;
         vec3<Real> face_normal_sum{0., 0., 0.}, local_curvature_vec{0., 0., 0.};
         vec3<Real> face_normal;
-        std::integral auto nn_number = (Index) nodes_.nn_ids(node_id).size();
+        integer_number auto nn_number = (Index) nodes_.nn_ids(node_id).size();
         Index j_p_1;
 
         Real face_area, face_normal_norm;
@@ -23654,7 +23664,7 @@ public:
 
     }
 
-#ifdef TESTING_TRIANGULATION
+#ifdef TESTING_FLIPPY_TRIANGULATION_ndh6jclc0qnp274b
 public:
 #else
 private:
@@ -23829,7 +23839,7 @@ private:
     {
 
         Index j = nodes_.find_nns_loc_idx(node_id_0, node_id_1);
-        std::integral auto nn_number = (Index)nodes_.nn_ids(node_id_0).size();
+        integer_number auto nn_number = (Index)nodes_.nn_ids(node_id_0).size();
         Index j_p_1 = Neighbors<Index>::plus_one(j, nn_number);
         Index j_m_1 = Neighbors<Index>::plus_one(j, nn_number);
         std::array<Index, 2> res{nodes_.nn_id(node_id_0,j_m_1),
@@ -24014,12 +24024,11 @@ private:
 
 #ifndef FLIPPY_MONTECARLOUPDATER_HPP
 #define FLIPPY_MONTECARLOUPDATER_HPP
-#include <concepts>
 #include <random>
 
 namespace fp {
 
-template<std::floating_point Real, std::integral Index, typename EnergyFunctionParameters, typename RandomNumberEngine, TriangulationType triangulation_type>
+template<floating_point_number Real, integer_number Index, typename EnergyFunctionParameters, typename RandomNumberEngine, TriangulationType triangulation_type>
 class MonteCarloUpdater
 {
 private:
