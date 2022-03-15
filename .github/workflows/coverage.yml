@@ -20,6 +20,20 @@ jobs:
             cd cmake-build-default
             cd ..
             ./do_tests > test_out
-            echo "done testing"
+            total=`grep "functions..:" test_out | tail -1| grep -Eo '[0-9]+\.[0-9]+'`
+            if (( $(echo "$total <= 50" | bc -l) )) ; then
+              COLOR=red
+            elif (( $(echo "$total > 80" | bc -l) )); then
+              COLOR=green
+            else
+              COLOR=orange
+            fi
+            gistID=2e1b636e9ff08fb7d0d5a8168bcf5613
+            git clone git@gist.github.com:${gistID}.git
+            echo \{\"schemaVersion\":1,\"label\":\"coverage\",\"message\":\""${total}%"\",\"color\":\""${COLOR}"\"\} > ${gistID}/coverage.json
+            cd ${gistID}
+            git commit coverage.json -m "new coverage results"
+            git push
+          echo "done testing"
         - name: Setup tmate session
           uses: mxschmitt/action-tmate@v3
