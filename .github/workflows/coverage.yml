@@ -18,6 +18,7 @@ jobs:
             cd tests/
             bash build_tests
             cd cmake-build-default
+            cd ..
             ./do_tests > test_out
             echo "done testing"
         - name: Setup tmate session
