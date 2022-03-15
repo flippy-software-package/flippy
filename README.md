@@ -1,4 +1,4 @@
-[![coverage report](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/gdadunashvili/2e1b636e9ff08fb7d0d5a8168bcf5613/raw/170d75bc86b733fd3b0f86e675d7cfc568c50be1/coverage.json)](https://github.com/flippy-software-package/flippy/actions)
+[![coverage report](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/gdadunashvili/2e1b636e9ff08fb7d0d5a8168bcf5613/raw/)](https://github.com/flippy-software-package/flippy/actions/workflows/coverage.yml)
 ![msvc pipeline status](https://github.com/flippy-software-package/flippy/actions/workflows/windows_test.yml/badge.svg)
 ![gcc pipeline status](https://github.com/flippy-software-package/flippy/actions/workflows/gcc_on_linux_test.yml/badge.svg)
 ![clang on linux pipeline status](https://github.com/flippy-software-package/flippy/actions/workflows/clang_on_linux_test.yml/badge.svg)
@@ -16,7 +16,7 @@ c++ package for dynamically triangulated membrane simulations.
 
 <img src="https://surfdrive.surf.nl/files/index.php/s/6HCtX7B4NwE6w48/download" alt="rbc" width="300">
 <img src="https://surfdrive.surf.nl/files/index.php/s/1O3oJBNMT0vLxIv/download" alt="bubble_collision" width="300">
-<img src="https://surfdrive.surf.nl/files/index.php/s/mua39VAvdxmobD4/download" alt="cell division" width="300">
+<img src="https://camo.githubusercontent.com/4da7586c72b3ee48a272002d2e5c79c02cd3d27504fe2d8331cb667da3d13c37/68747470733a2f2f7375726664726976652e737572662e6e6c2f66696c65732f696e6465782e7068702f732f6d7561333956417664786d6f6244342f646f776e6c6f6164" alt="cell division" width="300">
 
 # Support
 Flippy is still in active development and the documentation is almost non-existent, but I try my best to reply to e-mails and provide support for scientists who want to use flippy.

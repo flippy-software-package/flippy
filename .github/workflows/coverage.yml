@@ -6,6 +6,19 @@ on:
      - master
 
 jobs:
+  test_single_header:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: test_single_header
+        run: |
+          echo 'testing'
+          cd tests/
+          bash build_tests_for_single_header_flippy
+          cd cmake-build-default
+          ./flippy_test
+          echo 'done testing'
 
   test:
       runs-on: self-hosted
@@ -23,7 +36,7 @@ jobs:
             total=`grep "functions..:" test_out | tail -1| grep -Eo '[0-9]+\.[0-9]+'`
             if (( $(echo "$total <= 50" | bc -l) )) ; then
               COLOR=red
-            elif (( $(echo "$total > 80" | bc -l) )); then
+            elif (( $(echo "$total > 90" | bc -l) )); then
               COLOR=green
             else
               COLOR=orange

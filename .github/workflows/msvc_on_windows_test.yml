@@ -1,0 +1,24 @@
+name: MSVC on windows test suite
+
+on:
+  push:
+   branches:
+     - master
+
+jobs:
+  test:
+      runs-on: windows-latest
+      steps:
+        - name: Checkout repository
+          uses: actions/checkout@v3
+        - name: test
+          run: |
+            echo 'testing'
+            cd tests/
+            bash create_cmake_dir
+            cd cmake-build-default || exit 1
+            cmake -S .. -B .
+            cmake --build . --config Release
+            cp Release/flippy_test.exe flippy_test.exe
+            ./flippy_test.exe
+            echo "done testing"
