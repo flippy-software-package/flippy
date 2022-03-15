@@ -18,6 +18,8 @@ c++ package for dynamically triangulated membrane simulations.
 |            <img src="https://user-images.githubusercontent.com/25377791/158409152-820b76ba-3ab9-497c-94b3-423a95e2df1c.gif" alt="rbc" width="300" height="300">             |<img src="https://user-images.githubusercontent.com/25377791/158393623-190e3e94-565b-4f26-8154-53243aa84428.gif" alt="bubble_collision_tiny" width="300" height="300"> |
 | <img src="https://user-images.githubusercontent.com/25377791/158394047-84c564da-0f73-480c-988d-bd5c05111bc5.gif" alt="guv splitting" width="300" height="300"> |              <img src="https://user-images.githubusercontent.com/25377791/158395743-2a1de438-4c8b-43a6-8f41-9f989cd9128a.gif" alt="guv splitting tiny" width="300" height="300">              |
 
+toc::[]
+
 # Support
 Flippy is still in active development and the documentation is almost non-existent, but I try my best to reply to e-mails and provide support for scientists who want to use flippy.
 ### for questions about general usage
@@ -26,12 +28,10 @@ please use the support email [![EMail](https://img.shields.io/badge/EMail-D14836
 please create an [issue](https://github.com/flippy-software-package/flippy/issues).
 ### for feature requests
 again the [issues](https://github.com/flippy-software-package/flippy/issues) page can be used but be aware that new features will be slow to come.
-### want to join the team?
-write me an email!
 
 # How to get it
 
-*flippy* is a headers only library, so all you need to is to download the `flippy` subfolder and copy it into your project.
+*flippy* is a headers only library, so all you need to is to download the `flippy` sub-folder and copy it into your project.
 
 Or if you prefer using a single header file you can just download the [flippy.hpp](https://raw.githubusercontent.com/flippy-software-package/flippy/master/single_header_flippy/flippy.hpp) header from the `single_header_flippy` folder.
 
@@ -150,7 +150,7 @@ int main(){
 
 # Versioning
 
-Crrent release [![release version](https://img.shields.io/badge/dynamic/json?url=https://gitlab.tudelft.nl/idema-group/flippy/-/raw/master/VERSION.json&query=$.*&color=blue&label=version)](https://gitlab.tudelft.nl/idema-group/flippy/-/releases) is experimental. This means that the API may change significantly. Every input on the usability of `flippy`'s API is very welcome.
+Crrent release [![release version](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/flippy-software-package/flippy/master/VERSION.json&query=$.*&color=blue&label=version)](https://gitlab.tudelft.nl/idema-group/flippy/-/releases) is experimental. This means that the API may change significantly. Every input on the usability of `flippy`'s API is very welcome.
 
 This repository follows [Semantic Versioning](https://semver.org/) guidelines.
 
