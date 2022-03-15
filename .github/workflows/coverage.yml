@@ -1,0 +1,37 @@
+name: Run Test Suite
+
+on:
+  push:
+   branches:
+     - master
+
+jobs:
+  test_single_header:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: test_single_header
+        run: |
+          echo 'testing'
+#          cd tests/
+#          bash build_tests_for_single_header_flippy
+#          cd cmake-build-default
+#          ./flippy_test
+          echo 'done testing'
+
+  test:
+      runs-on: self-hosted
+      steps:
+        - name: Checkout repository
+          uses: actions/checkout@v3
+        - name: test
+          run: |
+            echo 'testing'
+            cd tests/
+            bash build_tests
+            cd cmake-build-default
+            ./do_tests > test_out
+            echo "done testing"
+        - name: Setup tmate session
+          uses: mxschmitt/action-tmate@v3

@@ -1,4 +1,4 @@
-[![coverage report](https://gitlab.tudelft.nl/idema-group/flippy/badges/master/coverage.svg)](https://gitlab.tudelft.nl/idema-group/flippy/-/commits/master)
+[![coverage report](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/gdadunashvili/2e1b636e9ff08fb7d0d5a8168bcf5613/raw/170d75bc86b733fd3b0f86e675d7cfc568c50be1/coverage.json)](https://github.com/flippy-software-package/flippy/actions)
 ![msvc pipeline status](https://github.com/flippy-software-package/flippy/actions/workflows/windows_test.yml/badge.svg)
 ![gcc pipeline status](https://github.com/flippy-software-package/flippy/actions/workflows/gcc_on_linux_test.yml/badge.svg)
 ![clang on linux pipeline status](https://github.com/flippy-software-package/flippy/actions/workflows/clang_on_linux_test.yml/badge.svg)
