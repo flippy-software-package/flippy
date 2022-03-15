@@ -34,6 +34,4 @@ jobs:
             cd ${gistID}
             git commit coverage.json -m "new coverage results"
             git push
-          echo "done testing"
-        - name: Setup tmate session
-          uses: mxschmitt/action-tmate@v3
+            echo "done testing"
