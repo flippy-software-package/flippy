@@ -174,6 +174,7 @@ TEST_CASE("Proper topology change")
 
     SECTION("Property check: unflip reverses flip"){
         double r_init = 1;
+        double small_number = 0.0001;
         Triangulation<double, long, SPHERICAL_TRIANGULATION> sphere(10, r_init, 0);
         std::random_device rd;
         std::mt19937_64 rng(rd());
@@ -188,9 +189,9 @@ TEST_CASE("Proper topology change")
             sphere.unflip_bond(rand_node_id, rand_nn_id, bfd);
             auto global_geometry_AFTER_FLIP_BACKFLIP = sphere.global_geometry();
             CHECK(bfd.flipped==true);
-            CHECK(global_geometry_ORIGINAL.area==global_geometry_AFTER_FLIP_BACKFLIP.area);
-            CHECK(global_geometry_ORIGINAL.volume==global_geometry_AFTER_FLIP_BACKFLIP.volume);
-            CHECK(global_geometry_ORIGINAL.unit_bending_energy==global_geometry_AFTER_FLIP_BACKFLIP.unit_bending_energy);
+            CHECK(Approx(global_geometry_ORIGINAL.area).margin(small_number)==global_geometry_AFTER_FLIP_BACKFLIP.area);
+            CHECK(Approx(global_geometry_ORIGINAL.volume).margin(small_number)==global_geometry_AFTER_FLIP_BACKFLIP.volume);
+            CHECK(Approx(global_geometry_ORIGINAL.unit_bending_energy).margin(small_number)==global_geometry_AFTER_FLIP_BACKFLIP.unit_bending_energy);
             bool nn_ids_are_directly_equal_or_equal_after_odd_perm = (nn_ids==sphere[rand_node_id].nn_ids)||(nn_ids==rotate_left(sphere[rand_node_id].nn_ids));
             CHECK(nn_ids_are_directly_equal_or_equal_after_odd_perm);
         }
