@@ -45,6 +45,6 @@ jobs:
             git clone git@gist.github.com:${gistID}.git
             echo \{\"schemaVersion\":1,\"label\":\"coverage\",\"message\":\""${total}%"\",\"color\":\""${COLOR}"\"\} > ${gistID}/coverage.json
             cd ${gistID}
-            git commit coverage.json -m "new coverage results"
-            git push
+            git commit coverage.json -m "new coverage results" || echo "nothing to commit"
+            git push || echo "nothing to push"
             echo "done testing"
