@@ -18,8 +18,6 @@ c++ package for dynamically triangulated membrane simulations.
 |            <img src="https://user-images.githubusercontent.com/25377791/158409152-820b76ba-3ab9-497c-94b3-423a95e2df1c.gif" alt="rbc" width="300" height="300">             |<img src="https://user-images.githubusercontent.com/25377791/158393623-190e3e94-565b-4f26-8154-53243aa84428.gif" alt="bubble_collision_tiny" width="300" height="300"> |
 | <img src="https://user-images.githubusercontent.com/25377791/158394047-84c564da-0f73-480c-988d-bd5c05111bc5.gif" alt="guv splitting" width="300" height="300"> |              <img src="https://user-images.githubusercontent.com/25377791/158395743-2a1de438-4c8b-43a6-8f41-9f989cd9128a.gif" alt="guv splitting tiny" width="300" height="300">              |
 
-toc::[]
-
 # Support
 Flippy is still in active development and the documentation is almost non-existent, but I try my best to reply to e-mails and provide support for scientists who want to use flippy.
 ### for questions about general usage
@@ -43,33 +41,37 @@ Automatically generated code [documentation](https://github.com/flippy-software-
 # Examples of usage
 
 This is a simple example of a monte carlo update of a spherical triangulation in under 100 lines. The code will run for several seconds to several minutes depending on the strength of your cpu and will produce a biconcave shape, i.e. something resembling a red blood cell.
-This code assumes that the single header `flippy.hpp` is in the same folder as the main file.
+
+A detailed description on how to execute demo codes can be found in the [`demo/README.md`](https://github.com/flippy-software-package/flippy/tree/master/demo) file. And a detailed description of how this particular demo works can be found in the [`demo/biconcave_shapes_MC/README.md`](https://github.com/flippy-software-package/flippy/tree/master/demo/biconcave_shapes_MC) file.
+
 This code saves two data files in the folder where the binary file will be executed, under the names `test_run_init.json` and `test_run_final.json` which are full snapshots of the initial and final configurations.
 
-This code can be found in the subfolder `demo/simplest_MC` together with a python script that visualizes the data, and a simple `CMake` file that can be used to build the code.
+This code can be found in the sub-folder `demo/biconcave_shapes_MC` together with a python script that visualizes the data, and a simple `CMake` file that can be used to build the code.
+
 ```cpp
-//demo/simplest_MC/main.cpp
+//demo/biconcave_shapes_MC/main.cpp
 
 #include <random> // needed for random displacement generation
 #include <vector> // need for std::vector
+#include <iostream> // needed for std::cout
 #include "flippy.hpp"
 
 double sphere_vol(double R){return 4./3. * M_PI *R*R*R;}
 double sphere_area(double R){return 4. * M_PI *R*R;}
 
-struct SimulationParameters{ // a data structure that can hold all simulation parameter, s.t. they can be easily passed to functions
-    double bending_rigidity, K_V, K_A, R, V_t, A_t, linear_displ, l_max_square;
-    int n_trng, max_mc_steps, surface_updates_per_mc_step;
-}tension;
+struct EnergyParameters{double kappa, K_V, K_A, V_t, A_t;};
 
 // This is the energy function that is used by flippy's built in updater to decide if a move was energetically favourable or not
-double surface_energy_area_volume_ensemble([[maybe_unused]]fp::Node<double, int> const& node, fp::Triangulation<double, int> const& triangulation, SimulationParameters const& prms){
-    double V = triangulation.global_geometry().volume;
-    double A = triangulation.global_geometry().area;
+double surface_energy([[maybe_unused]]fp::Node<double, int> const& node,
+                      fp::Triangulation<double, int> const& trg,
+                      EnergyParameters const& prms){
+    double V = trg.global_geometry().volume;
+    double A = trg.global_geometry().area;
     double dV = V-prms.V_t;
     double dA = A-prms.A_t;
-    double e_tot = prms.bending_rigidity*triangulation.global_geometry().unit_bending_energy + prms.K_V*dV*dV/prms.V_t + prms.K_A*dA*dA/prms.A_t;
-    return e_tot;
+    double energy = prms.kappa*trg.global_geometry().unit_bending_energy +
+                    prms.K_V*dV*dV/prms.V_t + prms.K_A*dA*dA/prms.A_t;
+    return energy;
 }
 
 int main(){
@@ -77,64 +79,41 @@ int main(){
     double l_min = 2;
     double R = l_min/(2*sin(asin(1./(2*sin(2.*M_PI/5.)))/(n_triang+1.))); // estimate of a typical bond length in the initial triangulation and then create a sphere such that the initial bond length are close to minimal. This formula is derived from equidistant subtriangulation of an icosahedron, where geodesic distances are used as a distance measure.
     double l_max = 2.*l_min; // if you make l_max closer to l_min bond_flip acceptance rate will go down
-    double V0 = sphere_vol(R);
-    SimulationParameters prms{
-        .bending_rigidity = 10 /*kBT_*/, .K_V = 100 /*kBT_*/, .K_A=1000, .R=R /*a.u.*/,
-        .V_t=V0, .A_t=sphere_area(R),
-        .linear_displ=l_min/8., // side length of a voxel from which the displacement of the node is drawn
-        .n_trng=n_triang,
-        .max_mc_steps=1000, // max number of iteration steps (depending on the strength of your cpu, this should take anywhere from a couple of seconds to a couple of minutes
-        .surface_updates_per_mc_step=50
-    };
+    double r_Verlet = 2*l_max;
+    EnergyParameters prms{.kappa=10 /*kBT*/,
+                          .K_V=100 /*kBT/area*/, .K_A=1000 /*kBT/volume*/,
+                          .V_t=0.6*sphere_vol(R), .A_t=sphere_area(R)};
+    double linear_displ=l_min/8.; // side length of a voxel from which the displacement of the node is drawn
+    int max_mc_steps=1e5; // max number of iteration steps (depending on the strength of your cpu, this should take anywhere from a couple of seconds to a couple of minutes
 
     std::random_device random_number_generator_seed;
     std::mt19937 rng(random_number_generator_seed()); // create a random number generator and seed it with current time
 
     // All the flippy magic is happening on the following two lines
-    fp::Triangulation<double, int> tr(prms.n_trng, prms.R, 2*l_min);
-    fp::MonteCarloUpdater<double, int, SimulationParameters, std::mt19937, fp::SPHERICAL_TRIANGULATION> mc_updater(tr, prms, surface_energy_area_volume_ensemble, rng, l_min, l_max);
+    fp::Triangulation<double, int> tr(n_triang, R, r_Verlet);
+    fp::MonteCarloUpdater<double, int, EnergyParameters, std::mt19937, fp::SPHERICAL_TRIANGULATION> mc_updater(tr, prms, surface_energy, rng, l_min, l_max);
 
     fp::vec3<double> displ{}; // declaring a 3d vector (using flippy's built in vec3 type) for a later use as a random direction vector
-    std::uniform_real_distribution<double> displ_distr(-prms.linear_displ, prms.linear_displ); //define a distribution from which the small displacements in x y and z directions will be drawn
+    std::uniform_real_distribution<double> displ_distr(-linear_displ, linear_displ); //define a distribution from which the small displacements in x y and z directions will be drawn
 
-    tr.scale_node_coordinates(1,1,0.8); // squish the sphere in z direction to break the initial symmetry. This speeds up the convergence to a biconcave shape greatly
-    fp::Json data_init = {{"nodes", tr.make_egg_data()}};
+    tr.scale_node_coordinates(1, 1, 0.8); // squish the sphere in z direction to break the initial symmetry. This speeds up the convergence to a biconcave shape greatly
+
+    fp::Json data_init = tr.make_egg_data();
     fp::json_dump("test_run_init", data_init);  // ATTENTION!!! this file will be saved in the same folder as the executable
 
     std::vector<int> shuffled_ids;
     shuffled_ids.reserve(tr.size());
     for(auto const& node: tr.nodes()){ shuffled_ids.push_back(node.id);} //create a vector that contains all node ids. We can shuffle this vector in each MC step, to iterate randomly through the nodes
-    double progress=0;
-    double volume_adaptation_fraction = 0.3; // this fraction of the simulation progress is devoted to going from initial volume to target volume
-    double cooldown_fraction = 0.1; // this fraction of the simulation progress is devoted to temperature cooldown
 
-    for(int t=1; t<prms.max_mc_steps+1; ++t){
-        if(t%10==0){
-            std::cout<<"V/V_t="<<tr.global_geometry().volume/prms.V_t<<" A/A_t="<<tr.global_geometry().area/prms.A_t<<'\n';
-            tr.make_global_geometry(); // Every so often we need to recalculate the global geometry to reduce the error accumulation, which happens because we constantly add to and subtract from the global geometry
-            tr.make_verlet_list(); // We need to update the Verlet list from time to time since the local neighbourhood of the nodes changes
+    for(int t=1; t<max_mc_steps+1; ++t){
+        for (int node_id: shuffled_ids) { // we first loop through all the beads and move them
+            displ = {displ_distr(rng), displ_distr(rng), displ_distr(rng)};
+            mc_updater.move_MC_updater(tr[node_id], displ); // tr[node_id] returns the node which has id=node_id
         }
-        progress = t/((double)prms.max_mc_steps);
-        if(progress<volume_adaptation_fraction){
-            // for the first half of the simulation we gradually decrease the target volume. If we do not do this the volume term will dominate the energy, and we will get weird shapes!
-            // since the MonteCarloUpdater takes a reference to the SimulationParameters struct, we can just change the parameters and flippy will have access to the updated version.
-            prms.V_t = V0*(1.-0.4*(progress/volume_adaptation_fraction));
+        std::shuffle(shuffled_ids.begin(), shuffled_ids.end(), rng); // then we shuffle the bead_ids
+        for (int node_id: shuffled_ids) { // then we loop through all of them again and try to flip their bonds
+            mc_updater.flip_MC_updater(tr[node_id]);
         }
-        else if((progress>1.-cooldown_fraction)){
-            mc_updater.reset_kBT(1. - (progress - volume_adaptation_fraction)); //here we cool down the temperature to force the monte carlo simulation to go to the minimum configuration faster
-        }
-
-        for(int update_step=0; update_step<prms.surface_updates_per_mc_step; ++update_step) {
-            for (int node_id: shuffled_ids) { // we first loop through all the beads and move them
-                displ = {displ_distr(rng), displ_distr(rng), displ_distr(rng)};
-                mc_updater.move_MC_updater(tr[node_id], displ);
-            }
-            std::shuffle(shuffled_ids.begin(), shuffled_ids.end(), rng); //then we shuffle the bead_ids
-            for (int node_id: shuffled_ids) { // then we loop through all of them again and try to flip their bonds
-                mc_updater.flip_MC_updater(tr[node_id]);
-            }
-        }
-
     }
 
     // MonteCarloUpdater counts the number of accepted and rejected moves, and it distinguishes between if a rejectio occurred because of the energy or the bond length constraint.
@@ -142,8 +121,9 @@ int main(){
     std::cout<<"percentage of failed moves: "<<(mc_updater.move_back_count() + mc_updater.bond_length_move_rejection_count())/((long double)mc_updater.move_attempt_count())<<'\n';
     std::cout<<"percentage of failed flips: "<<(mc_updater.flip_back_count() + mc_updater.bond_length_flip_rejection_count())/((long double)mc_updater.flip_attempt_count())<<'\n';
 
-    fp::Json data_final = {{"nodes", tr.make_egg_data()}}; // tr.make_egg_data() is sufficient to create a json object, but the python file expects a nested structure with nudes key containing the state of the triangulation`
+    fp::Json data_final = tr.make_egg_data();
     fp::json_dump("test_run_final", data_final);  // ATTENTION!!! this file will be saved in the same folder as the executable
+
     return 0;
 }
 ```

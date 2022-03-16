@@ -63,7 +63,7 @@ class SingleTimeFrameImporter(object):
         return instance
 
     def _load_egg(self):
-        node_dict = self.data_dict["nodes"]
+        node_dict = self.data_dict
         self.node_dict = dict(sorted(zip(list(map(int, node_dict.keys())), node_dict.values())))
         self.no_cell = True
 
