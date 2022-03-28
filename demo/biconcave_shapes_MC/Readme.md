@@ -75,7 +75,7 @@ fp::Triangulation<double, int, fp::SPHERICAL_TRIANGULATION> tr(n_triang, R, r_Ve
 ```
 here `fp` is flippy's namespace. The first two template arguments specify what types of floating point and integral numbers the triangulation is supposed to use. One could have specified `float` and `short` instead. The third argument specifies the type of triangulation, in this case we want to use a spherical one. However, the last template argument is not necessary since spherical triangulation is already default. This means that we can also write:
 ```c++
-fp::Triangulation<double, int> tr(n_triang, R, r_Verlet);
+fp::Triangulation<double, int> guv(n_triang, R, r_Verlet);
 ```
 The arguments of the triangulation instantiation are `n_triang` which specifies the level of triangulation. flippy's current implementation starts from an icosahedron and after `n_triang` steps of sub-triangulation, one gets
 
@@ -83,7 +83,7 @@ The arguments of the triangulation instantiation are `n_triang` which specifies 
 
 number of nodes. The second variable `R` specifies the radius of triangulated sphere and the variable `r_Verlet` specifies the Verlet radius for the nodes of the triangulation. This sets the size of the [Verlet list](https://en.wikipedia.org/wiki/Verlet_list), which is the list of spatially close nodes. This information is necessary to efficiently implement non-selfintersection property of the membrane. 
 
-After the above declaration we will have access to the triangulation via the declared variable `tr`.
+After the above declaration we will have access to the triangulation via the declared variable `guv`.
 
 ### Monte Carlo updater declaration
 The monte carlo updater needs to have information about the triangulation, the energy function and the parameter struct, all of which we have already defined and initiated. Additionally, we also need a random number generator.
@@ -92,7 +92,7 @@ The declaration can be done as follows:
 ```c++
 fp::MonteCarloUpdater<double, int, EnergyParameters, std::mt19937, 
                       fp::SPHERICAL_TRIANGULATION> 
-                      mc_updater(tr, prms, surface_energy, rng, l_min, l_max);
+                      mc_updater(guv, prms, surface_energy, rng, l_min, l_max);
 ```
 The template arguments again specify what type of updater we want.
 - `double` and `int` specify types of floating point and integral numbers used in updating (same as in triangulation). It is important that we use the same floating point type here as in the triangulation and in the return value of the energy function. 
@@ -101,7 +101,7 @@ The template arguments again specify what type of updater we want.
 - `fp::SPHERICAL_TRIANGULATION` specifies the triangulation type (not optional in this case), which has to match the triangulation type of the `Triangulation` class.
 
 The instantiation parameters have the following meaning:
- - `tr` name of the `Triangulation` class instance that we declared.
+ - `guv` name of the `Triangulation` class instance that we declared. 
  - `prms` name of the `EnergyParameters` struct instance that we declared.
  - `surface_energy` name of the energy function that we defined.
  - `rng` is the name of the instance of the random number generator. This generator needs to be declared before the `mc_updater` in the code as
@@ -123,7 +123,7 @@ The simplest update loop would be one where we loop through all nodes, and use t
 
 ```c++
 for(int t=1; t<max_mc_steps+1; ++t){
-    for (auto const& node: tr.nodes()) { 
+    for (auto const& node: guv.nodes()) { 
       displ = {displ_distr(rng), displ_distr(rng), displ_distr(rng)};
       mc_updater.move_MC_updater(node, displ);
       mc_updater.flip_MC_updater(node);
@@ -141,19 +141,19 @@ For starters, we want to separate the moving events from flipping events. We wan
 tr.scale_node_coordinates(1, 1, 0.8); // squish the sphere in z direction to break the initial symmetry. This speeds up the convergence to a biconcave shape greatly
 
 std::vector<int> shuffled_ids;
-shuffled_ids.reserve(tr.size());
-for(auto const& node: tr.nodes()){ shuffled_ids.push_back(node.id);}
+shuffled_ids.reserve(guv.size());
+for(auto const& node: guv.nodes()){ shuffled_ids.push_back(node.id);}
 
-for(int t=1; t<max_mc_steps+1; ++t){
+for(int mc_step=0; mc_step<max_mc_steps; ++mc_step){
     for (int node_id: shuffled_ids) { // we first loop through all the beads and move them
         displ = {displ_distr(rng), displ_distr(rng), displ_distr(rng)};
-        mc_updater.move_MC_updater(tr[node_id], displ); // tr[node_id] returns the node which has id=node_id
+        mc_updater.move_MC_updater(guv[node_id], displ); // guv[node_id] returns the node which has id=node_id
     }
     
     std::shuffle(shuffled_ids.begin(), shuffled_ids.end(), rng); // then we shuffle the bead_ids
     
     for (int node_id: shuffled_ids) { // then we loop through all of them again and try to flip their bonds
-        mc_updater.flip_MC_updater(tr[node_id]);
+        mc_updater.flip_MC_updater(guv[node_id]);
     }
 }
 ```
@@ -161,7 +161,7 @@ for(int t=1; t<max_mc_steps+1; ++t){
 ### Data saving
 The least effort way to save a snapshot of the triangulation is to use the builtin `make_egg` method. Which serializes every node of the triangulation to a `json` object.
 ```c++
-fp::Json data_final = tr.make_egg_data(); 
+fp::Json data_final = guv.make_egg_data(); 
 ```
 and then we can use one of flippy's helper functions `dump_json` to save the data to a file:
 ```c++
@@ -172,7 +172,7 @@ The above command will save the data to a `test_run_final.json` file in the same
 If one wants to continue the simulation after the final configurateion then the saved data can be used to initialize a triangulation:
 ```c++
 fp::Json loaded_data = fp::json_read("test_run_final.json");
-fp::Triangulation<double, int> triangulation(loaded_data, r_Verlet);
+fp::Triangulation<double, int> loaded_guv(loaded_data, r_Verlet);
 ```
 ## Data visualization
 

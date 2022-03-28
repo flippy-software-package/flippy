@@ -3,8 +3,8 @@
 ![gcc pipeline status](https://github.com/flippy-software-package/flippy/actions/workflows/gcc_on_linux_test.yml/badge.svg)
 ![clang on linux pipeline status](https://github.com/flippy-software-package/flippy/actions/workflows/clang_on_linux_test.yml/badge.svg)
 ![AppleClang pipeline status](https://github.com/flippy-software-package/flippy/actions/workflows/macos_test.yml/badge.svg)
-[![release version](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/flippy-software-package/flippy/master/VERSION.json&query=$.*&color=blue&label=version)](https://gitlab.tudelft.nl/idema-group/flippy/-/releases)
-[![licence](https://img.shields.io/badge/licence-MIT-green)](https://gitlab.tudelft.nl/idema-group/flippy/-/blob/master/LICENSE)
+[![release version](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/flippy-software-package/flippy/master/VERSION.json&query=$.*&color=blue&label=version)](https://github.com/flippy-software-package/flippy/releases)
+[![licence](https://img.shields.io/badge/licence-MIT-green)](https://github.com/flippy-software-package/flippy/blob/master/LICENSE)
 [![EMail](https://img.shields.io/badge/EMail-D14836?logo=Mail.ru&logoColor=white&logoWidth=20)](mailto:flippy@mailbox.org)
 # flippy
 
@@ -90,29 +90,29 @@ int main(){
     std::mt19937 rng(random_number_generator_seed()); // create a random number generator and seed it with current time
 
     // All the flippy magic is happening on the following two lines
-    fp::Triangulation<double, int> tr(n_triang, R, r_Verlet);
-    fp::MonteCarloUpdater<double, int, EnergyParameters, std::mt19937, fp::SPHERICAL_TRIANGULATION> mc_updater(tr, prms, surface_energy, rng, l_min, l_max);
+    fp::Triangulation<double, int> guv(n_triang, R, r_Verlet);
+    fp::MonteCarloUpdater<double, int, EnergyParameters, std::mt19937, fp::SPHERICAL_TRIANGULATION> mc_updater(guv, prms, surface_energy, rng, l_min, l_max);
 
     fp::vec3<double> displ{}; // declaring a 3d vector (using flippy's built in vec3 type) for a later use as a random direction vector
     std::uniform_real_distribution<double> displ_distr(-linear_displ, linear_displ); //define a distribution from which the small displacements in x y and z directions will be drawn
 
-    tr.scale_node_coordinates(1, 1, 0.8); // squish the sphere in z direction to break the initial symmetry. This speeds up the convergence to a biconcave shape greatly
+    guv.scale_node_coordinates(1, 1, 0.8); // squish the sphere in z direction to break the initial symmetry. This speeds up the convergence to a biconcave shape greatly
 
-    fp::Json data_init = tr.make_egg_data();
+    fp::Json data_init = guv.make_egg_data();
     fp::json_dump("test_run_init", data_init);  // ATTENTION!!! this file will be saved in the same folder as the executable
 
     std::vector<int> shuffled_ids;
-    shuffled_ids.reserve(tr.size());
-    for(auto const& node: tr.nodes()){ shuffled_ids.push_back(node.id);} //create a vector that contains all node ids. We can shuffle this vector in each MC step, to iterate randomly through the nodes
+    shuffled_ids.reserve(guv.size());
+    for(auto const& node: guv.nodes()){ shuffled_ids.push_back(node.id);} //create a vector that contains all node ids. We can shuffle this vector in each MC step, to iterate randomly through the nodes
 
-    for(int t=1; t<max_mc_steps+1; ++t){
+    for(int mc_step=0; mc_step<max_mc_steps; ++mc_step){
         for (int node_id: shuffled_ids) { // we first loop through all the beads and move them
             displ = {displ_distr(rng), displ_distr(rng), displ_distr(rng)};
-            mc_updater.move_MC_updater(tr[node_id], displ); // tr[node_id] returns the node which has id=node_id
+            mc_updater.move_MC_updater(guv[node_id], displ); // guv[node_id] returns the node which has id=node_id
         }
         std::shuffle(shuffled_ids.begin(), shuffled_ids.end(), rng); // then we shuffle the bead_ids
         for (int node_id: shuffled_ids) { // then we loop through all of them again and try to flip their bonds
-            mc_updater.flip_MC_updater(tr[node_id]);
+            mc_updater.flip_MC_updater(guv[node_id]);
         }
     }
 
@@ -121,7 +121,7 @@ int main(){
     std::cout<<"percentage of failed moves: "<<(mc_updater.move_back_count() + mc_updater.bond_length_move_rejection_count())/((long double)mc_updater.move_attempt_count())<<'\n';
     std::cout<<"percentage of failed flips: "<<(mc_updater.flip_back_count() + mc_updater.bond_length_flip_rejection_count())/((long double)mc_updater.flip_attempt_count())<<'\n';
 
-    fp::Json data_final = tr.make_egg_data();
+    fp::Json data_final = guv.make_egg_data();
     fp::json_dump("test_run_final", data_final);  // ATTENTION!!! this file will be saved in the same folder as the executable
 
     return 0;
@@ -130,19 +130,25 @@ int main(){
 
 # Versioning
 
-Crrent release [![release version](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/flippy-software-package/flippy/master/VERSION.json&query=$.*&color=blue&label=version)](https://gitlab.tudelft.nl/idema-group/flippy/-/releases) is experimental. This means that the API may change significantly. Every input on the usability of `flippy`'s API is very welcome.
+Crrent version [![release version](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/flippy-software-package/flippy/master/VERSION.json&query=$.*&color=blue&label=version)](https://github.com/flippy-software-package/flippy/releases) is the first stable release. No API breaking changes are expected in near future, and if they occur they will be preceded by deprecation warnings in previous versions. 
 
-This repository follows [Semantic Versioning](https://semver.org/) guidelines.
+flippy's version numbers follow [Semantic Versioning](https://semver.org/) guidelines.
 
-Given a version number *MAJOR*.*MINOR*.*PATCH*, the flippy project will increment the:
+## changes in [![release version](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/flippy-software-package/flippy/master/VERSION.json&query=$.*&color=blue&label=version)](https://github.com/flippy-software-package/flippy/releases)
 
-- *MAJOR* version when we make incompatible API changes,
-- *MINOR* version when we add functionality in a backwards compatible manner, and
-- *PATCH* version when we make backwards compatible bug fixes.
-
-Additional labels for pre-release and build metadata are available as extensions to the *MAJOR*.*MINOR*.*PATCH* format.
-
-as long as *MAJOR* version is 0 the API is unstable and any *MINOR* update can be backwards incompatible!
+### breaking changes
+- renamed `global_geometry.dA_K2` and `node.scaled_curvature_energy` to `unit_bending_energy`
+    - `unit_bending_energy` also differs from `scaled_curvature_energy` by a factor of `0.5`
+- removed `debug_utils` from flippy. This functionality was unrelated to membrane simulations and simply offered additional printing and timing capabilities.
+- Printing and timing utilities were removed form the `utils.hpp` header, since these tools are not related to membrane simulations and should not be maintained together with flippy.
+    - these utilities can be found in their own [repository](https://github.com/gdadunashvili/code_utils) now.
+### new features
+- none
+### bugfixes
+- removed default constructor from `MonteCarloUpdater` since it was implicitly deleted anyway.
+- changed update counters types in `MonteCarloUpdater` to long instead of Index to avoid integer overflow.
+- double check if the stdlib defines M_PI and define it if not.
+- count of moves and flips is saved in a `unsigned long` variable, by the `MonteCarloUpdater` to avoid overflow for even very long simulations.
 
 ## well tested part of the api
 
@@ -166,19 +172,6 @@ as long as *MAJOR* version is 0 the API is unstable and any *MINOR* update can b
     - other objects that the triangulations could interact with
 - force based updater
     - a utility class like MonteCarloUpdater, which uses force balance functions to update node positions
-
-## changes in [![release version](https://img.shields.io/badge/dynamic/json?url=https://gitlab.tudelft.nl/idema-group/flippy/-/raw/master/VERSION.json&query=$.*&color=blue&label=version)](https://gitlab.tudelft.nl/idema-group/flippy/-/releases)
-
-### breaking changes 
-  - renamed `global_geometry.dA_K2` and `node.scaled_curvature_energy` to `unit_bending_energy`
-    - `unit_bending_energy` also differs from `scaled_curvature_energy` by a factor of `0.5`
-  - removed `debug_utils` from flippy. This functionality was unrelated to membrane simulations and simply offered additional printing and timing capabilities.
-### new features
-- none
-### bugfixes
-  - removed default constructor from `MonteCarloUpdater` since it was implicitly deleted anyway.
-  - changed update counters types in `MonteCarloUpdater` to long instead of Index to avoid integer overflow.
-  - double check if the stdlib defines M_PI and define it if not.
 
 # licence
 
