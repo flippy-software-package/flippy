@@ -120,6 +120,19 @@ public:
         }else{++bond_length_flip_rejection;}
     }
 
+    void flip_MC_updater(fp::Node<Real, Index> const& node, Index index_in_nn_ids)
+    {
+        ++flip_attempt;
+        e_old = energy_function(node, triangulation, prms);
+        Index number_nn_ids = node.nn_ids.size();
+//        Index nn_id = index_in_nn_ids;//node.nn_ids[std::uniform_int_distribution<Index>(0, number_nn_ids-1)(rng)];
+        auto bfd = triangulation.flip_bond(node.id, index_in_nn_ids, min_bond_length_square, max_bond_length_square);
+        if (bfd.flipped) {
+            e_new = energy_function(node, triangulation, prms);
+            if (move_needs_undoing()) { triangulation.unflip_bond(node.id, index_in_nn_ids, bfd); ++flip_back;}
+        }else{++bond_length_flip_rejection;}
+    }
+
 
     void reset_kBT(Real kBT){kBT_=kBT;}
 
