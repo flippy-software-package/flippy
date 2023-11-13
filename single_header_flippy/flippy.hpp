@@ -24324,7 +24324,7 @@ public:
                         triangle[tr_idx].id = i;
                         ++i;
                         unique_nodes.push_back(node);
-                        fp::Node<Real, Index> n;
+                        fp::Node<Real, Index> n{};
                         n.pos = node.pos;
                         n.id = node.id;
                         nodes[n.id] = n;
