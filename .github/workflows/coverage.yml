@@ -31,10 +31,8 @@ jobs:
             echo 'testing'
             cd tests/
             bash build_tests
-            cd cmake-build-default
-            cd ..
-            ./do_tests > test_out
-            total=`grep "functions..:" test_out | tail -1| grep -Eo '[0-9]+\.[0-9]+'`
+            gcovr -r .. --exclude='.*external.*' --exclude=cmake --json-summary -o test_out.json      
+            total=` jq .function_percent test_out.json`
             if (( $(echo "$total <= 50" | bc -l) )) ; then
               COLOR=red
             elif (( $(echo "$total > 90" | bc -l) )); then
