@@ -20,7 +20,7 @@ jobs:
             cd tests/
             bash create_cmake_dir
             cd cmake-build-default
-            cmake -D CMAKE_CXX_COMPILER=clang++-12 -D MAKE_C_COMPILER=clang-12 ..
+            cmake -D CMAKE_CXX_COMPILER=clang++-12 -D CMAKE_C_COMPILER=clang-12 ..
             cmake --build .
             ./flippy_test
             echo "done testing"
