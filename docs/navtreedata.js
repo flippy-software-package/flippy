@@ -26,7 +26,7 @@ var NAVTREE =
 [
   [ "flippy", "index.html", [
     [ "Documentation overview", "index.html", null ],
-    [ "Modules", "modules.html", "modules" ],
+    [ "Topics", "topics.html", "topics" ],
     [ "Namespaces", "namespaces.html", [
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],
       [ "Namespace Members", "namespacemembers.html", [
@@ -46,7 +46,7 @@ var NAVTREE =
         [ "All", "functions.html", null ],
         [ "Functions", "functions_func.html", null ],
         [ "Variables", "functions_vars.html", null ],
-        [ "Related Functions", "functions_rela.html", null ]
+        [ "Related Symbols", "functions_rela.html", null ]
       ] ]
     ] ],
     [ "Files", "files.html", [
@@ -61,8 +61,8 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"_curvature_minimization_updater_8hpp.html",
-"structfp_1_1_geometry.html#ad54e751bccf6ae11d4af543ef6a23c23"
+"_monte_carlo_updater_8hpp.html",
+"structfp_1_1_node.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

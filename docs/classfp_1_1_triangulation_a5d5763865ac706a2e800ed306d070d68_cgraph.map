@@ -1,8 +1,7 @@
 <map id="fp::Triangulation::update_bulk_node_geometry" name="fp::Triangulation::update_bulk_node_geometry">
-<area shape="rect" id="node1" title="Update the geometric quantities associated with the given node." alt="" coords="5,85,193,125"/>
-<area shape="rect" id="node2" href="$classfp_1_1vec3.html#ae64d6fa0ceec87d5a26cac17560f1d7c" title="Calculate cross product between two vectors." alt="" coords="267,5,376,31"/>
-<area shape="rect" id="node3" href="$classfp_1_1_triangulation.html#a3e43dfd4b4c9cfd10c5bf4174f2a85d1" title="The node&#45;associated area inside a triangle." alt="" coords="260,55,383,95"/>
-<area shape="rect" id="node5" href="$classfp_1_1vec3.html#a8568d337f067bd43b63508174f047df2" title="Returns the norm of the vector." alt="" coords="268,120,375,145"/>
-<area shape="rect" id="node6" href="$structfp_1_1_neighbors.html#a59501864ac7f34bd676aa97d9faf68cc" title=" " alt="" coords="241,169,401,195"/>
-<area shape="rect" id="node4" href="$classfp_1_1vec3.html#a3097ff5c62f8bb0da1c5e87fb9384da9" title="Calculate dot product with another vector." alt="" coords="449,92,544,117"/>
+<area shape="rect" id="Node000001" title="Update the geometric quantities associated with the given node." alt="" coords="5,35,193,75"/>
+<area shape="rect" id="Node000002" href="$classfp_1_1_triangulation.html#a3e43dfd4b4c9cfd10c5bf4174f2a85d1" title="The node&#45;associated area inside a triangle." alt="" coords="260,5,383,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="193,40,246,33,247,38,194,45"/>
+<area shape="rect" id="Node000003" href="$structfp_1_1_neighbors.html#a59501864ac7f34bd676aa97d9faf68cc" title=" " alt="" coords="241,70,401,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="194,64,228,68,227,74,193,69"/>
 </map>

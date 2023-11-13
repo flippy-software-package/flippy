@@ -4,9 +4,9 @@ var searchData=
   ['calculate_5fmass_5fcenter_1',['calculate_mass_center',['../classfp_1_1_triangulation.html#af28b60961d8f8404a796b33b4a769c02',1,'fp::Triangulation']]],
   ['common_5fnn_5f0_2',['common_nn_0',['../structfp_1_1_bond_flip_data.html#af28b1b0fb90fcd3bf5a0363bf89569a9',1,'fp::BondFlipData']]],
   ['common_5fnn_5f1_3',['common_nn_1',['../structfp_1_1_bond_flip_data.html#a5792fe8f43d65f6aba3d0acd22dabf57',1,'fp::BondFlipData']]],
-  ['cross_4',['cross',['../classfp_1_1vec3.html#ae64d6fa0ceec87d5a26cac17560f1d7c',1,'fp::vec3::cross(vec3&lt; Real &gt; const &amp;a, vec3&lt; Real &gt; const &amp;b)'],['../classfp_1_1vec3.html#a2522af9d50779abf605b8be03e146a5f',1,'fp::vec3::cross(vec3&lt; Real &gt; const &amp;other) const']]],
-  ['curvature_5fvec_5',['curvature_vec',['../structfp_1_1_node.html#a2b801251ab545ad8d931d09583920537',1,'fp::Node::curvature_vec()'],['../structfp_1_1_nodes.html#aac8eaef6c3fa8679dfafcb4018573233',1,'fp::Nodes::curvature_vec()']]],
-  ['curvatureminimizationupdater_6',['CurvatureMinimizationUpdater',['../classfp_1_1experimental_1_1_curvature_minimization_updater.html#a8e118a45c58e7707b65cd38ff6b0a5d9',1,'fp::experimental::CurvatureMinimizationUpdater::CurvatureMinimizationUpdater()'],['../classfp_1_1experimental_1_1_curvature_minimization_updater.html',1,'fp::experimental::CurvatureMinimizationUpdater&lt; Real, Index, EnergyFunctionParameters, RandomNumberEngine, triangulation_type &gt;']]],
-  ['curvatureminimizationupdater_2ehpp_7',['CurvatureMinimizationUpdater.hpp',['../_curvature_minimization_updater_8hpp.html',1,'']]],
+  ['concepts_4',['Special concepts',['../group__my_concepts.html',1,'']]],
+  ['constants_20and_20such_5',['Globally defined functions constants and such',['../group___globals.html',1,'']]],
+  ['cross_6',['cross',['../classfp_1_1vec3.html#a2522af9d50779abf605b8be03e146a5f',1,'fp::vec3::cross(vec3&lt; Real &gt; const &amp;other) const'],['../classfp_1_1vec3.html#ae64d6fa0ceec87d5a26cac17560f1d7c',1,'fp::vec3::cross(vec3&lt; Real &gt; const &amp;a, vec3&lt; Real &gt; const &amp;b)']]],
+  ['curvature_5fvec_7',['curvature_vec',['../structfp_1_1_node.html#a2b801251ab545ad8d931d09583920537',1,'fp::Node::curvature_vec'],['../structfp_1_1_nodes.html#aac8eaef6c3fa8679dfafcb4018573233',1,'fp::Nodes::curvature_vec()']]],
   ['custom_5fconcepts_2ehpp_8',['custom_concepts.hpp',['../custom__concepts_8hpp.html',1,'']]]
 ];

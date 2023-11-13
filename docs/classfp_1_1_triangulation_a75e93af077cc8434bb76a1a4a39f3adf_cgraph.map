@@ -1,7 +1,5 @@
 <map id="fp::Triangulation::partial_voronoi_area_and_face_normal_of_node_in_a_triangle" name="fp::Triangulation::partial_voronoi_area_and_face_normal_of_node_in_a_triangle">
-<area shape="rect" id="node1" title="This function is deprecated!" alt="" coords="5,41,187,110"/>
-<area shape="rect" id="node2" href="$classfp_1_1vec3.html#ae64d6fa0ceec87d5a26cac17560f1d7c" title="Calculate cross product between two vectors." alt="" coords="241,5,351,31"/>
-<area shape="rect" id="node3" href="$classfp_1_1_triangulation.html#a3e43dfd4b4c9cfd10c5bf4174f2a85d1" title="The node&#45;associated area inside a triangle." alt="" coords="235,55,357,95"/>
-<area shape="rect" id="node5" href="$classfp_1_1vec3.html#a8568d337f067bd43b63508174f047df2" title="Returns the norm of the vector." alt="" coords="243,120,349,145"/>
-<area shape="rect" id="node4" href="$classfp_1_1vec3.html#a3097ff5c62f8bb0da1c5e87fb9384da9" title="Calculate dot product with another vector." alt="" coords="405,92,500,117"/>
+<area shape="rect" id="Node000001" title="This function is deprecated!" alt="" coords="5,5,187,75"/>
+<area shape="rect" id="Node000002" href="$classfp_1_1_triangulation.html#a3e43dfd4b4c9cfd10c5bf4174f2a85d1" title="The node&#45;associated area inside a triangle." alt="" coords="235,20,357,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="187,37,221,37,221,43,187,43"/>
 </map>

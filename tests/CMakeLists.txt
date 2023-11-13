@@ -5,6 +5,7 @@ set(CXX_STANDARD_REQUIRED ON)
 
 set(CMAKE_BUILD_TYPE Release)
 
+add_compile_definitions(TEST_ASSET_PATH="${CMAKE_CURRENT_SOURCE_DIR}/assets/")
 if (${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
     MESSAGE("building for MSVC")
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} -O2")
@@ -39,7 +40,8 @@ add_executable(${PROJECT_NAME} main.cpp
         local_geometry_test.cpp
         Triangulation_test.cpp
         Triangulator_test.cpp
-        )
+        stlSerializer_test.cpp
+)
 
 enable_testing()
 add_test(${PROJECT_NAME} ${PROJECT_NAME})

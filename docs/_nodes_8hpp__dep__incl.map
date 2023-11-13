@@ -1,7 +1,11 @@
 <map id="flippy/Nodes.hpp" name="flippy/Nodes.hpp">
-<area shape="rect" id="node1" title="This file contains the fp::Node and fp::Nodes classes, data structures that represent a single node o..." alt="" coords="240,5,360,31"/>
-<area shape="rect" id="node2" href="$_curvature_minimization_updater_8hpp.html" title="This file contains the MonteCarloUpdater class template. Together with Triangulation...." alt="" coords="5,152,192,192"/>
-<area shape="rect" id="node3" href="$_monte_carlo_updater_8hpp.html" title="This file contains the MonteCarloUpdater class template. Together with Triangulation...." alt="" coords="267,159,461,185"/>
-<area shape="rect" id="node4" href="$flippy_8hpp.html" title="This header file exists for convenience. Including this header will automatically include all parts o..." alt="" coords="309,240,419,265"/>
-<area shape="rect" id="node5" href="$_triangulation_8hpp.html" title="This file contains the fp::Triangulation class and several related helper classes...." alt="" coords="155,79,311,104"/>
+<area shape="rect" id="Node000001" title="This file contains the fp::Node and fp::Nodes classes, data structures that represent a single node o..." alt="" coords="132,5,252,31"/>
+<area shape="rect" id="Node000002" href="$_monte_carlo_updater_8hpp.html" title="This file contains the MonteCarloUpdater class template. Together with Triangulation...." alt="" coords="5,152,200,177"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="150,39,124,56,104,80,98,98,96,117,102,151,96,152,91,118,92,97,99,77,120,52,147,34"/>
+<area shape="rect" id="Node000003" href="$_triangulation_8hpp.html" title="This file contains the fp::Triangulation class and several related helper classes...." alt="" coords="114,79,270,104"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="195,44,195,79,189,79,189,44"/>
+<area shape="rect" id="Node000004" href="$flippy_8hpp.html" title="This header file exists for convenience. Including this header will automatically include all parts o..." alt="" coords="238,152,349,177"/>
+<area shape="poly" id="edge5_Node000001_Node000004" title=" " alt="" coords="235,34,262,52,285,77,293,97,297,117,297,152,292,152,292,118,288,98,280,80,259,56,232,39"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="169,115,119,154,116,150,165,110"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="221,110,278,150,275,154,218,114"/>
 </map>

@@ -1,9 +1,9 @@
 <map id="fp::Triangulation::update_diamond_geometry" name="fp::Triangulation::update_diamond_geometry">
-<area shape="rect" id="node1" title="Calculates and updates the geometric quantities of the diamond configuration of nodes associated with..." alt="" coords="5,85,184,125"/>
-<area shape="rect" id="node2" href="$classfp_1_1_triangulation.html#a5d5763865ac706a2e800ed306d070d68" title="Update the geometric quantities associated with the given node." alt="" coords="232,85,420,125"/>
-<area shape="rect" id="node3" href="$classfp_1_1vec3.html#ae64d6fa0ceec87d5a26cac17560f1d7c" title="Calculate cross product between two vectors." alt="" coords="493,5,603,31"/>
-<area shape="rect" id="node4" href="$classfp_1_1_triangulation.html#a3e43dfd4b4c9cfd10c5bf4174f2a85d1" title="The node&#45;associated area inside a triangle." alt="" coords="487,55,609,95"/>
-<area shape="rect" id="node6" href="$classfp_1_1vec3.html#a8568d337f067bd43b63508174f047df2" title="Returns the norm of the vector." alt="" coords="495,120,601,145"/>
-<area shape="rect" id="node7" href="$structfp_1_1_neighbors.html#a59501864ac7f34bd676aa97d9faf68cc" title=" " alt="" coords="468,169,628,195"/>
-<area shape="rect" id="node5" href="$classfp_1_1vec3.html#a3097ff5c62f8bb0da1c5e87fb9384da9" title="Calculate dot product with another vector." alt="" coords="676,92,771,117"/>
+<area shape="rect" id="Node000001" title="Calculates and updates the geometric quantities of the diamond configuration of nodes associated with..." alt="" coords="5,35,184,75"/>
+<area shape="rect" id="Node000002" href="$classfp_1_1_triangulation.html#a5d5763865ac706a2e800ed306d070d68" title="Update the geometric quantities associated with the given node." alt="" coords="232,35,420,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="184,52,219,52,219,57,184,57"/>
+<area shape="rect" id="Node000003" href="$classfp_1_1_triangulation.html#a3e43dfd4b4c9cfd10c5bf4174f2a85d1" title="The node&#45;associated area inside a triangle." alt="" coords="487,5,609,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="420,40,473,33,474,38,421,45"/>
+<area shape="rect" id="Node000004" href="$structfp_1_1_neighbors.html#a59501864ac7f34bd676aa97d9faf68cc" title=" " alt="" coords="468,70,628,95"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="421,64,455,68,454,74,420,69"/>
 </map>

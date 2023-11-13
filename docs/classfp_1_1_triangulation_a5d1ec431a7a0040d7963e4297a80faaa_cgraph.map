@@ -1,12 +1,15 @@
 <map id="fp::Triangulation::unflip_bond" name="fp::Triangulation::unflip_bond">
-<area shape="rect" id="node1" title="Un&#45;flip a bond that was just flipped." alt="" coords="5,53,128,93"/>
-<area shape="rect" id="node2" href="$classfp_1_1_triangulation.html#a077d1be6c31f16241e9035c5a0f93652" title=" " alt="" coords="193,21,337,61"/>
-<area shape="rect" id="node4" href="$classfp_1_1_triangulation.html#a762c6430c00d719a8ea5a4a3e89715a8" title="Calculates and updates the geometric quantities of the diamond configuration of nodes associated with..." alt="" coords="176,85,355,125"/>
-<area shape="rect" id="node3" href="$classfp_1_1_triangulation.html#a11ee6051e9db388def8aaed68b1841d4" title="Adds a new node to the next neighbor list of a given node and calculates their mutual distance." alt="" coords="435,21,558,61"/>
-<area shape="rect" id="node5" href="$classfp_1_1_triangulation.html#a5d5763865ac706a2e800ed306d070d68" title="Update the geometric quantities associated with the given node." alt="" coords="403,85,591,125"/>
-<area shape="rect" id="node6" href="$classfp_1_1vec3.html#ae64d6fa0ceec87d5a26cac17560f1d7c" title="Calculate cross product between two vectors." alt="" coords="664,5,773,31"/>
-<area shape="rect" id="node7" href="$classfp_1_1_triangulation.html#a3e43dfd4b4c9cfd10c5bf4174f2a85d1" title="The node&#45;associated area inside a triangle." alt="" coords="657,55,780,95"/>
-<area shape="rect" id="node9" href="$classfp_1_1vec3.html#a8568d337f067bd43b63508174f047df2" title="Returns the norm of the vector." alt="" coords="665,120,772,145"/>
-<area shape="rect" id="node10" href="$structfp_1_1_neighbors.html#a59501864ac7f34bd676aa97d9faf68cc" title=" " alt="" coords="639,169,799,195"/>
-<area shape="rect" id="node8" href="$classfp_1_1vec3.html#a3097ff5c62f8bb0da1c5e87fb9384da9" title="Calculate dot product with another vector." alt="" coords="847,92,941,117"/>
+<area shape="rect" id="Node000001" title="Un&#45;flip a bond that was just flipped." alt="" coords="5,37,128,77"/>
+<area shape="rect" id="Node000002" href="$classfp_1_1_triangulation.html#a077d1be6c31f16241e9035c5a0f93652" title=" " alt="" coords="193,5,337,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="128,45,179,36,180,42,129,50"/>
+<area shape="rect" id="Node000004" href="$classfp_1_1_triangulation.html#a762c6430c00d719a8ea5a4a3e89715a8" title="Calculates and updates the geometric quantities of the diamond configuration of nodes associated with..." alt="" coords="176,69,355,109"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="129,65,163,70,162,75,128,70"/>
+<area shape="rect" id="Node000003" href="$classfp_1_1_triangulation.html#a11ee6051e9db388def8aaed68b1841d4" title="Adds a new node to the next neighbor list of a given node and calculates their mutual distance." alt="" coords="435,5,558,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="338,23,421,23,421,28,338,28"/>
+<area shape="rect" id="Node000005" href="$classfp_1_1_triangulation.html#a5d5763865ac706a2e800ed306d070d68" title="Update the geometric quantities associated with the given node." alt="" coords="403,69,591,109"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="355,87,389,87,389,92,355,92"/>
+<area shape="rect" id="Node000006" href="$classfp_1_1_triangulation.html#a3e43dfd4b4c9cfd10c5bf4174f2a85d1" title="The node&#45;associated area inside a triangle." alt="" coords="657,40,780,80"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="591,74,644,67,644,72,591,80"/>
+<area shape="rect" id="Node000007" href="$structfp_1_1_neighbors.html#a59501864ac7f34bd676aa97d9faf68cc" title=" " alt="" coords="639,105,799,130"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="591,99,625,103,625,108,591,104"/>
 </map>

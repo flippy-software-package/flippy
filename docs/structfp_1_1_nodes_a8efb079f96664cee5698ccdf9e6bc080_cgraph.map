@@ -1,4 +1,5 @@
 <map id="fp::Nodes::get_nn_distance_vector_between" name="fp::Nodes::get_nn_distance_vector_between">
-<area shape="rect" id="node1" title="Given two global node ids, returns a distance vector (if the nodes are neighbors)." alt="" coords="5,5,188,45"/>
-<area shape="rect" id="node2" href="$structfp_1_1_nodes.html#a65c0fd75105d0110c204b2b9c2af5640" title="Given a node id and the local index in the Node::nn_ids vector, returns the next neighbour id." alt="" coords="236,13,355,38"/>
+<area shape="rect" id="Node000001" title="Given two global node ids, returns a distance vector (if the nodes are neighbors)." alt="" coords="5,5,188,45"/>
+<area shape="rect" id="Node000002" href="$structfp_1_1_nodes.html#a65c0fd75105d0110c204b2b9c2af5640" title="Given a node id and the local index in the Node::nn_ids vector, returns the next neighbour id." alt="" coords="236,13,355,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="189,23,222,23,222,28,189,28"/>
 </map>

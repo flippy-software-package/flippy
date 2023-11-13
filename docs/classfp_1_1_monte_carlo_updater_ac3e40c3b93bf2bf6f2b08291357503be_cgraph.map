@@ -1,10 +1,17 @@
 <map id="fp::MonteCarloUpdater::move_MC_updater" name="fp::MonteCarloUpdater::move_MC_updater">
-<area shape="rect" id="node1" title="Attempt a move Monte Carlo Step." alt="" coords="5,69,160,109"/>
-<area shape="rect" id="node2" href="$classfp_1_1_monte_carlo_updater.html#a7e172728bb0764e21ba1e44aa76cce83" title="Implementation of the Metropolis algorithm." alt="" coords="247,5,403,45"/>
-<area shape="rect" id="node3" href="$classfp_1_1_triangulation.html#ad8102adbe7dab80cda3209844a939e30" title="Move an individual node of the triangulation and update all the geometric quantities of the triangula..." alt="" coords="263,69,386,109"/>
-<area shape="rect" id="node6" href="$classfp_1_1_monte_carlo_updater.html#ada3c8ad8d719671d9dedecd3ec9bbd2b" title="Pre&#45;update check to test that the update step will not result in an unphysical configuration." alt="" coords="208,141,441,195"/>
-<area shape="rect" id="node4" href="$classfp_1_1_triangulation.html#a3c660cb2bec69afe055843975698cfd0" title="Aggregates and Returns the geometric quantities of the center node and its next neighbor nodes." alt="" coords="500,5,657,45"/>
-<area shape="rect" id="node5" href="$classfp_1_1_triangulation.html#a1d7b2a1e57f742d1d401eeb09b057beb" title="Updates the geometric quantities of the center node and its next neighbor nodes." alt="" coords="489,69,668,109"/>
-<area shape="rect" id="node7" href="$classfp_1_1_monte_carlo_updater.html#ad985050d8f094aa3d577df33eac9242d" title="Pre&#45;update check to test that the update step will not result in an unphysical configuration." alt="" coords="495,133,662,203"/>
-<area shape="rect" id="node8" href="$classfp_1_1_monte_carlo_updater.html#a6a064bcdc7395374ab73913e364f1f81" title="Pre&#45;update check to test that the update step will not result in an unphysical configuration." alt="" coords="495,227,662,296"/>
+<area shape="rect" id="Node000001" title="Attempt a move Monte Carlo Step." alt="" coords="5,69,160,109"/>
+<area shape="rect" id="Node000002" href="$classfp_1_1_monte_carlo_updater.html#a7e172728bb0764e21ba1e44aa76cce83" title="Implementation of the Metropolis algorithm." alt="" coords="247,5,403,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="158,67,235,46,236,51,160,72"/>
+<area shape="rect" id="Node000003" href="$classfp_1_1_triangulation.html#ad8102adbe7dab80cda3209844a939e30" title="Move an individual node of the triangulation and update all the geometric quantities of the triangula..." alt="" coords="263,69,386,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="160,87,250,87,250,92,160,92"/>
+<area shape="rect" id="Node000006" href="$classfp_1_1_monte_carlo_updater.html#ada3c8ad8d719671d9dedecd3ec9bbd2b" title="Pre&#45;update check to test that the update step will not result in an unphysical configuration." alt="" coords="208,141,441,195"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="146,107,228,134,226,139,144,112"/>
+<area shape="rect" id="Node000004" href="$classfp_1_1_triangulation.html#a3c660cb2bec69afe055843975698cfd0" title="Aggregates and Returns the geometric quantities of the center node and its next neighbor nodes." alt="" coords="500,5,657,45"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="386,71,486,46,487,51,387,77"/>
+<area shape="rect" id="Node000005" href="$classfp_1_1_triangulation.html#a1d7b2a1e57f742d1d401eeb09b057beb" title="Updates the geometric quantities of the center node and its next neighbor nodes." alt="" coords="489,69,668,109"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="386,87,476,87,476,92,386,92"/>
+<area shape="rect" id="Node000007" href="$classfp_1_1_monte_carlo_updater.html#ad985050d8f094aa3d577df33eac9242d" title="Pre&#45;update check to test that the update step will not result in an unphysical configuration." alt="" coords="495,133,662,203"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="441,165,482,165,482,171,441,171"/>
+<area shape="rect" id="Node000008" href="$classfp_1_1_monte_carlo_updater.html#a6a064bcdc7395374ab73913e364f1f81" title="Pre&#45;update check to test that the update step will not result in an unphysical configuration." alt="" coords="495,227,662,296"/>
+<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="401,193,483,224,481,229,399,198"/>
 </map>

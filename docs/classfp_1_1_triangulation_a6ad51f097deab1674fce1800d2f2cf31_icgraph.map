@@ -1,4 +1,5 @@
 <map id="fp::Triangulation::update_boundary_node_geometry" name="fp::Triangulation::update_boundary_node_geometry">
-<area shape="rect" id="node1" title="Updates the local geometry of a boundary node (for triangulation types that have a boundary)." alt="" coords="209,5,365,60"/>
-<area shape="rect" id="node2" href="$classfp_1_1_triangulation.html#a1afce8afd92f1b88fb15ce7d9cb31edd" title="Initiates the global geometry of the triangulation." alt="" coords="5,13,161,53"/>
+<area shape="rect" id="Node000001" title="Updates the local geometry of a boundary node (for triangulation types that have a boundary)." alt="" coords="209,5,365,60"/>
+<area shape="rect" id="Node000002" href="$classfp_1_1_triangulation.html#a1afce8afd92f1b88fb15ce7d9cb31edd" title="Initiates the global geometry of the triangulation." alt="" coords="5,13,161,53"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="196,35,161,35,161,30,196,30"/>
 </map>

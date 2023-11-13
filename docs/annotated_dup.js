@@ -1,8 +1,12 @@
 var annotated_dup =
 [
     [ "fp", "namespacefp.html", [
-      [ "experimental", null, [
-        [ "CurvatureMinimizationUpdater", "classfp_1_1experimental_1_1_curvature_minimization_updater.html", "classfp_1_1experimental_1_1_curvature_minimization_updater" ]
+      [ "implementation", "namespacefp_1_1implementation.html", [
+        [ "rawSTLSolid", "structfp_1_1implementation_1_1raw_s_t_l_solid.html", null ],
+        [ "rawSTLTriangle", "structfp_1_1implementation_1_1raw_s_t_l_triangle.html", null ],
+        [ "stlNode", "structfp_1_1implementation_1_1stl_node.html", null ],
+        [ "stlSerializer", "classfp_1_1implementation_1_1stl_serializer.html", null ],
+        [ "stlTriangle", "classfp_1_1implementation_1_1stl_triangle.html", null ]
       ] ],
       [ "BondFlipData", "structfp_1_1_bond_flip_data.html", "structfp_1_1_bond_flip_data" ],
       [ "Geometry", "structfp_1_1_geometry.html", "structfp_1_1_geometry" ],
