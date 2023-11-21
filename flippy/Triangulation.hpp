@@ -372,9 +372,9 @@ public:
     static Triangulation<Real, Index, SPHERICAL_TRIANGULATION> experimental_load_sphere_from_stl(std::filesystem::path const& stl_file_path, Real verlet_radius_inp){
             std::vector<implementation::stlTriangle<Real, Index>> triangles = implementation::stlSerializer<Real, Index>::read_STLSolid_into_triangle_vec(stl_file_path);
 
-            std::vector<fp::Node<Real, Index>> nodes;
+            std::vector<Node<Real, Index>> nodes;
             std::vector<implementation::stlNode<Real, Index>> unique_nodes;
-            fp::Triangulation<Real, Index> triangulation;
+            Triangulation<Real, Index> triangulation;
             nodes.resize(triangles.size()/2 + 2);
             for (Index i=0; implementation::stlTriangle<Real, Index> &triangle : triangles) {
                 for (unsigned int tr_idx = 0; tr_idx < 3; ++tr_idx) {
@@ -385,7 +385,7 @@ public:
                         triangle[tr_idx].id = i;
                         ++i;
                         unique_nodes.push_back(node);
-                        fp::Node<Real, Index> n{};
+                        Node<Real, Index> n{};
                         n.pos = node.pos;
                         n.id = node.id;
                         nodes[n.id] = n;
@@ -405,10 +405,6 @@ public:
 
                 }
             }
-            for(auto &node: nodes){
-                std::cout << "node_id: " << node.id << "\n";
-            }
-
             Triangulation<Real, Index, SPHERICAL_TRIANGULATION> tr;
             tr.verlet_radius = verlet_radius_inp;
             tr.R_initial = 1;
