@@ -1005,7 +1005,7 @@ private:
     Nodes<Real, Index> nodes_;
     std::vector<Index> bulk_nodes_ids;
     Geometry<Real, Index> global_geometry_;
-    Geometry<Real, Index> pre_update_geometry, post_update_geometry;
+    // Geometry<Real, Index> pre_update_geometry, post_update_geometry;
     mutable vec3<Real> l0_, l1_;
     Real verlet_radius{};
     Real verlet_radius_squared{};
