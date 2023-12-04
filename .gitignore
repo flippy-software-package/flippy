@@ -1,5 +1,6 @@
 .DS_Store
 .directory
+actions-runner/*
 actions-runner
 CMakeLists.txt
 assets/flippy.psd
