@@ -72,6 +72,7 @@
 #include <vector>
 #include <unordered_set>
 #include <unordered_map>
+#include <algorithm>
 
 // begin --- custom_concepts.hpp --- 
 
@@ -24311,9 +24312,9 @@ public:
     static Triangulation<Real, Index, SPHERICAL_TRIANGULATION> experimental_load_sphere_from_stl(std::filesystem::path const& stl_file_path, Real verlet_radius_inp){
             std::vector<implementation::stlTriangle<Real, Index>> triangles = implementation::stlSerializer<Real, Index>::read_STLSolid_into_triangle_vec(stl_file_path);
 
-            std::vector<fp::Node<Real, Index>> nodes;
+            std::vector<Node<Real, Index>> nodes;
             std::vector<implementation::stlNode<Real, Index>> unique_nodes;
-            fp::Triangulation<Real, Index> triangulation;
+            Triangulation<Real, Index> triangulation;
             nodes.resize(triangles.size()/2 + 2);
             for (Index i=0; implementation::stlTriangle<Real, Index> &triangle : triangles) {
                 for (unsigned int tr_idx = 0; tr_idx < 3; ++tr_idx) {
@@ -24324,7 +24325,7 @@ public:
                         triangle[tr_idx].id = i;
                         ++i;
                         unique_nodes.push_back(node);
-                        fp::Node<Real, Index> n{};
+                        Node<Real, Index> n{};
                         n.pos = node.pos;
                         n.id = node.id;
                         nodes[n.id] = n;
@@ -24344,10 +24345,6 @@ public:
 
                 }
             }
-            for(auto &node: nodes){
-                std::cout << "node_id: " << node.id << "\n";
-            }
-
             Triangulation<Real, Index, SPHERICAL_TRIANGULATION> tr;
             tr.verlet_radius = verlet_radius_inp;
             tr.R_initial = 1;
@@ -24432,8 +24429,7 @@ public:
     void move_node(Index node_id, vec3<Real> const& displacement_vector)
     {
         pre_update_geometry = get_two_ring_geometry(node_id);
-        nodes_.displace(node_id, displacement_vector);
-        update_two_ring_geometry(node_id);
+        pure_node_move(node_id, displacement_vector);
         post_update_geometry = get_two_ring_geometry(node_id);
         update_global_geometry(pre_update_geometry, post_update_geometry);
     }
@@ -24997,6 +24993,13 @@ private:
             nodes_.set_pos(i, diff);
         }
 
+    }
+
+    //! Update node positions without calculating global geometry.
+    void pure_node_move(Index node_id, vec3<Real> const& displacement_vector)
+    {
+        nodes_.displace(node_id, displacement_vector);
+        update_two_ring_geometry(node_id);
     }
 
     //! This function calculates distance vectors from a node to all of its neighbors.

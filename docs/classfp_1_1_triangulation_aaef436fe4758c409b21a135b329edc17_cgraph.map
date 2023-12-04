@@ -1,9 +1,7 @@
 <map id="fp::Triangulation::translate_all_nodes" name="fp::Triangulation::translate_all_nodes">
-<area shape="rect" id="Node000001" title="Adds the same 3D vector to the positions of each node of the triangulation." alt="" coords="5,37,140,77"/>
-<area shape="rect" id="Node000002" href="$classfp_1_1_triangulation.html#ad8102adbe7dab80cda3209844a939e30" title="Move an individual node of the triangulation and update all the geometric quantities of the triangula..." alt="" coords="188,37,311,77"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="140,55,174,55,174,60,140,60"/>
-<area shape="rect" id="Node000003" href="$classfp_1_1_triangulation.html#a3c660cb2bec69afe055843975698cfd0" title="Aggregates and Returns the geometric quantities of the center node and its next neighbor nodes." alt="" coords="369,5,527,45"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="311,45,355,38,356,43,312,50"/>
-<area shape="rect" id="Node000004" href="$classfp_1_1_triangulation.html#a1d7b2a1e57f742d1d401eeb09b057beb" title="Updates the geometric quantities of the center node and its next neighbor nodes." alt="" coords="359,69,537,109"/>
-<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="312,65,346,70,345,75,311,70"/>
+<area shape="rect" id="Node000001" title="Adds the same 3D vector to the positions of each node of the triangulation." alt="" coords="5,5,140,45"/>
+<area shape="rect" id="Node000002" href="$classfp_1_1_triangulation.html#ad8102adbe7dab80cda3209844a939e30" title="Move an individual node of the triangulation and update all the geometric quantities of the triangula..." alt="" coords="188,5,311,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="140,23,174,23,174,28,140,28"/>
+<area shape="rect" id="Node000003" href="$classfp_1_1_triangulation.html#a3c660cb2bec69afe055843975698cfd0" title="Aggregates and Returns the geometric quantities of the center node and its next neighbor nodes." alt="" coords="359,5,516,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="311,23,345,23,345,28,311,28"/>
 </map>

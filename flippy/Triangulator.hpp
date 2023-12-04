@@ -10,6 +10,7 @@
 #include <vector>
 #include <unordered_set>
 #include <unordered_map>
+#include <algorithm>
 #include "custom_concepts.hpp"
 #include "vec3.hpp"
 

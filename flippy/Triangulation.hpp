@@ -489,8 +489,7 @@ public:
     void move_node(Index node_id, vec3<Real> const& displacement_vector)
     {
         pre_update_geometry = get_two_ring_geometry(node_id);
-        nodes_.displace(node_id, displacement_vector);
-        update_two_ring_geometry(node_id);
+        pure_node_move(node_id, displacement_vector);
         post_update_geometry = get_two_ring_geometry(node_id);
         update_global_geometry(pre_update_geometry, post_update_geometry);
     }
@@ -1005,7 +1004,7 @@ private:
     Nodes<Real, Index> nodes_;
     std::vector<Index> bulk_nodes_ids;
     Geometry<Real, Index> global_geometry_;
-    // Geometry<Real, Index> pre_update_geometry, post_update_geometry;
+    Geometry<Real, Index> pre_update_geometry, post_update_geometry;
     mutable vec3<Real> l0_, l1_;
     Real verlet_radius{};
     Real verlet_radius_squared{};
@@ -1054,6 +1053,13 @@ private:
             nodes_.set_pos(i, diff);
         }
 
+    }
+
+    //! Update node positions without calculating global geometry.
+    void pure_node_move(Index node_id, vec3<Real> const& displacement_vector)
+    {
+        nodes_.displace(node_id, displacement_vector);
+        update_two_ring_geometry(node_id);
     }
 
     //! This function calculates distance vectors from a node to all of its neighbors.
