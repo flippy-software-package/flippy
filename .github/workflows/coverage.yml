@@ -47,10 +47,21 @@ jobs:
             else
               COLOR=orange
             fi
-            gistID=2e1b636e9ff08fb7d0d5a8168bcf5613
-            git clone git@gist.github.com:${gistID}.git
-            echo \{\"schemaVersion\":1,\"label\":\"coverage\",\"message\":\""${total}%"\",\"color\":\""${COLOR}"\"\} > ${gistID}/coverage.json
-            cd ${gistID}
-            git commit coverage.json -m "new coverage results" || echo "nothing to commit"
-            git push || echo "nothing to push"
+            GIST_ID=2e1b636e9ff08fb7d0d5a8168bcf5613
+            GITHUB_PAT=${{ secrets.GITHUB_PAT }}
+            
+            FILENAME="coverage.json"  
+            CONTENT='{\"schemaVersion\":1,\"label\":\"coverage\",\"message\":\""${total}%"\",\"color\":\""${COLOR}"\"}'
+      
+            curl -X POST "https://api.github.com/gists/$GIST_ID" \
+            -H "Authorization: token $GITHUB_PAT" \
+            -d "{
+              \"description\": \"Gist description\",
+              \"files\": {
+              \"$FILENAME\": {
+              \"content\": \"$CONTENT\"
+                }
+              }
+            }"
+
             echo "done testing"
