@@ -1,9 +1,0 @@
-<map id="flippy/Triangulator.hpp" name="flippy/Triangulator.hpp">
-<area shape="rect" id="Node000001" title="This file contains internal implementation details and is not part of the stable public api...." alt="" coords="116,5,265,31"/>
-<area shape="rect" id="Node000002" href="$_triangulation_8hpp.html" title="This file contains the fp::Triangulation class and several related helper classes...." alt="" coords="113,79,269,104"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="193,44,193,79,188,79,188,44"/>
-<area shape="rect" id="Node000003" href="$_monte_carlo_updater_8hpp.html" title="This file contains the MonteCarloUpdater class template. Together with Triangulation...." alt="" coords="5,152,200,177"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="168,115,119,154,115,150,164,110"/>
-<area shape="rect" id="Node000004" href="$flippy_8hpp.html" title="This header file exists for convenience. Including this header will automatically include all parts o..." alt="" coords="225,152,335,177"/>
-<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="217,110,267,150,264,154,214,115"/>
-</map>

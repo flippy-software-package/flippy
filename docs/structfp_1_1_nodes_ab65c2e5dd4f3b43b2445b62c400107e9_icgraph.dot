@@ -1,0 +1,11 @@
+digraph "fp::Nodes::unit_bending_energy"
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
+  node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
+  rankdir="RL";
+  Node1 [id="Node000001",label="fp::Nodes::unit_bending\l_energy",height=0.2,width=0.4,color="gray40", fillcolor="grey60", style="filled", fontcolor="black",tooltip="Given a node id, return node-associated unit bending energy."];
+  Node1 -> Node2 [id="edge1_Node000001_Node000002",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node2 [id="Node000002",label="fp::Nodes::Nodes",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$structfp_1_1_nodes.html#aeab72aa27fd66417ac8d5d0c9d000be6",tooltip="Constructor from JSON."];
+}
