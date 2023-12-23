@@ -26,6 +26,10 @@ jobs:
       steps:
         - name: Checkout repository
           uses: actions/checkout@v3
+        - name: install lcov
+          run: brew install lcov
+        - name: install gcovr
+          run: brew install gcovr
         - name: test
           run: |
             echo 'testing'
