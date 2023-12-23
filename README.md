@@ -38,6 +38,18 @@ Or, if you prefer using a single header file, you can download the [flippy.hpp](
 *flippy*'s public API is fully [documented](https://flippy-software-package.github.io/flippy). However, if you have never used *flippy* before, you might want to start with the demo projects. These are located in sub-folders of the [`demo`](https://github.com/flippy-software-package/flippy/tree/master/demo) folder. Each sub-folder contains a readme like this one, explaining how to set up a project and what to expect. 
 
 Automatically generated code [documentation](https://github.com/flippy-software-package/flippy/wiki/Documentation) over on the [wiki](https://github.com/flippy-software-package/flippy/wiki).
+# Citing flippy
+If you use *flippy* in your research, please cite the [arXiv preprint](https://arxiv.org/abs/2303.12305) as follows:
+```bibtex
+@article{dadunashvili2023flippy,
+    title={flippy: User friendly and open source framework for lipid membrane simulations},
+    author={George Dadunashvili and Timon Idema},
+    year={2023},
+    eprint={2303.12305},
+    archivePrefix={arXiv},
+    primaryClass={cond-mat.soft}
+}
+```
 
 # Examples of usage
 
