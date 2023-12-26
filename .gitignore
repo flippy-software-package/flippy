@@ -22,3 +22,4 @@ make_doxygen_html.sh
 make_single_header_flippy.sh
 benchmarks
 code_overview
+/actions-runner/_work

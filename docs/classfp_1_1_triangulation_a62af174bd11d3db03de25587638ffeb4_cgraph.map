@@ -1,7 +1,0 @@
-<map id="fp::Triangulation::experimental_load_sphere_from_stl" name="fp::Triangulation::experimental_load_sphere_from_stl">
-<area shape="rect" id="Node000001" title="Special constructor that can initialize a triangulation with spherical topology from a binary stl stl..." alt="" coords="5,20,179,75"/>
-<area shape="rect" id="Node000002" href="$group___globals.html#ga42171e60ff447e5c0776969445616702" title="Convenient wrapper around std::find, which only works for std::vectors." alt="" coords="235,5,341,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="178,32,221,25,222,31,179,37"/>
-<area shape="rect" id="Node000003" href="$classfp_1_1_triangulation.html#aeeb65b7f5974560fc57e20b50cf73b41" title="Returns a constant reference to the underlying Nodes container." alt="" coords="227,55,349,95"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="179,57,213,62,212,67,178,62"/>
-</map>

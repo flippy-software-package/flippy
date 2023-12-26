@@ -1,7 +1,0 @@
-<map id="fp::Nodes::pos" name="fp::Nodes::pos">
-<area shape="rect" id="Node000001" title="Given a node id, return the constant reference to the node position." alt="" coords="189,42,297,67"/>
-<area shape="rect" id="Node000002" href="$structfp_1_1_nodes.html#a53ecc9a931522c8f339dadb2232a528a" title="Emplace a the id of a new node in the Node::nn_ids vector, in front of the loc_idx position." alt="" coords="5,5,141,45"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="175,46,141,40,142,34,176,40"/>
-<area shape="rect" id="Node000003" href="$structfp_1_1_nodes.html#aeab72aa27fd66417ac8d5d0c9d000be6" title="Constructor from JSON." alt="" coords="11,70,136,95"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="176,68,136,75,136,70,175,63"/>
-</map>
