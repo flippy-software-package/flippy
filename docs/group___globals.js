@@ -3,7 +3,7 @@ var group___globals =
     [ "LONG_LONG_MAX", "group___globals.html#ga383fc2c0c24436c812cc22289504a151", null ],
     [ "VERY_LARGE_NUMBER_", "group___globals.html#ga4fcd71172083b7ac36f8a59485826cc1", null ],
     [ "M_PI", "group___globals.html#gae71449b1cc6e6250b91f539153a7a0d3", null ],
-    [ "fp::Json", "group___globals.html#ga0527b166a9415a6e07381ef4e11ed318", null ],
+    [ "fp::Json", "group___globals.html#ga7bd3848f67a3e8464cd2db3d7b255c04", null ],
     [ "fp::TriangulationType", "group___globals.html#ga6ac3c08b4c402e40a3f270818345078a", [
       [ "fp::SPHERICAL_TRIANGULATION", "group___globals.html#gga6ac3c08b4c402e40a3f270818345078aa4818fa0ff44979ed665568888d681703", null ],
       [ "fp::EXPERIMENTAL_PLANAR_TRIANGULATION", "group___globals.html#gga6ac3c08b4c402e40a3f270818345078aafb3c1a4934975221c03cd6b957b3e089", null ]

@@ -1,0 +1,15 @@
+<map id="fp::Nodes::Nodes" name="fp::Nodes::Nodes">
+<area shape="rect" id="Node000001" title="Constructor from JSON." alt="" coords="5,129,131,155"/>
+<area shape="rect" id="Node000002" href="$structfp_1_1_nodes.html#ab863d48ecbce98b85747961bbaae82a9" title="Given a node id, return node associated area." alt="" coords="207,5,319,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="78,127,118,85,146,60,177,40,193,32,195,37,180,44,150,65,122,88,82,131"/>
+<area shape="rect" id="Node000003" href="$structfp_1_1_nodes.html#aac8eaef6c3fa8679dfafcb4018573233" title="Given a node id, return the constant reference to the node curvature vector." alt="" coords="179,55,348,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="93,127,178,89,199,81,201,87,180,94,95,132"/>
+<area shape="rect" id="Node000004" href="$structfp_1_1_nodes.html#aeaac33789677da84759647308c5f25da" title="Given a node id, returns the std::vector containing distance vectors to next neighbours." alt="" coords="181,104,345,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="130,131,167,126,168,132,131,137"/>
+<area shape="rect" id="Node000005" href="$structfp_1_1_nodes.html#a44304df70878d39c9c55ce6cba0cec3d" title="Given a node id, return the constant reference to the node position." alt="" coords="209,153,317,179"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="131,147,196,155,195,160,130,152"/>
+<area shape="rect" id="Node000006" href="$structfp_1_1_nodes.html#ab65c2e5dd4f3b43b2445b62c400107e9" title="Given a node id, return node&#45;associated unit bending energy." alt="" coords="183,203,343,243"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="99,152,180,188,199,196,197,201,178,192,96,157"/>
+<area shape="rect" id="Node000007" href="$structfp_1_1_nodes.html#a0d791117fddd2490c8223a74de6f9109" title="Given a node id, return node associated volume." alt="" coords="199,268,328,293"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="80,153,120,202,148,229,180,253,194,261,192,265,177,258,145,233,116,206,76,157"/>
+</map>

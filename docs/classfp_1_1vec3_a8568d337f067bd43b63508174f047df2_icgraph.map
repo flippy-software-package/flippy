@@ -1,0 +1,19 @@
+<map id="fp::vec3::norm" name="fp::vec3::norm">
+<area shape="rect" id="Node000001" title="Returns the norm of the vector." alt="" coords="841,77,948,103"/>
+<area shape="rect" id="Node000002" href="$classfp_1_1vec3.html#a3484a50de6cbbadfa7b04d4352410a10" title="Normalize the vector in place. And return a reference to the new normalized vector." alt="" coords="633,5,766,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="856,74,792,46,752,33,754,28,794,41,858,69"/>
+<area shape="rect" id="Node000003" href="$classfp_1_1_triangulation.html#a75e93af077cc8434bb76a1a4a39f3adf" title="This function is deprecated!" alt="" coords="609,55,790,125"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="828,93,790,93,790,87,828,87"/>
+<area shape="rect" id="Node000004" href="$classfp_1_1_triangulation.html#a5d5763865ac706a2e800ed306d070d68" title="Update the geometric quantities associated with the given node." alt="" coords="605,149,793,189"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="857,111,794,139,763,151,761,146,792,134,855,106"/>
+<area shape="rect" id="Node000005" href="$classfp_1_1_triangulation.html#a1afce8afd92f1b88fb15ce7d9cb31edd" title="Initiates the global geometry of the triangulation." alt="" coords="390,117,546,157"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="591,156,546,150,547,145,592,151"/>
+<area shape="rect" id="Node000006" href="$classfp_1_1_triangulation.html#a762c6430c00d719a8ea5a4a3e89715a8" title="Calculates and updates the geometric quantities of the diamond configuration of nodes associated with..." alt="" coords="379,181,557,221"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="592,186,558,191,557,186,591,181"/>
+<area shape="rect" id="Node000007" href="$classfp_1_1_triangulation.html#a5d1ec431a7a0040d7963e4297a80faaa" title="Un&#45;flip a bond that was just flipped." alt="" coords="208,181,331,221"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="365,203,331,203,331,198,365,198"/>
+<area shape="rect" id="Node000008" href="$classfp_1_1_monte_carlo_updater.html#a8de725c1ae28fd44d096ffb82467b598" title="Attempt a flip Monte Carlo Step." alt="" coords="5,149,160,189"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="194,190,160,185,161,179,195,185"/>
+<area shape="rect" id="Node000009" href="$classfp_1_1_monte_carlo_updater.html#acf28ad26646a0e87dce57eed5ca5047c" title="Attempt a flip Monte Carlo Step." alt="" coords="5,213,160,253"/>
+<area shape="poly" id="edge8_Node000007_Node000009" title=" " alt="" coords="195,216,161,222,160,217,194,211"/>
+</map>

@@ -3,6 +3,7 @@ var namespacefp =
     [ "implementation", "namespacefp_1_1implementation.html", "namespacefp_1_1implementation" ],
     [ "BondFlipData", "structfp_1_1_bond_flip_data.html", "structfp_1_1_bond_flip_data" ],
     [ "Geometry", "structfp_1_1_geometry.html", "structfp_1_1_geometry" ],
+    [ "GradientDecentUpdater", "classfp_1_1_gradient_decent_updater.html", null ],
     [ "MonteCarloUpdater", "classfp_1_1_monte_carlo_updater.html", "classfp_1_1_monte_carlo_updater" ],
     [ "Neighbors", "structfp_1_1_neighbors.html", "structfp_1_1_neighbors" ],
     [ "Node", "structfp_1_1_node.html", "structfp_1_1_node" ],
@@ -11,7 +12,7 @@ var namespacefp =
     [ "vec3", "classfp_1_1vec3.html", "classfp_1_1vec3" ],
     [ "floating_point_number", "conceptfp_1_1floating__point__number.html", null ],
     [ "indexing_number", "conceptfp_1_1indexing__number.html", null ],
-    [ "Json", "group___globals.html#ga0527b166a9415a6e07381ef4e11ed318", null ],
+    [ "Json", "group___globals.html#ga7bd3848f67a3e8464cd2db3d7b255c04", null ],
     [ "TriangulationType", "group___globals.html#ga6ac3c08b4c402e40a3f270818345078a", [
       [ "SPHERICAL_TRIANGULATION", "group___globals.html#gga6ac3c08b4c402e40a3f270818345078aa4818fa0ff44979ed665568888d681703", null ],
       [ "EXPERIMENTAL_PLANAR_TRIANGULATION", "group___globals.html#gga6ac3c08b4c402e40a3f270818345078aafb3c1a4934975221c03cd6b957b3e089", null ]

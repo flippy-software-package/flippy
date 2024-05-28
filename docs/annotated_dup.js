@@ -10,6 +10,7 @@ var annotated_dup =
       ] ],
       [ "BondFlipData", "structfp_1_1_bond_flip_data.html", "structfp_1_1_bond_flip_data" ],
       [ "Geometry", "structfp_1_1_geometry.html", "structfp_1_1_geometry" ],
+      [ "GradientDecentUpdater", "classfp_1_1_gradient_decent_updater.html", null ],
       [ "MonteCarloUpdater", "classfp_1_1_monte_carlo_updater.html", "classfp_1_1_monte_carlo_updater" ],
       [ "Neighbors", "structfp_1_1_neighbors.html", "structfp_1_1_neighbors" ],
       [ "Node", "structfp_1_1_node.html", "structfp_1_1_node" ],

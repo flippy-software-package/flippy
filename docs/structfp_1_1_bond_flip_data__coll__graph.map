@@ -1,0 +1,7 @@
+<map id="fp::BondFlipData&lt; Index &gt;" name="fp::BondFlipData&lt; Index &gt;">
+<area shape="rect" id="Node000001" title="A helper struct; keeps track of bond flips." alt="" coords="5,108,181,133"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="33,5,79,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="56,44,56,64,61,83,80,106,75,109,56,85,51,65,50,44"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="103,5,158,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="124,44,100,109,95,107,119,43"/>
+</map>

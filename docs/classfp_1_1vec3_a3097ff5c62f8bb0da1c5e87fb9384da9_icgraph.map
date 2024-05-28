@@ -1,0 +1,29 @@
+<map id="fp::vec3::dot" name="fp::vec3::dot">
+<area shape="rect" id="Node000001" title="Calculate dot product with another vector." alt="" coords="1041,106,1136,131"/>
+<area shape="rect" id="Node000002" href="$classfp_1_1_triangulation.html#a847fc218cc1807b7027b069a4239c7db" title="This function is deprecated!" alt="" coords="856,5,979,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1057,100,992,60,968,48,970,43,995,55,1060,96"/>
+<area shape="rect" id="Node000003" href="$classfp_1_1_triangulation.html#a3e43dfd4b4c9cfd10c5bf4174f2a85d1" title="The node&#45;associated area inside a triangle." alt="" coords="856,69,979,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="1027,111,979,102,980,97,1028,106"/>
+<area shape="rect" id="Node000011" href="$classfp_1_1vec3.html#a8568d337f067bd43b63508174f047df2" title="Returns the norm of the vector." alt="" coords="864,134,971,159"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="1028,131,972,141,971,135,1027,126"/>
+<area shape="rect" id="Node000013" href="$classfp_1_1vec3.html#a8f4f85470de85d92876fe2c93ea0f425" title="Returns the square of the norm of the vector." alt="" coords="841,183,993,209"/>
+<area shape="poly" id="edge14_Node000001_Node000013" title=" " alt="" coords="1058,141,994,174,964,186,963,181,992,170,1055,136"/>
+<area shape="rect" id="Node000004" href="$classfp_1_1_triangulation.html#a75e93af077cc8434bb76a1a4a39f3adf" title="This function is deprecated!" alt="" coords="609,112,790,181"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="843,112,791,125,789,120,842,106"/>
+<area shape="rect" id="Node000005" href="$classfp_1_1_triangulation.html#a5d5763865ac706a2e800ed306d070d68" title="Update the geometric quantities associated with the given node." alt="" coords="605,48,793,88"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="842,85,793,80,794,75,842,79"/>
+<area shape="rect" id="Node000006" href="$classfp_1_1_triangulation.html#a1afce8afd92f1b88fb15ce7d9cb31edd" title="Initiates the global geometry of the triangulation." alt="" coords="390,16,546,56"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="591,56,546,49,547,44,592,50"/>
+<area shape="rect" id="Node000007" href="$classfp_1_1_triangulation.html#a762c6430c00d719a8ea5a4a3e89715a8" title="Calculates and updates the geometric quantities of the diamond configuration of nodes associated with..." alt="" coords="379,80,557,120"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="592,86,558,90,557,85,591,80"/>
+<area shape="rect" id="Node000008" href="$classfp_1_1_triangulation.html#a5d1ec431a7a0040d7963e4297a80faaa" title="Un&#45;flip a bond that was just flipped." alt="" coords="208,80,331,120"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="365,103,331,103,331,97,365,97"/>
+<area shape="rect" id="Node000009" href="$classfp_1_1_monte_carlo_updater.html#a8de725c1ae28fd44d096ffb82467b598" title="Attempt a flip Monte Carlo Step." alt="" coords="5,48,160,88"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="194,90,160,84,161,79,195,85"/>
+<area shape="rect" id="Node000010" href="$classfp_1_1_monte_carlo_updater.html#acf28ad26646a0e87dce57eed5ca5047c" title="Attempt a flip Monte Carlo Step." alt="" coords="5,112,160,152"/>
+<area shape="poly" id="edge9_Node000008_Node000010" title=" " alt="" coords="195,115,161,121,160,116,194,110"/>
+<area shape="poly" id="edge12_Node000011_Node000004" title=" " alt="" coords="850,149,790,149,790,144,850,144"/>
+<area shape="poly" id="edge13_Node000011_Node000005" title=" " alt="" coords="862,132,840,124,792,102,760,91,762,86,794,98,842,119,864,127"/>
+<area shape="rect" id="Node000012" href="$classfp_1_1vec3.html#a3484a50de6cbbadfa7b04d4352410a10" title="Normalize the vector in place. And return a reference to the new normalized vector." alt="" coords="633,206,766,231"/>
+<area shape="poly" id="edge11_Node000011_Node000012" title=" " alt="" coords="864,166,842,174,794,196,753,209,752,203,792,191,840,170,862,161"/>
+</map>

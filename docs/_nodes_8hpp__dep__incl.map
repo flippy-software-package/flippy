@@ -1,0 +1,14 @@
+<map id="flippy/Nodes.hpp" name="flippy/Nodes.hpp">
+<area shape="rect" id="Node000001" title="This file contains the fp::Node and fp::Nodes classes, data structures that represent a single node o..." alt="" coords="143,5,263,31"/>
+<area shape="rect" id="Node000002" href="$_monte_carlo_updater_8hpp.html" title="This file contains the MonteCarloUpdater class template. Together with Triangulation...." alt="" coords="333,152,527,177"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="235,36,413,149,410,154,232,41"/>
+<area shape="rect" id="Node000003" href="$flippy_8hpp.html" title="This header file exists for convenience. Including this header will automatically include all parts o..." alt="" coords="5,225,116,251"/>
+<area shape="poly" id="edge7_Node000001_Node000003" title=" " alt="" coords="170,40,141,58,115,81,87,113,70,153,63,192,63,225,57,225,58,191,65,151,82,111,111,77,138,54,167,35"/>
+<area shape="rect" id="Node000004" href="$_triangulation_8hpp.html" title="This file contains the fp::Triangulation class and several related helper classes...." alt="" coords="125,79,281,104"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="206,44,206,79,201,79,201,44"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="358,183,117,229,116,223,357,177"/>
+<area shape="poly" id="edge5_Node000004_Node000002" title=" " alt="" coords="254,106,394,149,393,154,252,111"/>
+<area shape="poly" id="edge6_Node000004_Node000003" title=" " alt="" coords="151,111,117,129,88,154,77,171,70,191,64,225,59,224,65,189,72,169,84,150,114,124,149,107"/>
+<area shape="rect" id="Node000005" href="$_gradient_descent_updater_8h_source.html" title=" " alt="" coords="98,152,309,177"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="206,118,206,152,201,152,201,118"/>
+</map>
