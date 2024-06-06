@@ -193,15 +193,16 @@ public:
      */
     void flip_MC_updater(fp::Node<Real, Index> const& node)
     {
-        ++flip_attempt;
-        e_old = energy_function(node, triangulation, prms);
-        Index number_nn_ids = node.nn_ids.size();
-        Index nn_id = node.nn_ids[std::uniform_int_distribution<Index>(0, number_nn_ids-1)(rng)];
-        auto bfd = triangulation.flip_bond(node.id, nn_id, min_bond_length_square, max_bond_length_square);
-        if (bfd.flipped) {
-            e_new = energy_function(node, triangulation, prms);
-            if (move_needs_undoing()) { triangulation.unflip_bond(node.id, nn_id, bfd); ++flip_back;}
-        }else{++bond_length_flip_rejection;}
+      Index number_nn_ids = static_cast<Index>(node.nn_ids.size());
+      Index nn_id = node.nn_ids[std::uniform_int_distribution<Index>(0, number_nn_ids-1)(rng)];
+      flip_MC_updater(node, nn_id);
+//        ++flip_attempt;
+//        e_old = energy_function(node, triangulation, prms);
+//        auto bfd = triangulation.flip_bond(node.id, nn_id, min_bond_length_square, max_bond_length_square);
+//        if (bfd.flipped) {
+//            e_new = energy_function(node, triangulation, prms);
+//            if (move_needs_undoing()) { triangulation.unflip_bond(node.id, nn_id, bfd); ++flip_back;}
+//        }else{++bond_length_flip_rejection;}
     }
 
     //! Attempt a flip Monte Carlo Step.
@@ -219,7 +220,7 @@ public:
     {
         ++flip_attempt;
         e_old = energy_function(node, triangulation, prms);
-        Index number_nn_ids = node.nn_ids.size();
+//        Index number_nn_ids = node.nn_ids.size();
 //        Index nn_id = index_in_nn_ids;//node.nn_ids[std::uniform_int_distribution<Index>(0, number_nn_ids-1)(rng)];
         auto bfd = triangulation.flip_bond(node.id, id_in_nn_ids, min_bond_length_square, max_bond_length_square);
         if (bfd.flipped) {

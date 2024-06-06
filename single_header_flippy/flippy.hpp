@@ -58,21 +58,10 @@
 
 
 
-// begin --- Triangulator.hpp --- 
+// begin --- GradientDescentUpdater.h --- 
 
-#ifndef FLIPPY_TRIANGULATOR_HPP
-#define FLIPPY_TRIANGULATOR_HPP
-/**
- * @file
- * @brief This file contains internal implementation details and is not part of the stable public api.
- * The classes and methods implemented here are responsible for creating the intitial triangulations.
- */
-
-#include <array>
-#include <vector>
-#include <unordered_set>
-#include <unordered_map>
-#include <algorithm>
+#ifndef FLIPPY_HPP_GRADIENTDESCENTUPDATER_H
+#define FLIPPY_HPP_GRADIENTDESCENTUPDATER_H
 
 // begin --- custom_concepts.hpp --- 
 
@@ -118,933 +107,28 @@ template<class T> concept indexing_number = std::is_unsigned_v<T> && std::is_int
 
 
 
-// begin --- vec3.hpp --- 
+// begin --- Triangulation.hpp --- 
 
-#ifndef FLIPPY_VEC3_HPP
-#define FLIPPY_VEC3_HPP
+#ifndef FLIPPY_TRIANGULATION_HPP
+#define FLIPPY_TRIANGULATION_HPP
 /**
  * @file
- * @brief Header file containing the definition and implementation a 3 dimensional vector class, with useful
- * mathematical operations like cross and dot products as member methods.
+ * @brief This file contains the fp::Triangulation class and several related helper classes. This is the core of flippy.
  */
+#include<optional>
+#include <set>
 
+// begin --- Nodes.hpp --- 
 
-#include <ostream>
-#include <iostream>
-#include <cmath>
-
-
-namespace fp{
-
-/**
- * \brief Internal implementation of a 3D vector.
- *
- * !!! vec3 does not throw !!! This means that if you ask vec3 to divide a vector by 0 or more realistically if you
- * normalize a zero length vector vec3 will not check for the division by zero and will return a nan result!
- * Since vec3 is used everywhere in flippy, including in very expensive calculations, I decided to omit the security check
- * for the sake of speed.
- *
- * To keep the external dependencies low, flippy implements it's own 3D vector class with basic functionality like dot product and cross product
- *
- * Example:
- * ```c++
- * fp::vec3<double> v1{1,0,0};
- * fp::vec3<double> v2{0,0,1};
- *
- *  assert(v1.dot(v2)==0);
- *  assert(v1.cross(v2).norm()==1);
- *  assert(((v1-v2)==fp::vec3<double>{1.,0.,-1.}));
- * ```
- *
- * @tparam Real @RealStub
- */
-
-template<floating_point_number Real>
-class vec3
-{
-public:
-
-    Real x; //!< The x component of the vector.
-    Real y; //!< The y component of the vector.
-    Real z; //!< The z component of the vector.
-
-    //! In place addition method.
-    /**
-     * Example:
-     * ```c++
-     * fp::vec3<double> v1{1,0,0};
-     * fp::vec3<double> v2{0,0,1};
-     * v1.add(v2);  // v1 will contain {1, 0, 1}
-     * ```
-     * @param v add this vector elementwise to the vector that is calling the *add* method.
-     */
-    void add(vec3<Real> const& v)
-    {
-        x += v.x;
-        y += v.y;
-        z += v.z;
-    }
-
-    //! In place subtraction method.
-    /**
-     * Example:
-     * ```c++
-     * fp::vec3<double> v1{2,0,0};
-     * fp::vec3<double> v2{1,0,1};
-     * v1.subtract(v2);  // v1 will contain {1, 0, -1}
-     * ```
-     * @param v subtract this vector elementwise from the vector that is calling the *subtract* method.
-     */
-    void subtract(vec3<Real> const& v)
-    {
-        x -= v.x;
-        y -= v.y;
-        z -= v.z;
-    }
-    //! Scale the vector by a real number s.
-    /**
-     * This function scales the vector in-place by the provided number `s`.
-     * @param s multiplicative prefactor.
-     */
-    void scale(Real s)
-    {
-        x = s*x;
-        y = s*y;
-        z = s*z;
-    }
-
-    //! Calculate dot product with another vector.
-    /**
-     * Example:
-     * @code{c++}
-     * fp::vec3<double> v1{1,0,0};
-     * fp::vec3<double> v2{2,0,1};
-     * double res = v1.dot(v2);  // res will contain 2*1 + 0*0 + 0*1=2
-     * @endcode
-     * @param v the other vec3 vector
-     * @return result of the dot product between the original vector and `v`.
-     */
-    Real dot(vec3<Real> const& v) const
-    {
-        Real res = x*v.x + y*v.y + z*v.z;
-        return res;
-    }
-
-    //! Always returns 3.
-    /**
-     * This function always returns 3 since vec3 can only have three elements.
-     * It was implemented for completeness, to make it more easy for vec3 to be used as a drop-in replacement for other vector types.
-     * @return Size (number of elements) of vec3.
-     */
-    [[nodiscard]] constexpr std::size_t size() const { return 3; }
-
-    //! Calculate cross product between two vectors.
-    /**
-     * A static method to calculate cross product between two vectors.
-     * Example:
-     * @code{c++}
-     * fp::vec3<double> v1{1,0,0};
-     * fp::vec3<double> v2{0,1,0};
-     * fp::vec3<double> v3 = cross(v1, v2);  // v3 will contain {0,0,1}
-     * @endcode
-     * @param a first vector of the cross product
-     * @param b second vector of the cross product
-     * @return result of the cross product between the original vector and `v`.
-     */
-    static inline vec3<Real> cross(vec3<Real> const& a, vec3<Real> const& b)
-    {
-        vec3<Real> res;
-        res.x = a.y*b.z - a.z*b.y;
-        res.y = a.z*b.x - a.x*b.z;
-        res.z = a.x*b.y - a.y*b.x;
-        return res;
-    }
-
-    //! Calculate cross product with another vector.
-    /**
-     * Example:
-     * @code{c++}
-     * fp::vec3<double> v1{1,0,0};
-     * fp::vec3<double> v2{0,1,0};
-     * fp::vec3<double> v3 = v1.cross(v2);  // v3 will contain {0,0,1}
-     * @endcode
-     * @param other the other vec3 vector.
-     * @return result of the cross product between the original vector and `other`.
-     */
-    vec3<Real> cross(vec3<Real> const& other) const { return cross(*this, other); }
-
-    //! Returns the norm of the vector.
-    /**
-     * Example:
-     * @code{c++}
-     * fp::vec3<double> v{1,0,1};
-     * double res = v.norm();  // res will contain 1,4142135624... i.e. sqrt(2)
-     * @endcode
-     * @return The euclidian norm of the vector.
-     */
-    Real norm() const { return std::sqrt(this->dot(*this)); }
-
-    //! Returns the square of the norm of the vector.
-    /**
-     * Example:
-     * @code{c++}
-     * fp::vec3<double> v{1,0,1};
-     * double res = v.norm_square();  // res will contain 2
-     * @endcode
-     * @return Square of the euclidian norm of the vector.
-     */
-    Real norm_square() const { return this->dot(*this); }
-
-    //! Normalize the vector in place. And return a reference to the new normalized vector.
-    /**
-     * @warning If you normalize a zero length vector, you effectively
-     * demand to divide by zero! this function will not do a security check
-     * for you and will just return nan!
-     * @return Reference to the normalized vector.
-     */
-    vec3<Real>const& normalize(){
-        *this= *this/this->norm();
-        return *this;
-    }
-
-    //! Streaming operator for easy printing of the vector.
-    friend std::ostream& operator<<(std::ostream& os, const vec3<Real>& obj)
-    {
-        os << "{" << obj.x << ',' << obj.y << ',' << obj.z << '}';
-        return os;
-    }
-
-    //! default equality operator.
-    /**
-     * @param other  vec3 on the right hand side of the comparison operator.
-     * @return `true` if all elements of the compared vectors are equal and to `false` otherwise.
-     */
-    bool operator==(vec3<Real> const& other) const =default;
-
-
-    //! Overloaded operator defined in terms of vec2::add.
-    /**
-     *
-     * @param lhs left hand side of the `+` operator
-     * @param rhs right hand side oif the `+` operator
-     * @return equivalent to a new copy of `lhs.add(rhs)`.
-     */
-    friend vec3<Real> operator+(vec3<Real> lhs, vec3<Real> const& rhs)
-    {
-        lhs+=rhs;
-        return lhs;
-    }
-
-    //! Overloaded operator defined in terms of vec3::add.
-    /**
-     * Equivalent to `lhs.add(rhs)`.
-     * @param lhs left hand side of the `+=` operator
-     * @param rhs right hand side oif the `+=` operator
-     */
-    friend void operator+=(vec3<Real>& lhs, vec3<Real> const& rhs)
-    {
-        lhs.add(rhs);
-    }
-
-    //! Overloaded operator defined in terms of vec3::subtract.
-    /**
-     *
-     * @param lhs left hand side of the `-` operator
-     * @param rhs right hand side oif the `-` operator
-     * @return equivalent to a new copy of `lhs.subtract(rhs)`.
-     */
-    friend vec3<Real> operator-(vec3<Real> lhs, vec3<Real> const& rhs)
-    {
-        lhs-=rhs;
-        return lhs;
-    }
-
-    //! Overloaded operator defined in terms of vec3::subtract.
-    /**
-     * Equivalent to `lhs.subtract(rhs)`.
-     * @param lhs left hand side of the `-=` operator
-     * @param rhs right hand side oif the `-=` operator
-     */
-    friend void operator-=(vec3<Real>& lhs, vec3<Real> const& rhs)
-    {
-        lhs.subtract(rhs);
-    }
-
-    //! Overloaded operator defined in terms of vec3::scale.
-    /**
-     * Left multiplication by a scalar `s*v`.
-     * @param lhs left hand side of the `*` operator
-     * @param rhs right hand side oif the `*` operator
-     * @return equivalent to a new copy of `rhs.scale(lhs)`.
-     */
-    friend vec3<Real> operator*(Real const& lhs, vec3<Real> rhs)
-    {
-        rhs.scale(lhs);
-        return rhs;
-    }
-
-    //! Overloaded operator defined in terms of vec3::scale.
-    /**
-     * Right multiplication by a scalar `v*s`.
-     * @param lhs left hand side of the `*` operator
-     * @param rhs right hand side oif the `*` operator
-     * @return equivalent to a new copy of `lhs.scale(rhs)`.
-     */
-    friend vec3<Real> operator*(vec3<Real> lhs, Real const& rhs)
-    {
-        lhs.scale(rhs);
-        return lhs;
-    }
-
-    //! Overloaded operator defined in terms of vec3::scale.
-    /**
-     * In place division by a scalar `v/s`,  equivalent to `lhs.scale(1/rhs)`.
-     * @param lhs left hand side of the `/=` operator
-     * @param rhs right hand side oif the `/=` operator
-     * @warning for performance reasons, this function will not check for zero division!
-     */
-    friend void operator/=(vec3<Real>& lhs, Real const& rhs){
-        lhs.scale((Real)1/rhs);
-    }
-
-    //! Overloaded operator defined in terms of vec3::scale.
-    /**
-     * Division by a scalar `v/s`.
-     * @param lhs left hand side of the `/` operator
-     * @param rhs right hand side oif the `/` operator
-     * @return equivalent to a new copu of `lhs.scale(1/rhs)`.
-     * @warning for performance reasons, this function will not check for zero division!
-     */
-    friend vec3<Real> operator/(vec3<Real> lhs, Real const& rhs)
-    {
-        lhs/=rhs;
-        return lhs;
-    }
-
-    //! element access operator.
-    /**
-     * @tparam Index automatically deduced type of the index.
-     * @param idx can only be 0 1 or 2. Any other number will cause the program to exit with an error.
-     * @return for a vec3 v: v[1] returns v.x, v[2] returns v.y and v[3] returns v.z.
-     *
-     * @note: The use of the subscription operator might be slower than the direct access of the data member.
-     */
-    template<typename Index>
-    requires std::is_integral_v<Index>
-    Real& operator[](Index idx)
-    {
-        switch (idx) {
-            case 0:return x;
-            case 1:return y;
-            case 2:return z;
-            default:std::cerr << idx << "is out of range for as vec3 index";
-            exit(12);
-        }
-    }
-
-    //! element access operator for constant environments.
-    /**
-     * @tparam Index automatically deduced type of the index.
-     * @param idx can only be 0 1 or 2. Any other number will cause the program to exit with an error.
-     * @return for a vec3 v: v[1] returns a constant reference to v.x, v[2] returns a constant reference to v.y and v[3] returns a constant reference to v.z.
-     *
-     * @note: The use of the subscription operator might be slower than the direct access of the data member.
-     */
-    template<typename Index>
-    requires std::is_integral_v<Index>
-    const Real& operator[](Index idx) const
-    {
-        switch (idx) {
-            case 0:return x;
-            case 1:return y;
-            case 2:return z;
-            default:std::cerr << idx << "is out of range for as vec3 index";
-                exit(12);
-        }
-    }
-
-    //! Unary minus operator.
-    /**
-     *
-     * @param v original vector.
-     * @return A copy of -v the vector v itself stays unaffected.
-     */
-    friend vec3<Real> operator-(vec3<Real> v)
-    {
-        v.x = -v.x;
-        v.y = -v.y;
-        v.z = -v.z;
-        return v;
-    }
-
-    //! Unary minus operator for rvalues.
-    /**
-     *
-     * @param v an rvalue vec3 vector.
-     * @return The rvalue vector `v` is moved into the function and `-v` is returned.
-     */
-    friend vec3<Real> operator-(vec3<Real>&& v)
-    {
-        v.x = -v.x;
-        v.y = -v.y;
-        v.z = -v.z;
-        return v;
-    }
-
-};
-}
-
-#endif //FLIPPY_VEC3_HPP
-
-
-// end --- vec3.hpp --- 
-
-
-
-
-/**
- * @GlobalsStub
- * @{
- */
-//! The M_PI macro is not defined on for all compilers, so it is defined here (if a definition does not already exist).
-#ifndef M_PI
-#define M_PI 3.14159265358979323846	/* pi */
-#endif
-/**@}*/
-
-/**
- * The API stability of the functions in the implementation namespace is not guaranteed!
- * Functions that are part of the implementation namespace are not part of the public facing API and are not intended fot the end-user.
- * Since flippy is a headers only library this could not be hidden in source files.
- */
-namespace fp::implementation{
-
-//! @private
-template<floating_point_number Real, indexing_number Index>
-struct SimpleNodeData{
-  std::string hash{};
-  Index id{};
-  vec3<Real> pos{};
-  std::unordered_set<std::string> nn_hashes{};
-};
-
-//! @private
-template<floating_point_number Real, indexing_number Index>
-class IcosahedronSubTriangulation
-{
-public:
-    static std::string hash_node(Index c)
-    {
-        /**
-         * returns a unique hash for a corner node, which is just the id of that corner node.
-         */
-        return std::to_string(c);
-    }
-
-    static std::string hash_node(Index c0, Index c1, Index n)
-    {
-        /**
-         * returns a unique hash for a node on one of the sides of the initial triangle.
-         * This hash is determined by the (ordered) corner nodes of the initial edge and the index of the node.
-         */
-        Index a = std::min(c0, c1);
-        Index b = std::max(c0, c1);
-        return std::to_string(a) + "_" + std::to_string(b) + "_" + std::to_string(n);
-    }
-
-    static std::string hash_node(Index c0, Index c1, Index c2, Index i, Index j)
-    {
-        /**
-         * returns a unique hash for a node in the bulk of the subtriangulation.
-         */
-        std::vector<Index> cv{c0, c1, c2};
-        std::sort(cv.begin(), cv.end());
-
-        return std::to_string(cv[0]) + "_" + std::to_string(cv[1]) + "_" + std::to_string(cv[2])
-                + "_" + std::to_string(i) + "_" + std::to_string(j);
-    }
-
-    static vec3<Real> r_S1(Real R, Real t, Real f) {
-        vec3<Real> r{R * std::sin(t) * std::cos(f), R * std::sin(t) * std::sin(f), R * std::cos(t)};
-        return r;
-    }
-
-    static constexpr int N_ICOSA_FACEs = 20;
-    static constexpr int N_ICOSA_EDGEs = 30;
-    static constexpr int N_ICOSA_NODEs = 12;
-
-    static constexpr std::array<int, N_ICOSA_FACEs> FACE_IDs{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19};
-    static constexpr std::array<int, N_ICOSA_NODEs> NODE_IDs{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
-    static constexpr std::array<std::array<int, 3>, N_ICOSA_FACEs> FACE_CORNER_NODES_ = {
-            std::array<int, 3>{NODE_IDs[0], NODE_IDs[5], NODE_IDs[1]},
-            std::array<int, 3>{NODE_IDs[0], NODE_IDs[1], NODE_IDs[2]},
-            std::array<int, 3>{NODE_IDs[0], NODE_IDs[2], NODE_IDs[3]},
-            std::array<int, 3>{NODE_IDs[0], NODE_IDs[3], NODE_IDs[4]},
-            std::array<int, 3>{NODE_IDs[0], NODE_IDs[4], NODE_IDs[5]},
-            std::array<int, 3>{NODE_IDs[10], NODE_IDs[5], NODE_IDs[4]},
-            std::array<int, 3>{NODE_IDs[10], NODE_IDs[6], NODE_IDs[5]},
-            std::array<int, 3>{NODE_IDs[6], NODE_IDs[1], NODE_IDs[5]},
-            std::array<int, 3>{NODE_IDs[6], NODE_IDs[7], NODE_IDs[1]},
-            std::array<int, 3>{NODE_IDs[7], NODE_IDs[2], NODE_IDs[1]},
-            std::array<int, 3>{NODE_IDs[7], NODE_IDs[8], NODE_IDs[2]},
-            std::array<int, 3>{NODE_IDs[8], NODE_IDs[3], NODE_IDs[2]},
-            std::array<int, 3>{NODE_IDs[8], NODE_IDs[9], NODE_IDs[3]},
-            std::array<int, 3>{NODE_IDs[9], NODE_IDs[4], NODE_IDs[3]},
-            std::array<int, 3>{NODE_IDs[9], NODE_IDs[10], NODE_IDs[4]},
-            std::array<int, 3>{NODE_IDs[11], NODE_IDs[10], NODE_IDs[9]},
-            std::array<int, 3>{NODE_IDs[11], NODE_IDs[6], NODE_IDs[10]},
-            std::array<int, 3>{NODE_IDs[11], NODE_IDs[7], NODE_IDs[6]},
-            std::array<int, 3>{NODE_IDs[11], NODE_IDs[8], NODE_IDs[7]},
-            std::array<int, 3>{NODE_IDs[11], NODE_IDs[9], NODE_IDs[8]}
-    };
-
-    static constexpr const std::array<std::array<int, 3>, N_ICOSA_FACEs> FACE_CORNER_NODES = {
-            std::array<int, 3>{0, 5, 1},
-            std::array<int, 3>{0, 1, 2},
-            std::array<int, 3>{0, 2, 3},
-            std::array<int, 3>{0, 3, 4},
-            std::array<int, 3>{0, 4, 5},
-            std::array<int, 3>{10, 5, 4},
-            std::array<int, 3>{10, 6, 5},
-            std::array<int, 3>{6, 1, 5},
-            std::array<int, 3>{6, 7, 1},
-            std::array<int, 3>{7, 2, 1},
-            std::array<int, 3>{7, 8, 2},
-            std::array<int, 3>{8, 3, 2},
-            std::array<int, 3>{8, 9, 3},
-            std::array<int, 3>{9, 4, 3},
-            std::array<int, 3>{9, 10, 4},
-            std::array<int, 3>{11, 10, 9},
-            std::array<int, 3>{11, 6, 10},
-            std::array<int, 3>{11, 7, 6},
-            std::array<int, 3>{11, 8, 7},
-            std::array<int, 3>{11, 9, 8}
-    };
-
-    static std::unordered_map<std::string, SimpleNodeData<Real, Index>> make_corner_nodes()
-    {
-
-        Real R = 1.;
-        std::unordered_map<std::string, SimpleNodeData<Real, Index>> base_nodes(N_ICOSA_NODEs);
-        base_nodes[hash_node(0)] = {.hash=hash_node(0), .id=0, .pos=r_S1(R, 0., 0.)};
-        std::string hash;
-        hash.reserve(2);
-        for (Index i = 1; i<6; ++i) {
-            hash = hash_node(i);
-            base_nodes[hash] = {
-                    .hash=hash,
-                    .id=i,
-                    .pos=r_S1(R,
-                            static_cast<Real>(M_PI/2. - std::atan(0.5)),
-                            static_cast<Real>(2.*M_PI*(static_cast<Real>(i) - 1.)/5.))};
-        }
-
-        for (Index i = 6; i<N_ICOSA_NODEs - 1; ++i) {
-            hash = hash_node(i);
-            base_nodes[hash] = {
-                    .hash=hash,
-                    .id=i,
-                    .pos=r_S1(R,
-                            static_cast<Real>(M_PI/2. + std::atan(0.5)),
-                            static_cast<Real>(2.*M_PI*(static_cast<Real>(i) - 6.5)/5.))};
-        }
-        hash = hash_node(N_ICOSA_NODEs - 1);
-        base_nodes[hash] = {
-                .hash=hash,
-                .id=static_cast<Index>(N_ICOSA_NODEs - 1),
-                .pos=r_S1(R, static_cast<Real>(M_PI), static_cast<Real>(0.))};
-        return base_nodes;
-    }
-
-    enum TriangleRegion
-    {
-      TOP_CORNER, BOTTOM_LEFT_CORNER, BOTTOM_RIGHT_CORNER, LEFT_EDGE, BOTTOM_EDGE, DIAGONAL_EDGE, BULK
-    };
-
-    static TriangleRegion get_region(Index i, Index j, Index sizeMinOne)
-    {
-        if (i==0) { return TOP_CORNER; }
-        else if (j==0 && i==sizeMinOne) { return BOTTOM_LEFT_CORNER; }
-        else if (j==sizeMinOne && i==sizeMinOne) { return BOTTOM_RIGHT_CORNER; }
-        else if (j==0) { return LEFT_EDGE; }
-        else if (i==sizeMinOne) { return BOTTOM_EDGE; }
-        else if (i==j) { return DIAGONAL_EDGE; }
-        else { return BULK; }
-    }
-
-    static std::string hash_any(Index c0, Index c1, Index c2, Index i, Index j, Index maxIdx)
-    {
-        switch (get_region(i, j, maxIdx)) {
-            case TOP_CORNER:return hash_node(c0);
-            case BOTTOM_LEFT_CORNER:return hash_node(c1);
-            case BOTTOM_RIGHT_CORNER:return hash_node(c2);
-            case LEFT_EDGE:return hash_node(c0, c1, i);
-            case BOTTOM_EDGE:return hash_node(c1, c2, j);
-            case DIAGONAL_EDGE:return hash_node(c0, c2, j);
-            case BULK:return hash_node(c0, c1, c2, i, j);
-            default:
-                std::cerr<<"something went wrong! provided indices i: "
-                         <<i<<" and j: "
-                         <<j<<" together with the maxIdx: "<<maxIdx
-                         <<" produced a wrong region.\n";
-                exit(12);
-        }
-    }
-
-    static std::vector<std::string> neighbour_hash_vec(Index c0, Index c1, Index c2, Index i, Index j, Index maxIdx)
-    {
-        std::vector<std::string> neighbour_hash;
-        neighbour_hash.reserve(6);
-        switch (get_region(i, j, maxIdx)) {
-
-            case TOP_CORNER:neighbour_hash.push_back(hash_any(c0, c1, c2, 1, 0, maxIdx));
-                neighbour_hash.push_back(hash_any(c0, c1, c2, 1, 1, maxIdx));
-                return neighbour_hash;
-
-            case BOTTOM_LEFT_CORNER:neighbour_hash.push_back(hash_any(c0, c1, c2, i, j + 1, maxIdx));
-                neighbour_hash.push_back(hash_any(c0, c1, c2, i - 1, j, maxIdx));
-                return neighbour_hash;
-
-            case BOTTOM_RIGHT_CORNER:neighbour_hash.push_back(hash_any(c0, c1, c2, i, j - 1, maxIdx));
-                neighbour_hash.push_back(hash_any(c0, c1, c2, i - 1, j - 1, maxIdx));
-                return neighbour_hash;
-
-            case LEFT_EDGE:neighbour_hash.push_back(hash_any(c0, c1, c2, i - 1, j, maxIdx));
-                neighbour_hash.push_back(hash_any(c0, c1, c2, i + 1, j, maxIdx));
-                neighbour_hash.push_back(hash_any(c0, c1, c2, i, j + 1, maxIdx));
-                neighbour_hash.push_back(hash_any(c0, c1, c2, i + 1, j + 1, maxIdx));
-                return neighbour_hash;
-
-            case BOTTOM_EDGE:neighbour_hash.push_back(hash_any(c0, c1, c2, i, j - 1, maxIdx));
-                neighbour_hash.push_back(hash_any(c0, c1, c2, i - 1, j - 1, maxIdx));
-                neighbour_hash.push_back(hash_any(c0, c1, c2, i - 1, j, maxIdx));
-                neighbour_hash.push_back(hash_any(c0, c1, c2, i, j + 1, maxIdx));
-                return neighbour_hash;
-
-            case DIAGONAL_EDGE:neighbour_hash.push_back(hash_any(c0, c1, c2, i, j - 1, maxIdx));
-                neighbour_hash.push_back(hash_any(c0, c1, c2, i - 1, j - 1, maxIdx));
-                neighbour_hash.push_back(hash_any(c0, c1, c2, i + 1, j, maxIdx));
-                neighbour_hash.push_back(hash_any(c0, c1, c2, i + 1, j + 1, maxIdx));
-                return neighbour_hash;
-
-            case BULK:neighbour_hash.push_back(hash_any(c0, c1, c2, i, j - 1, maxIdx));
-                neighbour_hash.push_back(hash_any(c0, c1, c2, i - 1, j - 1, maxIdx));
-                neighbour_hash.push_back(hash_any(c0, c1, c2, i - 1, j, maxIdx));
-                neighbour_hash.push_back(hash_any(c0, c1, c2, i, j + 1, maxIdx));
-                neighbour_hash.push_back(hash_any(c0, c1, c2, i + 1, j + 1, maxIdx));
-                neighbour_hash.push_back(hash_any(c0, c1, c2, i + 1, j, maxIdx));
-                return neighbour_hash;
-            default:
-                std::cerr<<"something went wrong! provided indices i: "
-                         <<i<<" and j: "
-                         <<j<<" together with the maxIdx: "<<maxIdx
-                         <<" produced a wrong region.\n";
-                exit(12);
-        }
-
-    }
-
-    static Real even_angular_distance_length(Real l, Index k, Index n, Real R = 1.)
-    {
-        /**
-         * The points of the sub-triangulation can not be equally spaced or their angular distances
-         * won't be the same.
-         */
-        if (k==0) {
-            return 0;
-        }
-        else {
-            Real fr = static_cast<Real>(k)/static_cast<Real>(n);
-            Real denominator = static_cast<Real>(l + std::sqrt(4.*R*R - l*l)/std::tan(fr*2.*asin(l/(2.*R))));
-            return static_cast<Real>(2.)*R*R/denominator;
-        }
-    }
-
-    static vec3<Real> get_pos(vec3<Real> const& p0, vec3<Real> const& p1, vec3<Real> const& p2, Index i, Index j, Index maxIdx)
-    {
-/**
- * get the position o a node in the sub triangulation of a face of the initial icosahedron.
- * ```{.txt}
- *              p0
- *            /___\
- *     e1   /__\/__\ e2
- *        / \ / \  / \
- *      p1 --------- p3
- *            e3
- * ```
- */
-        vec3<Real> e1 = p1 - p0;
-        vec3<Real> e2 = p2 - p0;
-        auto e = e1.norm();
-        Real wi = even_angular_distance_length(e, i, maxIdx);
-
-        e1.normalize();
-        e2.normalize();
-
-        vec3<Real> li{};
-        Real li_norm{0};
-        vec3<Real> interm_1 = p0 + wi*e1;
-        interm_1.normalize();
-        if (i!=0) {
-            vec3<Real> interm_2 = p0 + wi*e2;
-            interm_2.normalize();
-
-            li = interm_2 - interm_1;
-            li_norm = li.norm();
-            li.normalize();
-        }
-        Real wj = even_angular_distance_length(li_norm, j, i);
-        return interm_1 + wj*li;
-    }
-
-    static std::tuple<Index, Index, Index> get_sorted_face_nodes(std::array<int, 3> face)
-    {
-        std::sort(face.begin(), face.end());
-        return {static_cast<Index>(face[0]),
-                static_cast<Index>(face[1]),
-                static_cast<Index>(face[2])};
-    }
-    static void make_face_nodes(std::unordered_map<std::string, SimpleNodeData<Real, Index>>& node_cache, Index nIter)
-    {
-        vec3<Real> p0, p1, p2, pos;
-        Index nEdge = nIter + 2;// total Number of nodes on an edge
-        Index maxIdx = nIter + 1;// max value i or j can have
-
-        std::string hash;
-        hash.reserve(10);
-
-        std::string c0_h, c1_h, c2_h;
-        for (auto face: FACE_CORNER_NODES) {
-            auto[c0, c1, c2] = get_sorted_face_nodes(face);
-            c0_h = hash_node(c0);
-            c1_h = hash_node(c1);
-            c2_h = hash_node(c2);
-            p0 = node_cache[c0_h].pos;
-            p1 = node_cache[c1_h].pos;
-            p2 = node_cache[c2_h].pos;
-            for (Index i = 0; i<nEdge; ++i) {
-                for (Index j = 0; j<=i; ++j) {
-                    pos = get_pos(p0, p1, p2, i, j, maxIdx);
-                    hash = hash_any(c0, c1, c2, i, j, maxIdx);
-                    node_cache[hash] = {.hash=hash, .pos=pos};
-                }
-            }
-        }
-
-        for (auto face: FACE_CORNER_NODES) {
-//        std::sort(face.begin(),face.end());
-//        auto [c0, c1, c2] = face;
-            auto[c0, c1, c2] = get_sorted_face_nodes(face);
-            for (Index i = 0; i<nEdge; ++i) {
-                for (Index j = 0; j<=i; ++j) {
-                    hash = hash_any(c0, c1, c2, i, j, maxIdx);
-                    std::vector<std::string> neighbour_hashes = neighbour_hash_vec(c0, c1, c2, i, j, maxIdx);
-                    for (auto const& neighbour_hash: neighbour_hashes) {
-                        node_cache[hash].nn_hashes.insert(neighbour_hash);
-                        node_cache[neighbour_hash].nn_hashes.insert(hash);
-                    }
-                }
-            }
-            for (Index idx = 0; auto& nodeEl: node_cache) {
-                nodeEl.second.id = idx;
-                ++idx;
-            }
-
-        }
-
-    }
-};
-
-//! @private
-template<floating_point_number Real, indexing_number Index>
-class PlanarTriangulation{
-    Index n_length;
-public:
-    std::vector<std::vector<Index>> nn_ids;
-    std::vector<bool> is_bulk;
-    [[nodiscard]] Index ij_to_id(Index i, Index j){return i*n_length+j;}
-    [[nodiscard]] Index id_to_i(Index id){return id/n_length;}
-    [[nodiscard]] Index id_to_j(Index id){return id%n_length;}
-
-    // TL T TR
-    //  L    R
-    // BL B BR
-
-    [[nodiscard]] Index TL(Index id){ return ij_to_id(id_to_i(id)-1, id_to_j(id)-1);}
-    [[nodiscard]] Index T (Index id){ return ij_to_id(id_to_i(id)-1, id_to_j(id)  );}
-    [[nodiscard]] Index TR(Index id){ return ij_to_id(id_to_i(id)-1, id_to_j(id)+1);}
-    [[nodiscard]] Index  L(Index id){ return ij_to_id(id_to_i(id)  , id_to_j(id)-1);}
-    [[nodiscard]] Index  R(Index id){ return ij_to_id(id_to_i(id)  , id_to_j(id)+1);}
-    [[nodiscard]] Index BL(Index id){ return ij_to_id(id_to_i(id)+1, id_to_j(id)-1);}
-    [[nodiscard]] Index B (Index id){ return ij_to_id(id_to_i(id)+1, id_to_j(id)  );}
-    [[nodiscard]] Index BR(Index id){ return ij_to_id(id_to_i(id)+1, id_to_j(id)+1);}
-
-    [[nodiscard]] std::vector<Index> bulk_odd_j_neighbor_ids(Index id){
-        return { B(id), R(id), TR(id), T(id), TL(id), L(id) };
-    }
-
-    [[nodiscard]] std::vector<Index> bulk_even_j_neighbor_ids(Index id){
-        return { T(id), L(id), BL(id), B(id), BR(id), R(id) };
-    }
-
-    [[nodiscard]] std::vector<Index> top_boundary_odd_j_neighbor_ids(Index id){
-        return { L(id), B(id), R(id) };
-    }
-
-    [[nodiscard]] std::vector<Index> top_boundary_even_j_neighbor_ids(Index id){
-        return { L(id), BL(id), B(id), BR(id), R(id) };
-    }
-
-    [[nodiscard]] std::vector<Index> bottom_boundary_odd_j_neighbor_ids(Index id){
-        return { R(id), TR(id), T(id), TL(id), L(id) };
-    }
-
-    [[nodiscard]] std::vector<Index> bottom_boundary_even_j_neighbor_ids(Index id){
-        return { T(id), L(id), R(id) };
-    }
-
-    [[nodiscard]] std::vector<Index> left_boundary_neighbor_ids(Index id){
-        return { T(id), B(id), BR(id), R(id)};
-    }
-
-    [[nodiscard]] std::vector<Index> right_boundary_odd_j_neighbor_ids(Index id){
-        return { T(id), TL(id), L(id), B(id) };
-    }
-
-    [[nodiscard]] std::vector<Index> right_boundary_even_j_neighbor_ids(Index id){
-        return { T(id), L(id), BL(id), B(id) };
-    }
-
-    PlanarTriangulation(Index n_length_inp, Index n_width):n_length(n_length_inp){
-        Index N_nodes = n_length*n_width;
-
-        nn_ids.resize(N_nodes);
-        is_bulk.resize(N_nodes,false);
-        // populate_bulk
-        for(Index i=1; i<n_width-1;++i){
-            for(Index j=1; j<n_length-1;++j){
-                Index bulk_id = ij_to_id(i,j);
-                is_bulk[bulk_id] = true;
-                if(j%2==0){
-                    nn_ids[bulk_id] = bulk_even_j_neighbor_ids(bulk_id);
-                }else{
-                    nn_ids[bulk_id] = bulk_odd_j_neighbor_ids(bulk_id);
-                }
-            }
-        }
-
-        // populate top and bottom boundaries
-        for (Index j = 1; j<n_length-1; ++j) {
-            Index i = 0;
-            Index id = ij_to_id(i,j);
-            if (j%2==0) {
-                nn_ids[id] = top_boundary_even_j_neighbor_ids(id);
-            }else{
-                nn_ids[id] = top_boundary_odd_j_neighbor_ids(id);
-            }
-
-            i = n_width-1;
-            id = ij_to_id(i,j);
-            if (j%2==0) {
-                nn_ids[id] = bottom_boundary_even_j_neighbor_ids(id);
-            }else{
-                nn_ids[id] = bottom_boundary_odd_j_neighbor_ids(id);
-            }
-        }
-
-        // populate left and right boundaries
-        for (Index i = 1; i<n_width-1; ++i) {
-            Index j = 0;
-            Index id = ij_to_id(i,j);
-            nn_ids[id] = left_boundary_neighbor_ids(id);
-
-            j = n_length-1;
-            id = ij_to_id(i,j);
-            if (j%2==0) {
-                nn_ids[id] = right_boundary_even_j_neighbor_ids(id);
-            }else{
-                nn_ids[id] = right_boundary_odd_j_neighbor_ids(id);
-            }
-        }
-
-        // populate top left corner
-        nn_ids[0] = std::vector<Index>{B(0), BR(0), R(0)};
-        // populate bottom left corner
-        Index bottom_left_id = ij_to_id(n_width-1,0);
-        nn_ids[bottom_left_id] = std::vector<Index>{R(bottom_left_id), T(bottom_left_id)}; //Todo this bond will never flip
-        // populate top and bottom right corner
-        Index top_right_id = n_length-1;
-        Index bottom_right_id = N_nodes-1;
-        if((n_length-1)%2==0){
-            nn_ids[top_right_id] = {L(top_right_id), BL(top_right_id), B(top_right_id)};
-            nn_ids[bottom_right_id] = {T(bottom_right_id), L(bottom_right_id)};// Todo this bond will never flip
-        }else{
-            nn_ids[top_right_id] = {L(top_right_id), /*BL(top_right_id),*/ B(top_right_id)}; // Todo this bond will never flip
-            nn_ids[bottom_right_id] = {T(bottom_right_id), TL(bottom_right_id), L(bottom_right_id),};// Todo this bond will never flip
-        }
-
-
-    }
-};
-}
-#endif //FLIPPY_TRIANGULATOR_HPP
-
-
-// end --- Triangulator.hpp --- 
-
-
-
-// begin --- flippy.hpp --- 
-
-/*
- *```txt
- *
- *  .d888 888 d8b
- * d88P"  888 Y8P
- * 888    888
- * 888888 888 888 88888b.  88888b.  888  888
- * 888    888 888 888 "88b 888 "88b 888  888     simulating package for
- * 888    888 888 888  888 888  888 888  888     dynamically triangulated
- * 888    888 888 888 d88P 888 d88P Y88b 888     surfaces
- * 888    888 888 88888P"  88888P"   "Y88888
- *                888      888           888     version 1.0.0
- *                888      888      Y8b d88P
- *                888      888       "Y88P"
- *
- * https://github.com/flippy-software-package/flippy
- *
- *
- * MIT License
- *
- * Copyright (c) 2021 George Dadunashvili
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- *```
- */
-
-
+#ifndef FLIPPY_NODES_HPP
+#define FLIPPY_NODES_HPP
 /**
  * @file
- * @brief This header file exists for convenience. Including this header will automatically include all parts of flippy in the project.
+ * @brief This file contains the fp::Node and fp::Nodes classes, data structures that represent a single node of the triangulation
+ * and the collection of all nodes of the triangulation, respectively.
  */
-#ifndef FLIPPY_FLIPPY_HPP
-#define FLIPPY_FLIPPY_HPP
+#include <vector>
+#include <unordered_set>
 
 // begin --- json.hpp --- 
 
@@ -23145,93 +22229,388 @@ inline nlohmann::json::json_pointer operator "" _json_pointer(const char* s, std
 
 
 
-// begin --- utils.hpp --- 
+// begin --- vec3.hpp --- 
 
-#ifndef FLIPPY_UTILS_H
-#define FLIPPY_UTILS_H
-/** @file
- *  @brief This file contains helper functions that are used throughout flippy, but are not specific to any given class.
- */
-
-#include <iostream>
-#include <fstream>
-#include <utility>
-#include <filesystem>
-#include <type_traits>
-
-namespace fp {
-/**
- * @GlobalsStub
- * @{
- */
-//! shortening of the nlohmann::json namespace, which is an [external open source library](https://github.com/nlohmann/json) bundled by flippy.
-using Json = nlohmann::json;
-
-/**
- * @brief Simple wrapper function around Json objects built in dump() method.
- * @param file_name @FileNameOrPathFileNameStub
- * @param data json data object that is supposed to be stored.
- */
-static inline void json_dump(std::string const& file_name, const Json& data)
-{
-    std::ofstream o(file_name + ".json");
-    o << data.dump();
-    o.close();
-}
-
-/**
- * @brief Simple wrapper function  that reads the content of a text file into a json object.
- *
- * The file name onb the disk needs to end in '.json' for this function to work.
- * @param file_name @FileNameOrPathFileNameStub
- * @return Json object that was parsed from the provided file.
- *
- * @warning This function will stream any file into the json object.
- * If the provided file is not a valid json file this will cause runtime errors.
- */
-static Json inline json_read(std::string file_name)
-{
-    auto pos_json = file_name.find_last_of(".json");
-    auto not_json = (file_name.size() - 1!=pos_json);
-    if (not_json) { file_name = file_name + ".json"; }
-    std::ifstream o(file_name);
-    Json data;
-    o >> data;
-    o.close();
-    return data;
-}
-
-/**
- * @brief Convenient wrapper around std::find, which only works for std::vectors.
- *
- * @tparam T type of the vector elements.
- * @param v std::vector in which we want to search.
- * @param el the value of the element that we want to check for.
- * @return The function returns `true` if `el` is contained in vector `v` (at least once), otherwise it returns `false`.
- */
-template<typename T>
-[[maybe_unused]] static bool is_member(std::vector<T> const& v, T const& el){
-    return (std::find(v.begin(),v.end(), el) != v.end());
-}
- /**@}*/
-}
-#endif
-
-// end --- utils.hpp --- 
-
-
-
-// begin --- Nodes.hpp --- 
-
-#ifndef FLIPPY_NODES_HPP
-#define FLIPPY_NODES_HPP
+#ifndef FLIPPY_VEC3_HPP
+#define FLIPPY_VEC3_HPP
 /**
  * @file
- * @brief This file contains the fp::Node and fp::Nodes classes, data structures that represent a single node of the triangulation
- * and the collection of all nodes of the triangulation, respectively.
+ * @brief Header file containing the definition and implementation a 3 dimensional vector class, with useful
+ * mathematical operations like cross and dot products as member methods.
  */
-#include <vector>
-#include <unordered_set>
+
+
+#include <ostream>
+#include <iostream>
+#include <cmath>
+
+
+namespace fp{
+
+/**
+ * \brief Internal implementation of a 3D vector.
+ *
+ * !!! vec3 does not throw !!! This means that if you ask vec3 to divide a vector by 0 or more realistically if you
+ * normalize a zero length vector vec3 will not check for the division by zero and will return a nan result!
+ * Since vec3 is used everywhere in flippy, including in very expensive calculations, I decided to omit the security check
+ * for the sake of speed.
+ *
+ * To keep the external dependencies low, flippy implements it's own 3D vector class with basic functionality like dot product and cross product
+ *
+ * Example:
+ * ```c++
+ * fp::vec3<double> v1{1,0,0};
+ * fp::vec3<double> v2{0,0,1};
+ *
+ *  assert(v1.dot(v2)==0);
+ *  assert(v1.cross(v2).norm()==1);
+ *  assert(((v1-v2)==fp::vec3<double>{1.,0.,-1.}));
+ * ```
+ *
+ * @tparam Real @RealStub
+ */
+
+template<floating_point_number Real>
+class vec3
+{
+public:
+
+    Real x; //!< The x component of the vector.
+    Real y; //!< The y component of the vector.
+    Real z; //!< The z component of the vector.
+
+    //! In place addition method.
+    /**
+     * Example:
+     * ```c++
+     * fp::vec3<double> v1{1,0,0};
+     * fp::vec3<double> v2{0,0,1};
+     * v1.add(v2);  // v1 will contain {1, 0, 1}
+     * ```
+     * @param v add this vector elementwise to the vector that is calling the *add* method.
+     */
+    void add(vec3<Real> const& v)
+    {
+        x += v.x;
+        y += v.y;
+        z += v.z;
+    }
+
+    //! In place subtraction method.
+    /**
+     * Example:
+     * ```c++
+     * fp::vec3<double> v1{2,0,0};
+     * fp::vec3<double> v2{1,0,1};
+     * v1.subtract(v2);  // v1 will contain {1, 0, -1}
+     * ```
+     * @param v subtract this vector elementwise from the vector that is calling the *subtract* method.
+     */
+    void subtract(vec3<Real> const& v)
+    {
+        x -= v.x;
+        y -= v.y;
+        z -= v.z;
+    }
+    //! Scale the vector by a real number s.
+    /**
+     * This function scales the vector in-place by the provided number `s`.
+     * @param s multiplicative prefactor.
+     */
+    void scale(Real s)
+    {
+        x = s*x;
+        y = s*y;
+        z = s*z;
+    }
+
+    //! Calculate dot product with another vector.
+    /**
+     * Example:
+     * @code{c++}
+     * fp::vec3<double> v1{1,0,0};
+     * fp::vec3<double> v2{2,0,1};
+     * double res = v1.dot(v2);  // res will contain 2*1 + 0*0 + 0*1=2
+     * @endcode
+     * @param v the other vec3 vector
+     * @return result of the dot product between the original vector and `v`.
+     */
+    Real dot(vec3<Real> const& v) const
+    {
+        Real res = x*v.x + y*v.y + z*v.z;
+        return res;
+    }
+
+    //! Always returns 3.
+    /**
+     * This function always returns 3 since vec3 can only have three elements.
+     * It was implemented for completeness, to make it more easy for vec3 to be used as a drop-in replacement for other vector types.
+     * @return Size (number of elements) of vec3.
+     */
+    [[nodiscard]] constexpr std::size_t size() const { return 3; }
+
+    //! Calculate cross product between two vectors.
+    /**
+     * A static method to calculate cross product between two vectors.
+     * Example:
+     * @code{c++}
+     * fp::vec3<double> v1{1,0,0};
+     * fp::vec3<double> v2{0,1,0};
+     * fp::vec3<double> v3 = cross(v1, v2);  // v3 will contain {0,0,1}
+     * @endcode
+     * @param a first vector of the cross product
+     * @param b second vector of the cross product
+     * @return result of the cross product between the original vector and `v`.
+     */
+    static inline vec3<Real> cross(vec3<Real> const& a, vec3<Real> const& b)
+    {
+        vec3<Real> res;
+        res.x = a.y*b.z - a.z*b.y;
+        res.y = a.z*b.x - a.x*b.z;
+        res.z = a.x*b.y - a.y*b.x;
+        return res;
+    }
+
+    //! Calculate cross product with another vector.
+    /**
+     * Example:
+     * @code{c++}
+     * fp::vec3<double> v1{1,0,0};
+     * fp::vec3<double> v2{0,1,0};
+     * fp::vec3<double> v3 = v1.cross(v2);  // v3 will contain {0,0,1}
+     * @endcode
+     * @param other the other vec3 vector.
+     * @return result of the cross product between the original vector and `other`.
+     */
+    vec3<Real> cross(vec3<Real> const& other) const { return cross(*this, other); }
+
+    //! Returns the norm of the vector.
+    /**
+     * Example:
+     * @code{c++}
+     * fp::vec3<double> v{1,0,1};
+     * double res = v.norm();  // res will contain 1,4142135624... i.e. sqrt(2)
+     * @endcode
+     * @return The euclidian norm of the vector.
+     */
+    Real norm() const { return std::sqrt(this->dot(*this)); }
+
+    //! Returns the square of the norm of the vector.
+    /**
+     * Example:
+     * @code{c++}
+     * fp::vec3<double> v{1,0,1};
+     * double res = v.norm_square();  // res will contain 2
+     * @endcode
+     * @return Square of the euclidian norm of the vector.
+     */
+    Real norm_square() const { return this->dot(*this); }
+
+    //! Normalize the vector in place. And return a reference to the new normalized vector.
+    /**
+     * @warning If you normalize a zero length vector, you effectively
+     * demand to divide by zero! this function will not do a security check
+     * for you and will just return nan!
+     * @return Reference to the normalized vector.
+     */
+    vec3<Real>const& normalize(){
+        *this= *this/this->norm();
+        return *this;
+    }
+
+    //! Streaming operator for easy printing of the vector.
+    friend std::ostream& operator<<(std::ostream& os, const vec3<Real>& obj)
+    {
+        os << "{" << obj.x << ',' << obj.y << ',' << obj.z << '}';
+        return os;
+    }
+
+    //! default equality operator.
+    /**
+     * @param other  vec3 on the right hand side of the comparison operator.
+     * @return `true` if all elements of the compared vectors are equal and to `false` otherwise.
+     */
+    bool operator==(vec3<Real> const& other) const =default;
+
+
+    //! Overloaded operator defined in terms of vec2::add.
+    /**
+     *
+     * @param lhs left hand side of the `+` operator
+     * @param rhs right hand side oif the `+` operator
+     * @return equivalent to a new copy of `lhs.add(rhs)`.
+     */
+    friend vec3<Real> operator+(vec3<Real> lhs, vec3<Real> const& rhs)
+    {
+        lhs+=rhs;
+        return lhs;
+    }
+
+    //! Overloaded operator defined in terms of vec3::add.
+    /**
+     * Equivalent to `lhs.add(rhs)`.
+     * @param lhs left hand side of the `+=` operator
+     * @param rhs right hand side oif the `+=` operator
+     */
+    friend void operator+=(vec3<Real>& lhs, vec3<Real> const& rhs)
+    {
+        lhs.add(rhs);
+    }
+
+    //! Overloaded operator defined in terms of vec3::subtract.
+    /**
+     *
+     * @param lhs left hand side of the `-` operator
+     * @param rhs right hand side oif the `-` operator
+     * @return equivalent to a new copy of `lhs.subtract(rhs)`.
+     */
+    friend vec3<Real> operator-(vec3<Real> lhs, vec3<Real> const& rhs)
+    {
+        lhs-=rhs;
+        return lhs;
+    }
+
+    //! Overloaded operator defined in terms of vec3::subtract.
+    /**
+     * Equivalent to `lhs.subtract(rhs)`.
+     * @param lhs left hand side of the `-=` operator
+     * @param rhs right hand side oif the `-=` operator
+     */
+    friend void operator-=(vec3<Real>& lhs, vec3<Real> const& rhs)
+    {
+        lhs.subtract(rhs);
+    }
+
+    //! Overloaded operator defined in terms of vec3::scale.
+    /**
+     * Left multiplication by a scalar `s*v`.
+     * @param lhs left hand side of the `*` operator
+     * @param rhs right hand side oif the `*` operator
+     * @return equivalent to a new copy of `rhs.scale(lhs)`.
+     */
+    friend vec3<Real> operator*(Real const& lhs, vec3<Real> rhs)
+    {
+        rhs.scale(lhs);
+        return rhs;
+    }
+
+    //! Overloaded operator defined in terms of vec3::scale.
+    /**
+     * Right multiplication by a scalar `v*s`.
+     * @param lhs left hand side of the `*` operator
+     * @param rhs right hand side oif the `*` operator
+     * @return equivalent to a new copy of `lhs.scale(rhs)`.
+     */
+    friend vec3<Real> operator*(vec3<Real> lhs, Real const& rhs)
+    {
+        lhs.scale(rhs);
+        return lhs;
+    }
+
+    //! Overloaded operator defined in terms of vec3::scale.
+    /**
+     * In place division by a scalar `v/s`,  equivalent to `lhs.scale(1/rhs)`.
+     * @param lhs left hand side of the `/=` operator
+     * @param rhs right hand side oif the `/=` operator
+     * @warning for performance reasons, this function will not check for zero division!
+     */
+    friend void operator/=(vec3<Real>& lhs, Real const& rhs){
+        lhs.scale((Real)1/rhs);
+    }
+
+    //! Overloaded operator defined in terms of vec3::scale.
+    /**
+     * Division by a scalar `v/s`.
+     * @param lhs left hand side of the `/` operator
+     * @param rhs right hand side oif the `/` operator
+     * @return equivalent to a new copu of `lhs.scale(1/rhs)`.
+     * @warning for performance reasons, this function will not check for zero division!
+     */
+    friend vec3<Real> operator/(vec3<Real> lhs, Real const& rhs)
+    {
+        lhs/=rhs;
+        return lhs;
+    }
+
+    //! element access operator.
+    /**
+     * @tparam Index automatically deduced type of the index.
+     * @param idx can only be 0 1 or 2. Any other number will cause the program to exit with an error.
+     * @return for a vec3 v: v[1] returns v.x, v[2] returns v.y and v[3] returns v.z.
+     *
+     * @note: The use of the subscription operator might be slower than the direct access of the data member.
+     */
+    template<typename Index>
+    requires std::is_integral_v<Index>
+    Real& operator[](Index idx)
+    {
+        switch (idx) {
+            case 0:return x;
+            case 1:return y;
+            case 2:return z;
+            default:std::cerr << idx << "is out of range for as vec3 index";
+            exit(12);
+        }
+    }
+
+    //! element access operator for constant environments.
+    /**
+     * @tparam Index automatically deduced type of the index.
+     * @param idx can only be 0 1 or 2. Any other number will cause the program to exit with an error.
+     * @return for a vec3 v: v[1] returns a constant reference to v.x, v[2] returns a constant reference to v.y and v[3] returns a constant reference to v.z.
+     *
+     * @note: The use of the subscription operator might be slower than the direct access of the data member.
+     */
+    template<typename Index>
+    requires std::is_integral_v<Index>
+    const Real& operator[](Index idx) const
+    {
+        switch (idx) {
+            case 0:return x;
+            case 1:return y;
+            case 2:return z;
+            default:std::cerr << idx << "is out of range for as vec3 index";
+                exit(12);
+        }
+    }
+
+    //! Unary minus operator.
+    /**
+     *
+     * @param v original vector.
+     * @return A copy of -v the vector v itself stays unaffected.
+     */
+    friend vec3<Real> operator-(vec3<Real> v)
+    {
+        v.x = -v.x;
+        v.y = -v.y;
+        v.z = -v.z;
+        return v;
+    }
+
+    //! Unary minus operator for rvalues.
+    /**
+     *
+     * @param v an rvalue vec3 vector.
+     * @return The rvalue vector `v` is moved into the function and `-v` is returned.
+     */
+    friend vec3<Real> operator-(vec3<Real>&& v)
+    {
+        v.x = -v.x;
+        v.y = -v.y;
+        v.z = -v.z;
+        return v;
+    }
+
+};
+}
+
+#endif //FLIPPY_VEC3_HPP
+
+
+// end --- vec3.hpp --- 
+
+
 
 namespace fp {
 using Json = nlohmann::json;
@@ -23786,16 +23165,590 @@ struct Nodes
 
 
 
-// begin --- Triangulation.hpp --- 
+// begin --- utils.hpp --- 
 
-#ifndef FLIPPY_TRIANGULATION_HPP
-#define FLIPPY_TRIANGULATION_HPP
+#ifndef FLIPPY_UTILS_H
+#define FLIPPY_UTILS_H
+/** @file
+ *  @brief This file contains helper functions that are used throughout flippy, but are not specific to any given class.
+ */
+
+#include <iostream>
+#include <fstream>
+#include <utility>
+#include <filesystem>
+#include <type_traits>
+
+namespace fp {
+/**
+ * @GlobalsStub
+ * @{
+ */
+//! shortening of the nlohmann::json namespace, which is an [external open source library](https://github.com/nlohmann/json) bundled by flippy.
+using Json = nlohmann::json;
+
+/**
+ * @brief Simple wrapper function around Json objects built in dump() method.
+ * @param file_name @FileNameOrPathFileNameStub
+ * @param data json data object that is supposed to be stored.
+ */
+static inline void json_dump(std::string const& file_name, const Json& data)
+{
+    std::ofstream o(file_name + ".json");
+    o << data.dump();
+    o.close();
+}
+
+/**
+ * @brief Simple wrapper function  that reads the content of a text file into a json object.
+ *
+ * The file name onb the disk needs to end in '.json' for this function to work.
+ * @param file_name @FileNameOrPathFileNameStub
+ * @return Json object that was parsed from the provided file.
+ *
+ * @warning This function will stream any file into the json object.
+ * If the provided file is not a valid json file this will cause runtime errors.
+ */
+static Json inline json_read(std::string file_name)
+{
+    auto pos_json = file_name.find_last_of(".json");
+    auto not_json = (file_name.size() - 1!=pos_json);
+    if (not_json) { file_name = file_name + ".json"; }
+    std::ifstream o(file_name);
+    Json data;
+    o >> data;
+    o.close();
+    return data;
+}
+
+/**
+ * @brief Convenient wrapper around std::find, which only works for std::vectors.
+ *
+ * @tparam T type of the vector elements.
+ * @param v std::vector in which we want to search.
+ * @param el the value of the element that we want to check for.
+ * @return The function returns `true` if `el` is contained in vector `v` (at least once), otherwise it returns `false`.
+ */
+template<typename T>
+[[maybe_unused]] static bool is_member(std::vector<T> const& v, T const& el){
+    return (std::find(v.begin(),v.end(), el) != v.end());
+}
+ /**@}*/
+}
+#endif
+
+// end --- utils.hpp --- 
+
+
+
+// begin --- Triangulator.hpp --- 
+
+#ifndef FLIPPY_TRIANGULATOR_HPP
+#define FLIPPY_TRIANGULATOR_HPP
 /**
  * @file
- * @brief This file contains the fp::Triangulation class and several related helper classes. This is the core of flippy.
+ * @brief This file contains internal implementation details and is not part of the stable public api.
+ * The classes and methods implemented here are responsible for creating the intitial triangulations.
  */
-#include<optional>
-#include <set>
+
+#include <array>
+#include <vector>
+#include <unordered_set>
+#include <unordered_map>
+#include <algorithm>
+
+
+/**
+ * @GlobalsStub
+ * @{
+ */
+//! The M_PI macro is not defined on for all compilers, so it is defined here (if a definition does not already exist).
+#ifndef M_PI
+#define M_PI 3.14159265358979323846	/* pi */
+#endif
+/**@}*/
+
+/**
+ * The API stability of the functions in the implementation namespace is not guaranteed!
+ * Functions that are part of the implementation namespace are not part of the public facing API and are not intended fot the end-user.
+ * Since flippy is a headers only library this could not be hidden in source files.
+ */
+namespace fp::implementation{
+
+//! @private
+template<floating_point_number Real, indexing_number Index>
+struct SimpleNodeData{
+  std::string hash{};
+  Index id{};
+  vec3<Real> pos{};
+  std::unordered_set<std::string> nn_hashes{};
+};
+
+//! @private
+template<floating_point_number Real, indexing_number Index>
+class IcosahedronSubTriangulation
+{
+public:
+    static std::string hash_node(Index c)
+    {
+        /**
+         * returns a unique hash for a corner node, which is just the id of that corner node.
+         */
+        return std::to_string(c);
+    }
+
+    static std::string hash_node(Index c0, Index c1, Index n)
+    {
+        /**
+         * returns a unique hash for a node on one of the sides of the initial triangle.
+         * This hash is determined by the (ordered) corner nodes of the initial edge and the index of the node.
+         */
+        Index a = std::min(c0, c1);
+        Index b = std::max(c0, c1);
+        return std::to_string(a) + "_" + std::to_string(b) + "_" + std::to_string(n);
+    }
+
+    static std::string hash_node(Index c0, Index c1, Index c2, Index i, Index j)
+    {
+        /**
+         * returns a unique hash for a node in the bulk of the subtriangulation.
+         */
+        std::vector<Index> cv{c0, c1, c2};
+        std::sort(cv.begin(), cv.end());
+
+        return std::to_string(cv[0]) + "_" + std::to_string(cv[1]) + "_" + std::to_string(cv[2])
+                + "_" + std::to_string(i) + "_" + std::to_string(j);
+    }
+
+    static vec3<Real> r_S1(Real R, Real t, Real f) {
+        vec3<Real> r{R * std::sin(t) * std::cos(f), R * std::sin(t) * std::sin(f), R * std::cos(t)};
+        return r;
+    }
+
+    static constexpr int N_ICOSA_FACEs = 20;
+    static constexpr int N_ICOSA_EDGEs = 30;
+    static constexpr int N_ICOSA_NODEs = 12;
+
+    static constexpr std::array<int, N_ICOSA_FACEs> FACE_IDs{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19};
+    static constexpr std::array<int, N_ICOSA_NODEs> NODE_IDs{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
+    static constexpr std::array<std::array<int, 3>, N_ICOSA_FACEs> FACE_CORNER_NODES_ = {
+            std::array<int, 3>{NODE_IDs[0], NODE_IDs[5], NODE_IDs[1]},
+            std::array<int, 3>{NODE_IDs[0], NODE_IDs[1], NODE_IDs[2]},
+            std::array<int, 3>{NODE_IDs[0], NODE_IDs[2], NODE_IDs[3]},
+            std::array<int, 3>{NODE_IDs[0], NODE_IDs[3], NODE_IDs[4]},
+            std::array<int, 3>{NODE_IDs[0], NODE_IDs[4], NODE_IDs[5]},
+            std::array<int, 3>{NODE_IDs[10], NODE_IDs[5], NODE_IDs[4]},
+            std::array<int, 3>{NODE_IDs[10], NODE_IDs[6], NODE_IDs[5]},
+            std::array<int, 3>{NODE_IDs[6], NODE_IDs[1], NODE_IDs[5]},
+            std::array<int, 3>{NODE_IDs[6], NODE_IDs[7], NODE_IDs[1]},
+            std::array<int, 3>{NODE_IDs[7], NODE_IDs[2], NODE_IDs[1]},
+            std::array<int, 3>{NODE_IDs[7], NODE_IDs[8], NODE_IDs[2]},
+            std::array<int, 3>{NODE_IDs[8], NODE_IDs[3], NODE_IDs[2]},
+            std::array<int, 3>{NODE_IDs[8], NODE_IDs[9], NODE_IDs[3]},
+            std::array<int, 3>{NODE_IDs[9], NODE_IDs[4], NODE_IDs[3]},
+            std::array<int, 3>{NODE_IDs[9], NODE_IDs[10], NODE_IDs[4]},
+            std::array<int, 3>{NODE_IDs[11], NODE_IDs[10], NODE_IDs[9]},
+            std::array<int, 3>{NODE_IDs[11], NODE_IDs[6], NODE_IDs[10]},
+            std::array<int, 3>{NODE_IDs[11], NODE_IDs[7], NODE_IDs[6]},
+            std::array<int, 3>{NODE_IDs[11], NODE_IDs[8], NODE_IDs[7]},
+            std::array<int, 3>{NODE_IDs[11], NODE_IDs[9], NODE_IDs[8]}
+    };
+
+    static constexpr const std::array<std::array<int, 3>, N_ICOSA_FACEs> FACE_CORNER_NODES = {
+            std::array<int, 3>{0, 5, 1},
+            std::array<int, 3>{0, 1, 2},
+            std::array<int, 3>{0, 2, 3},
+            std::array<int, 3>{0, 3, 4},
+            std::array<int, 3>{0, 4, 5},
+            std::array<int, 3>{10, 5, 4},
+            std::array<int, 3>{10, 6, 5},
+            std::array<int, 3>{6, 1, 5},
+            std::array<int, 3>{6, 7, 1},
+            std::array<int, 3>{7, 2, 1},
+            std::array<int, 3>{7, 8, 2},
+            std::array<int, 3>{8, 3, 2},
+            std::array<int, 3>{8, 9, 3},
+            std::array<int, 3>{9, 4, 3},
+            std::array<int, 3>{9, 10, 4},
+            std::array<int, 3>{11, 10, 9},
+            std::array<int, 3>{11, 6, 10},
+            std::array<int, 3>{11, 7, 6},
+            std::array<int, 3>{11, 8, 7},
+            std::array<int, 3>{11, 9, 8}
+    };
+
+    static std::unordered_map<std::string, SimpleNodeData<Real, Index>> make_corner_nodes()
+    {
+
+        Real R = 1.;
+        std::unordered_map<std::string, SimpleNodeData<Real, Index>> base_nodes(N_ICOSA_NODEs);
+        base_nodes[hash_node(0)] = {.hash=hash_node(0), .id=0, .pos=r_S1(R, 0., 0.)};
+        std::string hash;
+        hash.reserve(2);
+        for (Index i = 1; i<6; ++i) {
+            hash = hash_node(i);
+            base_nodes[hash] = {
+                    .hash=hash,
+                    .id=i,
+                    .pos=r_S1(R,
+                            static_cast<Real>(M_PI/2. - std::atan(0.5)),
+                            static_cast<Real>(2.*M_PI*(static_cast<Real>(i) - 1.)/5.))};
+        }
+
+        for (Index i = 6; i<N_ICOSA_NODEs - 1; ++i) {
+            hash = hash_node(i);
+            base_nodes[hash] = {
+                    .hash=hash,
+                    .id=i,
+                    .pos=r_S1(R,
+                            static_cast<Real>(M_PI/2. + std::atan(0.5)),
+                            static_cast<Real>(2.*M_PI*(static_cast<Real>(i) - 6.5)/5.))};
+        }
+        hash = hash_node(N_ICOSA_NODEs - 1);
+        base_nodes[hash] = {
+                .hash=hash,
+                .id=static_cast<Index>(N_ICOSA_NODEs - 1),
+                .pos=r_S1(R, static_cast<Real>(M_PI), static_cast<Real>(0.))};
+        return base_nodes;
+    }
+
+    enum TriangleRegion
+    {
+      TOP_CORNER, BOTTOM_LEFT_CORNER, BOTTOM_RIGHT_CORNER, LEFT_EDGE, BOTTOM_EDGE, DIAGONAL_EDGE, BULK
+    };
+
+    static TriangleRegion get_region(Index i, Index j, Index sizeMinOne)
+    {
+        if (i==0) { return TOP_CORNER; }
+        else if (j==0 && i==sizeMinOne) { return BOTTOM_LEFT_CORNER; }
+        else if (j==sizeMinOne && i==sizeMinOne) { return BOTTOM_RIGHT_CORNER; }
+        else if (j==0) { return LEFT_EDGE; }
+        else if (i==sizeMinOne) { return BOTTOM_EDGE; }
+        else if (i==j) { return DIAGONAL_EDGE; }
+        else { return BULK; }
+    }
+
+    static std::string hash_any(Index c0, Index c1, Index c2, Index i, Index j, Index maxIdx)
+    {
+        switch (get_region(i, j, maxIdx)) {
+            case TOP_CORNER:return hash_node(c0);
+            case BOTTOM_LEFT_CORNER:return hash_node(c1);
+            case BOTTOM_RIGHT_CORNER:return hash_node(c2);
+            case LEFT_EDGE:return hash_node(c0, c1, i);
+            case BOTTOM_EDGE:return hash_node(c1, c2, j);
+            case DIAGONAL_EDGE:return hash_node(c0, c2, j);
+            case BULK:return hash_node(c0, c1, c2, i, j);
+            default:
+                std::cerr<<"something went wrong! provided indices i: "
+                         <<i<<" and j: "
+                         <<j<<" together with the maxIdx: "<<maxIdx
+                         <<" produced a wrong region.\n";
+                exit(12);
+        }
+    }
+
+    static std::vector<std::string> neighbour_hash_vec(Index c0, Index c1, Index c2, Index i, Index j, Index maxIdx)
+    {
+        std::vector<std::string> neighbour_hash;
+        neighbour_hash.reserve(6);
+        switch (get_region(i, j, maxIdx)) {
+
+            case TOP_CORNER:neighbour_hash.push_back(hash_any(c0, c1, c2, 1, 0, maxIdx));
+                neighbour_hash.push_back(hash_any(c0, c1, c2, 1, 1, maxIdx));
+                return neighbour_hash;
+
+            case BOTTOM_LEFT_CORNER:neighbour_hash.push_back(hash_any(c0, c1, c2, i, j + 1, maxIdx));
+                neighbour_hash.push_back(hash_any(c0, c1, c2, i - 1, j, maxIdx));
+                return neighbour_hash;
+
+            case BOTTOM_RIGHT_CORNER:neighbour_hash.push_back(hash_any(c0, c1, c2, i, j - 1, maxIdx));
+                neighbour_hash.push_back(hash_any(c0, c1, c2, i - 1, j - 1, maxIdx));
+                return neighbour_hash;
+
+            case LEFT_EDGE:neighbour_hash.push_back(hash_any(c0, c1, c2, i - 1, j, maxIdx));
+                neighbour_hash.push_back(hash_any(c0, c1, c2, i + 1, j, maxIdx));
+                neighbour_hash.push_back(hash_any(c0, c1, c2, i, j + 1, maxIdx));
+                neighbour_hash.push_back(hash_any(c0, c1, c2, i + 1, j + 1, maxIdx));
+                return neighbour_hash;
+
+            case BOTTOM_EDGE:neighbour_hash.push_back(hash_any(c0, c1, c2, i, j - 1, maxIdx));
+                neighbour_hash.push_back(hash_any(c0, c1, c2, i - 1, j - 1, maxIdx));
+                neighbour_hash.push_back(hash_any(c0, c1, c2, i - 1, j, maxIdx));
+                neighbour_hash.push_back(hash_any(c0, c1, c2, i, j + 1, maxIdx));
+                return neighbour_hash;
+
+            case DIAGONAL_EDGE:neighbour_hash.push_back(hash_any(c0, c1, c2, i, j - 1, maxIdx));
+                neighbour_hash.push_back(hash_any(c0, c1, c2, i - 1, j - 1, maxIdx));
+                neighbour_hash.push_back(hash_any(c0, c1, c2, i + 1, j, maxIdx));
+                neighbour_hash.push_back(hash_any(c0, c1, c2, i + 1, j + 1, maxIdx));
+                return neighbour_hash;
+
+            case BULK:neighbour_hash.push_back(hash_any(c0, c1, c2, i, j - 1, maxIdx));
+                neighbour_hash.push_back(hash_any(c0, c1, c2, i - 1, j - 1, maxIdx));
+                neighbour_hash.push_back(hash_any(c0, c1, c2, i - 1, j, maxIdx));
+                neighbour_hash.push_back(hash_any(c0, c1, c2, i, j + 1, maxIdx));
+                neighbour_hash.push_back(hash_any(c0, c1, c2, i + 1, j + 1, maxIdx));
+                neighbour_hash.push_back(hash_any(c0, c1, c2, i + 1, j, maxIdx));
+                return neighbour_hash;
+            default:
+                std::cerr<<"something went wrong! provided indices i: "
+                         <<i<<" and j: "
+                         <<j<<" together with the maxIdx: "<<maxIdx
+                         <<" produced a wrong region.\n";
+                exit(12);
+        }
+
+    }
+
+    static Real even_angular_distance_length(Real l, Index k, Index n, Real R = 1.)
+    {
+        /**
+         * The points of the sub-triangulation can not be equally spaced or their angular distances
+         * won't be the same.
+         */
+        if (k==0) {
+            return 0;
+        }
+        else {
+            Real fr = static_cast<Real>(k)/static_cast<Real>(n);
+            Real denominator = static_cast<Real>(l + std::sqrt(4.*R*R - l*l)/std::tan(fr*2.*asin(l/(2.*R))));
+            return static_cast<Real>(2.)*R*R/denominator;
+        }
+    }
+
+    static vec3<Real> get_pos(vec3<Real> const& p0, vec3<Real> const& p1, vec3<Real> const& p2, Index i, Index j, Index maxIdx)
+    {
+/**
+ * get the position o a node in the sub triangulation of a face of the initial icosahedron.
+ * ```{.txt}
+ *              p0
+ *            /___\
+ *     e1   /__\/__\ e2
+ *        / \ / \  / \
+ *      p1 --------- p3
+ *            e3
+ * ```
+ */
+        vec3<Real> e1 = p1 - p0;
+        vec3<Real> e2 = p2 - p0;
+        auto e = e1.norm();
+        Real wi = even_angular_distance_length(e, i, maxIdx);
+
+        e1.normalize();
+        e2.normalize();
+
+        vec3<Real> li{};
+        Real li_norm{0};
+        vec3<Real> interm_1 = p0 + wi*e1;
+        interm_1.normalize();
+        if (i!=0) {
+            vec3<Real> interm_2 = p0 + wi*e2;
+            interm_2.normalize();
+
+            li = interm_2 - interm_1;
+            li_norm = li.norm();
+            li.normalize();
+        }
+        Real wj = even_angular_distance_length(li_norm, j, i);
+        return interm_1 + wj*li;
+    }
+
+    static std::tuple<Index, Index, Index> get_sorted_face_nodes(std::array<int, 3> face)
+    {
+        std::sort(face.begin(), face.end());
+        return {static_cast<Index>(face[0]),
+                static_cast<Index>(face[1]),
+                static_cast<Index>(face[2])};
+    }
+    static void make_face_nodes(std::unordered_map<std::string, SimpleNodeData<Real, Index>>& node_cache, Index nIter)
+    {
+        vec3<Real> p0, p1, p2, pos;
+        Index nEdge = nIter + 2;// total Number of nodes on an edge
+        Index maxIdx = nIter + 1;// max value i or j can have
+
+        std::string hash;
+        hash.reserve(10);
+
+        std::string c0_h, c1_h, c2_h;
+        for (auto face: FACE_CORNER_NODES) {
+            auto[c0, c1, c2] = get_sorted_face_nodes(face);
+            c0_h = hash_node(c0);
+            c1_h = hash_node(c1);
+            c2_h = hash_node(c2);
+            p0 = node_cache[c0_h].pos;
+            p1 = node_cache[c1_h].pos;
+            p2 = node_cache[c2_h].pos;
+            for (Index i = 0; i<nEdge; ++i) {
+                for (Index j = 0; j<=i; ++j) {
+                    pos = get_pos(p0, p1, p2, i, j, maxIdx);
+                    hash = hash_any(c0, c1, c2, i, j, maxIdx);
+                    node_cache[hash] = {.hash=hash, .pos=pos};
+                }
+            }
+        }
+
+        for (auto face: FACE_CORNER_NODES) {
+//        std::sort(face.begin(),face.end());
+//        auto [c0, c1, c2] = face;
+            auto[c0, c1, c2] = get_sorted_face_nodes(face);
+            for (Index i = 0; i<nEdge; ++i) {
+                for (Index j = 0; j<=i; ++j) {
+                    hash = hash_any(c0, c1, c2, i, j, maxIdx);
+                    std::vector<std::string> neighbour_hashes = neighbour_hash_vec(c0, c1, c2, i, j, maxIdx);
+                    for (auto const& neighbour_hash: neighbour_hashes) {
+                        node_cache[hash].nn_hashes.insert(neighbour_hash);
+                        node_cache[neighbour_hash].nn_hashes.insert(hash);
+                    }
+                }
+            }
+            for (Index idx = 0; auto& nodeEl: node_cache) {
+                nodeEl.second.id = idx;
+                ++idx;
+            }
+
+        }
+
+    }
+};
+
+//! @private
+template<floating_point_number Real, indexing_number Index>
+class PlanarTriangulation{
+    Index n_length;
+public:
+    std::vector<std::vector<Index>> nn_ids;
+    std::vector<bool> is_bulk;
+    [[nodiscard]] Index ij_to_id(Index i, Index j){return i*n_length+j;}
+    [[nodiscard]] Index id_to_i(Index id){return id/n_length;}
+    [[nodiscard]] Index id_to_j(Index id){return id%n_length;}
+
+    // TL T TR
+    //  L    R
+    // BL B BR
+
+    [[nodiscard]] Index TL(Index id){ return ij_to_id(id_to_i(id)-1, id_to_j(id)-1);}
+    [[nodiscard]] Index T (Index id){ return ij_to_id(id_to_i(id)-1, id_to_j(id)  );}
+    [[nodiscard]] Index TR(Index id){ return ij_to_id(id_to_i(id)-1, id_to_j(id)+1);}
+    [[nodiscard]] Index  L(Index id){ return ij_to_id(id_to_i(id)  , id_to_j(id)-1);}
+    [[nodiscard]] Index  R(Index id){ return ij_to_id(id_to_i(id)  , id_to_j(id)+1);}
+    [[nodiscard]] Index BL(Index id){ return ij_to_id(id_to_i(id)+1, id_to_j(id)-1);}
+    [[nodiscard]] Index B (Index id){ return ij_to_id(id_to_i(id)+1, id_to_j(id)  );}
+    [[nodiscard]] Index BR(Index id){ return ij_to_id(id_to_i(id)+1, id_to_j(id)+1);}
+
+    [[nodiscard]] std::vector<Index> bulk_odd_j_neighbor_ids(Index id){
+        return { B(id), R(id), TR(id), T(id), TL(id), L(id) };
+    }
+
+    [[nodiscard]] std::vector<Index> bulk_even_j_neighbor_ids(Index id){
+        return { T(id), L(id), BL(id), B(id), BR(id), R(id) };
+    }
+
+    [[nodiscard]] std::vector<Index> top_boundary_odd_j_neighbor_ids(Index id){
+        return { L(id), B(id), R(id) };
+    }
+
+    [[nodiscard]] std::vector<Index> top_boundary_even_j_neighbor_ids(Index id){
+        return { L(id), BL(id), B(id), BR(id), R(id) };
+    }
+
+    [[nodiscard]] std::vector<Index> bottom_boundary_odd_j_neighbor_ids(Index id){
+        return { R(id), TR(id), T(id), TL(id), L(id) };
+    }
+
+    [[nodiscard]] std::vector<Index> bottom_boundary_even_j_neighbor_ids(Index id){
+        return { T(id), L(id), R(id) };
+    }
+
+    [[nodiscard]] std::vector<Index> left_boundary_neighbor_ids(Index id){
+        return { T(id), B(id), BR(id), R(id)};
+    }
+
+    [[nodiscard]] std::vector<Index> right_boundary_odd_j_neighbor_ids(Index id){
+        return { T(id), TL(id), L(id), B(id) };
+    }
+
+    [[nodiscard]] std::vector<Index> right_boundary_even_j_neighbor_ids(Index id){
+        return { T(id), L(id), BL(id), B(id) };
+    }
+
+    PlanarTriangulation(Index n_length_inp, Index n_width):n_length(n_length_inp){
+        Index N_nodes = n_length*n_width;
+
+        nn_ids.resize(N_nodes);
+        is_bulk.resize(N_nodes,false);
+        // populate_bulk
+        for(Index i=1; i<n_width-1;++i){
+            for(Index j=1; j<n_length-1;++j){
+                Index bulk_id = ij_to_id(i,j);
+                is_bulk[bulk_id] = true;
+                if(j%2==0){
+                    nn_ids[bulk_id] = bulk_even_j_neighbor_ids(bulk_id);
+                }else{
+                    nn_ids[bulk_id] = bulk_odd_j_neighbor_ids(bulk_id);
+                }
+            }
+        }
+
+        // populate top and bottom boundaries
+        for (Index j = 1; j<n_length-1; ++j) {
+            Index i = 0;
+            Index id = ij_to_id(i,j);
+            if (j%2==0) {
+                nn_ids[id] = top_boundary_even_j_neighbor_ids(id);
+            }else{
+                nn_ids[id] = top_boundary_odd_j_neighbor_ids(id);
+            }
+
+            i = n_width-1;
+            id = ij_to_id(i,j);
+            if (j%2==0) {
+                nn_ids[id] = bottom_boundary_even_j_neighbor_ids(id);
+            }else{
+                nn_ids[id] = bottom_boundary_odd_j_neighbor_ids(id);
+            }
+        }
+
+        // populate left and right boundaries
+        for (Index i = 1; i<n_width-1; ++i) {
+            Index j = 0;
+            Index id = ij_to_id(i,j);
+            nn_ids[id] = left_boundary_neighbor_ids(id);
+
+            j = n_length-1;
+            id = ij_to_id(i,j);
+            if (j%2==0) {
+                nn_ids[id] = right_boundary_even_j_neighbor_ids(id);
+            }else{
+                nn_ids[id] = right_boundary_odd_j_neighbor_ids(id);
+            }
+        }
+
+        // populate top left corner
+        nn_ids[0] = std::vector<Index>{B(0), BR(0), R(0)};
+        // populate bottom left corner
+        Index bottom_left_id = ij_to_id(n_width-1,0);
+        nn_ids[bottom_left_id] = std::vector<Index>{R(bottom_left_id), T(bottom_left_id)}; //Todo this bond will never flip
+        // populate top and bottom right corner
+        Index top_right_id = n_length-1;
+        Index bottom_right_id = N_nodes-1;
+        if((n_length-1)%2==0){
+            nn_ids[top_right_id] = {L(top_right_id), BL(top_right_id), B(top_right_id)};
+            nn_ids[bottom_right_id] = {T(bottom_right_id), L(bottom_right_id)};// Todo this bond will never flip
+        }else{
+            nn_ids[top_right_id] = {L(top_right_id), /*BL(top_right_id),*/ B(top_right_id)}; // Todo this bond will never flip
+            nn_ids[bottom_right_id] = {T(bottom_right_id), TL(bottom_right_id), L(bottom_right_id),};// Todo this bond will never flip
+        }
+
+
+    }
+};
+}
+#endif //FLIPPY_TRIANGULATOR_HPP
+
+
+// end --- Triangulator.hpp --- 
+
+
 
 // begin --- stlSerializer.hpp --- 
 
@@ -25371,6 +25324,90 @@ private:
 // end --- Triangulation.hpp --- 
 
 
+
+namespace fp{
+template<floating_point_number Real, indexing_number Index, typename EnergyFunctionParameters, TriangulationType triangulation_type>
+class GradientDecentUpdater{
+    static constexpr Real max_float = 3.40282347e+38;
+    fp::Triangulation<Real, Index, triangulation_type>& triangulation;
+    EnergyFunctionParameters const& prms;
+    std::function<Real(fp::Node<Real, Index> const&, fp::Triangulation<Real, Index, triangulation_type> const&, EnergyFunctionParameters const&)> energy_function;
+    Real min_bond_length_square{0.}, max_bond_length_square{max_float};
+    unsigned long move_attempt{0}, bond_length_move_rejection{0},move_back{0};
+    unsigned long flip_attempt{0}, bond_length_flip_rejection{0}, flip_back{0};
+
+private:
+    GradientDecentUpdater(fp::Triangulation<Real, Index, triangulation_type>& triangulation_inp,
+            EnergyFunctionParameters const& prms_inp,
+    std::function<Real(fp::Node<Real, Index> const&, fp::Triangulation<Real, Index, triangulation_type> const&, EnergyFunctionParameters const&)> energy_function_inp,
+             Real min_bond_length, Real max_bond_length)
+    :triangulation(triangulation_inp), prms(prms_inp), energy_function(energy_function_inp),
+    min_bond_length_square(min_bond_length*min_bond_length), max_bond_length_square(max_bond_length*max_bond_length)
+    {}
+
+    
+
+};
+}
+
+#endif
+
+
+// end --- GradientDescentUpdater.h --- 
+
+
+
+// begin --- flippy.hpp --- 
+
+/*
+ *```txt
+ *
+ *  .d888 888 d8b
+ * d88P"  888 Y8P
+ * 888    888
+ * 888888 888 888 88888b.  88888b.  888  888
+ * 888    888 888 888 "88b 888 "88b 888  888     simulating package for
+ * 888    888 888 888  888 888  888 888  888     dynamically triangulated
+ * 888    888 888 888 d88P 888 d88P Y88b 888     surfaces
+ * 888    888 888 88888P"  88888P"   "Y88888
+ *                888      888           888     version 1.0.0
+ *                888      888      Y8b d88P
+ *                888      888       "Y88P"
+ *
+ * https://github.com/flippy-software-package/flippy
+ *
+ *
+ * MIT License
+ *
+ * Copyright (c) 2021 George Dadunashvili
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ *```
+ */
+
+
+/**
+ * @file
+ * @brief This header file exists for convenience. Including this header will automatically include all parts of flippy in the project.
+ */
+#ifndef FLIPPY_FLIPPY_HPP
+#define FLIPPY_FLIPPY_HPP
 
 // begin --- MonteCarloUpdater.hpp --- 
 
