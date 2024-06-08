@@ -1202,6 +1202,17 @@ private:
         }
     }
 
+    bool has_two_common_neighbours(Index node_id_0, Index node_id_1) const
+    {
+        int nn_count = 0;
+        for (Index nn_of_n0: nodes_[node_id_0].nn_ids){
+            for (Index nn_of_n1: nodes_[node_id_1].nn_ids) {
+                if(nn_of_n0 == nn_of_n1){ ++nn_count; }
+            }
+            if(nn_count>2){return false;}
+        }
+        return nn_count==2;
+    }
     //unit tested
     std::vector<Index> common_neighbours(Index node_id_0, Index node_id_1) const
     {
