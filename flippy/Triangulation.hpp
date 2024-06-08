@@ -1371,9 +1371,7 @@ private:
         }
     }
     void all_nodes_are_bulk(){
-        for(auto const& node: nodes_){
-            bulk_nodes_ids.push_back(node.id);
-        }
+        for(auto const& node: nodes_){ bulk_nodes_ids.push_back(node.id); }
     }
 
 
