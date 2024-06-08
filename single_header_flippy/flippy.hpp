@@ -23829,7 +23829,7 @@ namespace fp::implementation {
         inp.read(reinterpret_cast<char *>(&solid.num_triangles), sizeof(rawSTLSolid::num_triangles));
         std::vector<rawSTLTriangle> triangles;
         triangles.reserve(solid.num_triangles);
-        std::cout << "loading STL solid with: " << solid.num_triangles << " triangles'\n";
+//        std::cout << "loading STL solid with: " << solid.num_triangles << " triangles'\n";
         for (uint32_t i = 0; i < solid.num_triangles; ++i) {
             triangles.push_back(loadSTLTriangle(inp));
         }
@@ -24334,14 +24334,14 @@ public:
             Triangulation<Real, Index, SPHERICAL_TRIANGULATION> tr;
             tr.verlet_radius = verlet_radius_inp;
             tr.R_initial = 1;
-            std::cout << "finished stl parsing\n";
+//            std::cout << "finished stl parsing\n";
             tr.nodes_ = Nodes<Real, Index>(nodes);
             tr.all_nodes_are_bulk();
-            std::cout << "node count: " << tr.nodes_.size() << "\n";
+//            std::cout << "node count: " << tr.nodes_.size() << "\n";
             tr.orient_surface_of_a_sphere();
-            std::cout << "surface oriented\n";
+//            std::cout << "surface oriented\n";
             tr.initiate_advanced_geometry();
-            std::cout << "advanced geometry initiated\n";
+//            std::cout << "advanced geometry initiated\n";
             return tr;
         }
 

@@ -313,14 +313,14 @@ $(function(){initNavTree('_triangulation_8hpp_source.html',''); initResizable(tr
 <div class="line"><a id="l00408" name="l00408"></a><span class="lineno">  408</span>            <a class="code hl_class" href="classfp_1_1_triangulation.html">Triangulation&lt;Real, Index, SPHERICAL_TRIANGULATION&gt;</a> tr;</div>
 <div class="line"><a id="l00409" name="l00409"></a><span class="lineno">  409</span>            tr.verlet_radius = verlet_radius_inp;</div>
 <div class="line"><a id="l00410" name="l00410"></a><span class="lineno">  410</span>            tr.R_initial = 1;</div>
-<div class="line"><a id="l00411" name="l00411"></a><span class="lineno">  411</span>            std::cout &lt;&lt; <span class="stringliteral">&quot;finished stl parsing\n&quot;</span>;</div>
+<div class="line"><a id="l00411" name="l00411"></a><span class="lineno">  411</span><span class="comment">//            std::cout &lt;&lt; &quot;finished stl parsing\n&quot;;</span></div>
 <div class="line"><a id="l00412" name="l00412"></a><span class="lineno">  412</span>            tr.nodes_ = <a class="code hl_struct" href="structfp_1_1_nodes.html">Nodes&lt;Real, Index&gt;</a>(<a class="code hl_function" href="classfp_1_1_triangulation.html#aeeb65b7f5974560fc57e20b50cf73b41">nodes</a>);</div>
 <div class="line"><a id="l00413" name="l00413"></a><span class="lineno">  413</span>            tr.all_nodes_are_bulk();</div>
-<div class="line"><a id="l00414" name="l00414"></a><span class="lineno">  414</span>            std::cout &lt;&lt; <span class="stringliteral">&quot;node count: &quot;</span> &lt;&lt; tr.nodes_.size() &lt;&lt; <span class="stringliteral">&quot;\n&quot;</span>;</div>
+<div class="line"><a id="l00414" name="l00414"></a><span class="lineno">  414</span><span class="comment">//            std::cout &lt;&lt; &quot;node count: &quot; &lt;&lt; tr.nodes_.size() &lt;&lt; &quot;\n&quot;;</span></div>
 <div class="line"><a id="l00415" name="l00415"></a><span class="lineno">  415</span>            tr.orient_surface_of_a_sphere();</div>
-<div class="line"><a id="l00416" name="l00416"></a><span class="lineno">  416</span>            std::cout &lt;&lt; <span class="stringliteral">&quot;surface oriented\n&quot;</span>;</div>
+<div class="line"><a id="l00416" name="l00416"></a><span class="lineno">  416</span><span class="comment">//            std::cout &lt;&lt; &quot;surface oriented\n&quot;;</span></div>
 <div class="line"><a id="l00417" name="l00417"></a><span class="lineno">  417</span>            tr.initiate_advanced_geometry();</div>
-<div class="line"><a id="l00418" name="l00418"></a><span class="lineno">  418</span>            std::cout &lt;&lt; <span class="stringliteral">&quot;advanced geometry initiated\n&quot;</span>;</div>
+<div class="line"><a id="l00418" name="l00418"></a><span class="lineno">  418</span><span class="comment">//            std::cout &lt;&lt; &quot;advanced geometry initiated\n&quot;;</span></div>
 <div class="line"><a id="l00419" name="l00419"></a><span class="lineno">  419</span>            <span class="keywordflow">return</span> tr;</div>
 <div class="line"><a id="l00420" name="l00420"></a><span class="lineno">  420</span>        }</div>
 </div>

@@ -408,14 +408,14 @@ public:
             Triangulation<Real, Index, SPHERICAL_TRIANGULATION> tr;
             tr.verlet_radius = verlet_radius_inp;
             tr.R_initial = 1;
-            std::cout << "finished stl parsing\n";
+//            std::cout << "finished stl parsing\n";
             tr.nodes_ = Nodes<Real, Index>(nodes);
             tr.all_nodes_are_bulk();
-            std::cout << "node count: " << tr.nodes_.size() << "\n";
+//            std::cout << "node count: " << tr.nodes_.size() << "\n";
             tr.orient_surface_of_a_sphere();
-            std::cout << "surface oriented\n";
+//            std::cout << "surface oriented\n";
             tr.initiate_advanced_geometry();
-            std::cout << "advanced geometry initiated\n";
+//            std::cout << "advanced geometry initiated\n";
             return tr;
         }
 

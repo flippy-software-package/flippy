@@ -159,7 +159,7 @@ $(function(){initNavTree('stl_serializer_8hpp_source.html',''); initResizable(tr
 <div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>        inp.read(<span class="keyword">reinterpret_cast&lt;</span><span class="keywordtype">char</span> *<span class="keyword">&gt;</span>(&amp;solid.num_triangles), <span class="keyword">sizeof</span>(rawSTLSolid::num_triangles));</div>
 <div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>        std::vector&lt;rawSTLTriangle&gt; triangles;</div>
 <div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>        triangles.reserve(solid.num_triangles);</div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>        std::cout &lt;&lt; <span class="stringliteral">&quot;loading STL solid with: &quot;</span> &lt;&lt; solid.num_triangles &lt;&lt; <span class="stringliteral">&quot; triangles&#39;\n&quot;</span>;</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span><span class="comment">//        std::cout &lt;&lt; &quot;loading STL solid with: &quot; &lt;&lt; solid.num_triangles &lt;&lt; &quot; triangles&#39;\n&quot;;</span></div>
 <div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>        <span class="keywordflow">for</span> (uint32_t i = 0; i &lt; solid.num_triangles; ++i) {</div>
 <div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>            triangles.push_back(loadSTLTriangle(inp));</div>
 <div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>        }</div>

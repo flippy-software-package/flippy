@@ -43,7 +43,7 @@ namespace fp::implementation {
         inp.read(reinterpret_cast<char *>(&solid.num_triangles), sizeof(rawSTLSolid::num_triangles));
         std::vector<rawSTLTriangle> triangles;
         triangles.reserve(solid.num_triangles);
-        std::cout << "loading STL solid with: " << solid.num_triangles << " triangles'\n";
+//        std::cout << "loading STL solid with: " << solid.num_triangles << " triangles'\n";
         for (uint32_t i = 0; i < solid.num_triangles; ++i) {
             triangles.push_back(loadSTLTriangle(inp));
         }
