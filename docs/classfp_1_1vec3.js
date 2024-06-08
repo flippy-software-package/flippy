@@ -23,7 +23,6 @@ var classfp_1_1vec3 =
     [ "operator/=", "classfp_1_1vec3.html#a34315674ec0ce3613c42ca5c9ec82c6f", null ],
     [ "operator/", "classfp_1_1vec3.html#a8d8ccff0006cc4699a6773e85de7e4cb", null ],
     [ "operator-", "classfp_1_1vec3.html#ac3763454def892f79476dad1079adb18", null ],
-    [ "operator-", "classfp_1_1vec3.html#adaf7d3b941eeaa8bc1bb3ee5dd865552", null ],
     [ "x", "classfp_1_1vec3.html#ae5ce71c3ddb550e4e040950462e5b5d4", null ],
     [ "y", "classfp_1_1vec3.html#a9d726ab99a57c65998f22bcdd12227cf", null ],
     [ "z", "classfp_1_1vec3.html#a5e845f97a31bd5f821a0e4f92ca4c4b3", null ]

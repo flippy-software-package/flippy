@@ -8,8 +8,6 @@
 <area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="592,75,558,80,557,74,591,70"/>
 <area shape="rect" id="Node000005" href="$classfp_1_1_triangulation.html#a5d1ec431a7a0040d7963e4297a80faaa" title="Un&#45;flip a bond that was just flipped." alt="" coords="208,69,331,109"/>
 <area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="365,92,331,92,331,87,365,87"/>
-<area shape="rect" id="Node000006" href="$classfp_1_1_monte_carlo_updater.html#a8de725c1ae28fd44d096ffb82467b598" title="Attempt a flip Monte Carlo Step." alt="" coords="5,37,160,77"/>
-<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="194,79,160,73,161,68,195,74"/>
-<area shape="rect" id="Node000007" href="$classfp_1_1_monte_carlo_updater.html#acf28ad26646a0e87dce57eed5ca5047c" title="Attempt a flip Monte Carlo Step." alt="" coords="5,101,160,141"/>
-<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="195,105,161,111,160,105,194,100"/>
+<area shape="rect" id="Node000006" href="$classfp_1_1_monte_carlo_updater.html#acf28ad26646a0e87dce57eed5ca5047c" title="Attempt a flip Monte Carlo Step." alt="" coords="5,69,160,109"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="194,92,161,92,161,87,194,87"/>
 </map>

@@ -1,12 +1,10 @@
 <map id="flippy/Triangulator.hpp" name="flippy/Triangulator.hpp">
-<area shape="rect" id="Node000001" title="This file contains internal implementation details and is not part of the stable public api...." alt="" coords="263,5,412,31"/>
-<area shape="rect" id="Node000002" href="$_triangulation_8hpp.html" title="This file contains the fp::Triangulation class and several related helper classes...." alt="" coords="259,79,415,104"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="340,44,340,79,335,79,335,44"/>
-<area shape="rect" id="Node000003" href="$_gradient_descent_updater_8h_source.html" title=" " alt="" coords="5,152,216,177"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="289,111,148,154,147,149,287,106"/>
-<area shape="rect" id="Node000004" href="$_monte_carlo_updater_8hpp.html" title="This file contains the MonteCarloUpdater class template. Together with Triangulation...." alt="" coords="240,152,435,177"/>
-<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="340,118,340,152,335,152,335,118"/>
-<area shape="rect" id="Node000005" href="$flippy_8hpp.html" title="This header file exists for convenience. Including this header will automatically include all parts o..." alt="" coords="349,225,459,251"/>
-<area shape="poly" id="edge5_Node000002_Node000005" title=" " alt="" coords="394,107,425,124,449,151,454,172,447,193,434,212,420,227,416,223,430,208,442,190,448,172,444,153,421,129,392,112"/>
-<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="360,186,395,223,391,227,356,190"/>
+<area shape="rect" id="Node000001" title="This file contains internal implementation details and is not part of the stable public api...." alt="" coords="95,5,244,31"/>
+<area shape="rect" id="Node000002" href="$_triangulation_8hpp.html" title="This file contains the fp::Triangulation class and several related helper classes...." alt="" coords="91,79,247,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="172,44,172,79,167,79,167,44"/>
+<area shape="rect" id="Node000003" href="$_monte_carlo_updater_8hpp.html" title="This file contains the MonteCarloUpdater class template. Together with Triangulation...." alt="" coords="5,152,200,177"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="151,116,115,154,112,150,147,113"/>
+<area shape="rect" id="Node000004" href="$flippy_8hpp.html" title="This header file exists for convenience. Including this header will automatically include all parts o..." alt="" coords="114,225,225,251"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="192,113,205,131,215,151,216,173,208,194,184,227,180,224,204,192,211,172,209,153,200,133,188,116"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="125,186,160,223,157,227,121,190"/>
 </map>

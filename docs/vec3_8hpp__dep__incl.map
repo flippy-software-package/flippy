@@ -1,24 +1,22 @@
 <map id="flippy/vec3.hpp" name="flippy/vec3.hpp">
-<area shape="rect" id="Node000001" title="Header file containing the definition and implementation a 3 dimensional vector class,..." alt="" coords="225,5,336,31"/>
-<area shape="rect" id="Node000002" href="$_nodes_8hpp.html" title="This file contains the fp::Node and fp::Nodes classes, data structures that represent a single node o..." alt="" coords="11,79,131,104"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="235,38,106,81,104,76,233,33"/>
-<area shape="rect" id="Node000004" href="$flippy_8hpp.html" title="This header file exists for convenience. Including this header will automatically include all parts o..." alt="" coords="256,299,367,324"/>
-<area shape="poly" id="edge12_Node000001_Node000004" title=" " alt="" coords="350,23,406,30,463,41,512,57,530,66,542,77,571,101,582,112,588,126,585,144,570,169,541,204,494,253,466,275,433,290,399,301,368,308,366,302,398,296,431,285,463,270,491,249,537,201,565,166,580,142,583,126,578,115,567,105,539,81,527,70,510,61,462,47,405,36,349,28"/>
-<area shape="rect" id="Node000005" href="$_triangulation_8hpp.html" title="This file contains the fp::Triangulation class and several related helper classes...." alt="" coords="203,152,359,177"/>
-<area shape="poly" id="edge9_Node000001_Node000005" title=" " alt="" coords="240,39,215,57,196,80,193,91,194,100,207,120,229,136,254,149,251,154,226,141,203,123,189,102,188,90,192,77,212,53,237,35"/>
-<area shape="rect" id="Node000007" href="$_triangulator_8hpp.html" title="This file contains internal implementation details and is not part of the stable public api...." alt="" coords="206,79,355,104"/>
-<area shape="poly" id="edge10_Node000001_Node000007" title=" " alt="" coords="283,44,283,79,278,79,278,44"/>
-<area shape="rect" id="Node000008" href="$stl_serializer_8hpp_source.html" title=" " alt="" coords="379,79,529,104"/>
-<area shape="poly" id="edge13_Node000001_Node000008" title=" " alt="" coords="322,33,427,76,425,81,320,38"/>
-<area shape="rect" id="Node000003" href="$_monte_carlo_updater_8hpp.html" title="This file contains the MonteCarloUpdater class template. Together with Triangulation...." alt="" coords="30,225,225,251"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="83,116,125,224,120,226,78,118"/>
-<area shape="poly" id="edge8_Node000002_Node000004" title=" " alt="" coords="54,116,33,145,15,181,10,199,8,217,11,234,20,249,35,261,58,271,120,288,191,298,256,304,255,310,190,303,119,293,56,276,32,265,16,252,6,235,3,217,5,198,10,179,29,143,50,113"/>
-<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="119,106,248,149,246,154,117,111"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="171,253,282,296,280,301,169,258"/>
-<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="245,185,154,228,151,223,243,181"/>
-<area shape="poly" id="edge7_Node000005_Node000004" title=" " alt="" coords="373,169,401,176,428,187,453,203,474,224,481,240,479,255,469,267,454,278,413,294,368,304,367,299,411,289,451,273,465,263,474,253,476,241,469,227,450,207,426,192,399,181,372,174"/>
-<area shape="rect" id="Node000006" href="$_gradient_descent_updater_8h_source.html" title=" " alt="" coords="249,225,459,251"/>
-<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="304,185,344,223,340,227,301,189"/>
-<area shape="poly" id="edge11_Node000007_Node000005" title=" " alt="" coords="283,118,283,152,278,152,278,118"/>
-<area shape="poly" id="edge14_Node000008_Node000005" title=" " alt="" coords="415,112,310,154,308,149,413,107"/>
+<area shape="rect" id="Node000001" title="Header file containing the definition and implementation a 3 dimensional vector class,..." alt="" coords="281,5,391,31"/>
+<area shape="rect" id="Node000002" href="$_nodes_8hpp.html" title="This file contains the fp::Node and fp::Nodes classes, data structures that represent a single node o..." alt="" coords="5,79,125,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="280,37,110,81,108,76,279,32"/>
+<area shape="rect" id="Node000004" href="$flippy_8hpp.html" title="This header file exists for convenience. Including this header will automatically include all parts o..." alt="" coords="211,299,322,324"/>
+<area shape="poly" id="edge11_Node000001_Node000004" title=" " alt="" coords="406,20,459,28,507,43,525,54,538,68,542,85,537,105,514,143,486,176,453,206,419,233,351,274,296,301,294,296,349,270,416,228,450,202,482,173,510,139,532,103,537,85,533,70,522,58,504,48,457,33,405,26"/>
+<area shape="rect" id="Node000005" href="$_triangulation_8hpp.html" title="This file contains the fp::Triangulation class and several related helper classes...." alt="" coords="247,152,403,177"/>
+<area shape="poly" id="edge8_Node000001_Node000005" title=" " alt="" coords="337,45,329,152,324,152,331,44"/>
+<area shape="rect" id="Node000006" href="$_triangulator_8hpp.html" title="This file contains internal implementation details and is not part of the stable public api...." alt="" coords="373,79,523,104"/>
+<area shape="poly" id="edge9_Node000001_Node000006" title=" " alt="" coords="367,36,431,76,428,81,364,40"/>
+<area shape="rect" id="Node000007" href="$stl_serializer_8hpp_source.html" title=" " alt="" coords="149,79,299,104"/>
+<area shape="poly" id="edge12_Node000001_Node000007" title=" " alt="" coords="308,40,244,81,241,76,305,36"/>
+<area shape="rect" id="Node000003" href="$_monte_carlo_updater_8hpp.html" title="This file contains the MonteCarloUpdater class template. Together with Triangulation...." alt="" coords="103,225,297,251"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="87,112,191,223,187,227,84,116"/>
+<area shape="poly" id="edge7_Node000002_Node000004" title=" " alt="" coords="65,118,63,148,66,183,75,218,93,249,118,271,148,287,180,297,212,303,211,309,179,302,146,292,115,275,89,252,70,220,61,183,58,148,59,118"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="121,105,284,149,283,154,120,110"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="222,259,258,297,254,300,219,263"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="295,186,222,227,219,223,292,182"/>
+<area shape="poly" id="edge6_Node000005_Node000004" title=" " alt="" coords="326,191,321,221,312,252,296,279,280,300,275,297,292,276,307,250,316,219,321,190"/>
+<area shape="poly" id="edge10_Node000006_Node000005" title=" " alt="" coords="418,113,347,154,344,149,415,108"/>
+<area shape="poly" id="edge13_Node000007_Node000005" title=" " alt="" coords="253,110,310,150,307,154,250,114"/>
 </map>

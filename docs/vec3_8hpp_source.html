@@ -266,7 +266,7 @@ $(function(){initNavTree('vec3_8hpp_source.html',''); initResizable(true); });
 <div class="line"><a id="l00279" name="l00279"></a><span class="lineno">  279</span> </div>
 <div class="foldopen" id="foldopen00285" data-start="{" data-end="};">
 <div class="line"><a id="l00285" name="l00285"></a><span class="lineno"><a class="line" href="classfp_1_1vec3.html#a34315674ec0ce3613c42ca5c9ec82c6f">  285</a></span>    <span class="keyword">friend</span> <span class="keywordtype">void</span> <a class="code hl_friend" href="classfp_1_1vec3.html#a34315674ec0ce3613c42ca5c9ec82c6f">operator/=</a>(<a class="code hl_class" href="classfp_1_1vec3.html">vec3&lt;Real&gt;</a>&amp; lhs, Real <span class="keyword">const</span>&amp; rhs){</div>
-<div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span>        lhs.<a class="code hl_function" href="classfp_1_1vec3.html#ab50f5353d9f81d47a0a5b87efc7ad056">scale</a>((Real)1/rhs);</div>
+<div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span>        lhs.<a class="code hl_function" href="classfp_1_1vec3.html#ab50f5353d9f81d47a0a5b87efc7ad056">scale</a>(<span class="keyword">static_cast&lt;</span>Real<span class="keyword">&gt;</span>(1.)/rhs);</div>
 <div class="line"><a id="l00287" name="l00287"></a><span class="lineno">  287</span>    }</div>
 </div>
 <div class="line"><a id="l00288" name="l00288"></a><span class="lineno">  288</span> </div>
@@ -322,22 +322,11 @@ $(function(){initNavTree('vec3_8hpp_source.html',''); initResizable(true); });
 <div class="line"><a id="l00357" name="l00357"></a><span class="lineno">  357</span>    }</div>
 </div>
 <div class="line"><a id="l00358" name="l00358"></a><span class="lineno">  358</span> </div>
-<div class="line"><a id="l00360" name="l00360"></a><span class="lineno">  360</span> </div>
-<div class="foldopen" id="foldopen00365" data-start="{" data-end="};">
-<div class="line"><a id="l00365" name="l00365"></a><span class="lineno"><a class="line" href="classfp_1_1vec3.html#adaf7d3b941eeaa8bc1bb3ee5dd865552">  365</a></span>    <span class="keyword">friend</span> <a class="code hl_class" href="classfp_1_1vec3.html">vec3&lt;Real&gt;</a> <a class="code hl_friend" href="classfp_1_1vec3.html#adaf7d3b941eeaa8bc1bb3ee5dd865552">operator-</a>(<a class="code hl_class" href="classfp_1_1vec3.html">vec3&lt;Real&gt;</a>&amp;&amp; v)</div>
-<div class="line"><a id="l00366" name="l00366"></a><span class="lineno">  366</span>    {</div>
-<div class="line"><a id="l00367" name="l00367"></a><span class="lineno">  367</span>        v.x = -v.x;</div>
-<div class="line"><a id="l00368" name="l00368"></a><span class="lineno">  368</span>        v.y = -v.y;</div>
-<div class="line"><a id="l00369" name="l00369"></a><span class="lineno">  369</span>        v.z = -v.z;</div>
-<div class="line"><a id="l00370" name="l00370"></a><span class="lineno">  370</span>        <span class="keywordflow">return</span> v;</div>
-<div class="line"><a id="l00371" name="l00371"></a><span class="lineno">  371</span>    }</div>
+<div class="line"><a id="l00359" name="l00359"></a><span class="lineno">  359</span>};</div>
 </div>
-<div class="line"><a id="l00372" name="l00372"></a><span class="lineno">  372</span> </div>
-<div class="line"><a id="l00373" name="l00373"></a><span class="lineno">  373</span>};</div>
-</div>
-<div class="line"><a id="l00374" name="l00374"></a><span class="lineno">  374</span>}</div>
-<div class="line"><a id="l00375" name="l00375"></a><span class="lineno">  375</span> </div>
-<div class="line"><a id="l00376" name="l00376"></a><span class="lineno">  376</span><span class="preprocessor">#endif </span><span class="comment">//FLIPPY_VEC3_HPP</span></div>
+<div class="line"><a id="l00360" name="l00360"></a><span class="lineno">  360</span>}</div>
+<div class="line"><a id="l00361" name="l00361"></a><span class="lineno">  361</span> </div>
+<div class="line"><a id="l00362" name="l00362"></a><span class="lineno">  362</span><span class="preprocessor">#endif </span><span class="comment">//FLIPPY_VEC3_HPP</span></div>
 <div class="ttc" id="aclassfp_1_1vec3_html"><div class="ttname"><a href="classfp_1_1vec3.html">fp::vec3</a></div><div class="ttdoc">Internal implementation of a 3D vector.</div><div class="ttdef"><b>Definition</b> vec3.hpp:43</div></div>
 <div class="ttc" id="aclassfp_1_1vec3_html_a19f1aaf1e61b599d434aaa89e0e58351"><div class="ttname"><a href="classfp_1_1vec3.html#a19f1aaf1e61b599d434aaa89e0e58351">fp::vec3::size</a></div><div class="ttdeci">constexpr std::size_t size() const</div><div class="ttdoc">Always returns 3.</div><div class="ttdef"><b>Definition</b> vec3.hpp:118</div></div>
 <div class="ttc" id="aclassfp_1_1vec3_html_a2522af9d50779abf605b8be03e146a5f"><div class="ttname"><a href="classfp_1_1vec3.html#a2522af9d50779abf605b8be03e146a5f">fp::vec3::cross</a></div><div class="ttdeci">vec3&lt; Real &gt; cross(vec3&lt; Real &gt; const &amp;other) const</div><div class="ttdoc">Calculate cross product with another vector.</div><div class="ttdef"><b>Definition</b> vec3.hpp:153</div></div>
@@ -361,7 +350,6 @@ $(function(){initNavTree('vec3_8hpp_source.html',''); initResizable(true); });
 <div class="ttc" id="aclassfp_1_1vec3_html_ac3763454def892f79476dad1079adb18"><div class="ttname"><a href="classfp_1_1vec3.html#ac3763454def892f79476dad1079adb18">fp::vec3::operator-</a></div><div class="ttdeci">friend vec3&lt; Real &gt; operator-(vec3&lt; Real &gt; v)</div><div class="ttdoc">Unary minus operator.</div><div class="ttdef"><b>Definition</b> vec3.hpp:351</div></div>
 <div class="ttc" id="aclassfp_1_1vec3_html_ac70e0b9511e58cb1dc2b0e327aacf70d"><div class="ttname"><a href="classfp_1_1vec3.html#ac70e0b9511e58cb1dc2b0e327aacf70d">fp::vec3::operator&lt;&lt;</a></div><div class="ttdeci">friend std::ostream &amp; operator&lt;&lt;(std::ostream &amp;os, const vec3&lt; Real &gt; &amp;obj)</div><div class="ttdoc">Streaming operator for easy printing of the vector.</div><div class="ttdef"><b>Definition</b> vec3.hpp:190</div></div>
 <div class="ttc" id="aclassfp_1_1vec3_html_ad3792f8349787c827e4f5b66b0e62156"><div class="ttname"><a href="classfp_1_1vec3.html#ad3792f8349787c827e4f5b66b0e62156">fp::vec3::operator+</a></div><div class="ttdeci">friend vec3&lt; Real &gt; operator+(vec3&lt; Real &gt; lhs, vec3&lt; Real &gt; const &amp;rhs)</div><div class="ttdoc">Overloaded operator defined in terms of vec2::add.</div><div class="ttdef"><b>Definition</b> vec3.hpp:211</div></div>
-<div class="ttc" id="aclassfp_1_1vec3_html_adaf7d3b941eeaa8bc1bb3ee5dd865552"><div class="ttname"><a href="classfp_1_1vec3.html#adaf7d3b941eeaa8bc1bb3ee5dd865552">fp::vec3::operator-</a></div><div class="ttdeci">friend vec3&lt; Real &gt; operator-(vec3&lt; Real &gt; &amp;&amp;v)</div><div class="ttdoc">Unary minus operator for rvalues.</div><div class="ttdef"><b>Definition</b> vec3.hpp:365</div></div>
 <div class="ttc" id="aclassfp_1_1vec3_html_adc1be1017b046b97972b4f4ead8f5323"><div class="ttname"><a href="classfp_1_1vec3.html#adc1be1017b046b97972b4f4ead8f5323">fp::vec3::operator[]</a></div><div class="ttdeci">Real &amp; operator[](Index idx)</div><div class="ttdoc">element access operator.</div><div class="ttdef"><b>Definition</b> vec3.hpp:313</div></div>
 <div class="ttc" id="aclassfp_1_1vec3_html_ae5ce71c3ddb550e4e040950462e5b5d4"><div class="ttname"><a href="classfp_1_1vec3.html#ae5ce71c3ddb550e4e040950462e5b5d4">fp::vec3::x</a></div><div class="ttdeci">Real x</div><div class="ttdoc">The x component of the vector.</div><div class="ttdef"><b>Definition</b> vec3.hpp:46</div></div>
 <div class="ttc" id="aclassfp_1_1vec3_html_ae64d6fa0ceec87d5a26cac17560f1d7c"><div class="ttname"><a href="classfp_1_1vec3.html#ae64d6fa0ceec87d5a26cac17560f1d7c">fp::vec3::cross</a></div><div class="ttdeci">static vec3&lt; Real &gt; cross(vec3&lt; Real &gt; const &amp;a, vec3&lt; Real &gt; const &amp;b)</div><div class="ttdoc">Calculate cross product between two vectors.</div><div class="ttdef"><b>Definition</b> vec3.hpp:133</div></div>

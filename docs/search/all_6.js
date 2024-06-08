@@ -6,6 +6,5 @@ var searchData=
   ['get_5fnn_5fdistance_5fvector_5fbetween_3',['get_nn_distance_vector_between',['../structfp_1_1_nodes.html#a8efb079f96664cee5698ccdf9e6bc080',1,'fp::Nodes']]],
   ['get_5ftwo_5fring_5fgeometry_4',['get_two_ring_geometry',['../classfp_1_1_triangulation.html#a3c660cb2bec69afe055843975698cfd0',1,'fp::Triangulation']]],
   ['global_5fgeometry_5',['global_geometry',['../classfp_1_1_triangulation.html#a9890d90831a7a834e8fffa1c432200d3',1,'fp::Triangulation']]],
-  ['globally_20defined_20functions_20constants_20and_20such_6',['Globally defined functions constants and such',['../group___globals.html',1,'']]],
-  ['gradientdecentupdater_7',['GradientDecentUpdater',['../classfp_1_1_gradient_decent_updater.html',1,'fp']]]
+  ['globally_20defined_20functions_20constants_20and_20such_6',['Globally defined functions constants and such',['../group___globals.html',1,'']]]
 ];
