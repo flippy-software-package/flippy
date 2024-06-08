@@ -356,20 +356,6 @@ public:
         return v;
     }
 
-    //! Unary minus operator for rvalues.
-    /**
-     *
-     * @param v an rvalue vec3 vector.
-     * @return The rvalue vector `v` is moved into the function and `-v` is returned.
-     */
-    friend vec3<Real> operator-(vec3<Real>&& v)
-    {
-        v.x = -v.x;
-        v.y = -v.y;
-        v.z = -v.z;
-        return v;
-    }
-
 };
 }
 
