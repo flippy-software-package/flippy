@@ -283,7 +283,7 @@ public:
      * @warning for performance reasons, this function will not check for zero division!
      */
     friend void operator/=(vec3<Real>& lhs, Real const& rhs){
-        lhs.scale((Real)1/rhs);
+        lhs.scale(static_cast<Real>(1.)/rhs);
     }
 
     //! Overloaded operator defined in terms of vec3::scale.
