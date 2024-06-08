@@ -206,10 +206,10 @@ TEST_CASE("check -v correctness"){
         CHECK(-v == v_min);
     }
     SECTION("rvalue - is correctly returned"){
-        auto make_min = [](fp::vec3<float>&& v){return -v;};
-        auto v_min = fp::vec3<float>{-1.3f, -6.8f, -2.4f};
-        auto v = make_min({1.3f, 6.8f, 2.4f});
-        CHECK(v == v_min);
+//        auto make_min = [](fp::vec3<float>&& v){return -v;};
+//        auto v_min = fp::vec3<float>{-1.3f, -6.8f, -2.4f};
+        auto v = fp::vec3<float>{1.3f, 6.8f, 2.4f};
+        CHECK(v ==  -(fp::vec3<float>{-1.3f, -6.8f, -2.4f}));
     }
 
     SECTION("rvalue - is correctly returned 2"){
