@@ -3,47 +3,55 @@
 #include <iostream> // needed for std::cout
 #include "flippy.hpp"
 
-double sphere_vol(double R){return 4./3. * M_PI *R*R*R;}
-double sphere_area(double R){return 4. * M_PI *R*R;}
+using REAL = float;
 
-struct EnergyParameters{double kappa, K_V, K_A, V_t, A_t;};
+REAL sphere_vol(REAL R){return 4./3. * M_PI *R*R*R;}
+REAL sphere_area(REAL R){return 4. * M_PI *R*R;}
+
+struct EnergyParameters{REAL kappa, K_V, K_A, V_t, A_t;};
 
 // This is the energy function that is used by flippy's built-in updater to decide if a move was energetically favorable or not
-double surface_energy([[maybe_unused]]fp::Node<double, unsigned int> const& node,
-                      fp::Triangulation<double, unsigned int> const& trg,
+REAL surface_energy([[maybe_unused]]fp::Node<REAL, unsigned int> const& node,
+                      fp::Triangulation<REAL, unsigned int> const& trg,
                       EnergyParameters const& prms){
-    double V = trg.global_geometry().volume;
-    double A = trg.global_geometry().area;
-    double dV = V-prms.V_t;
-    double dA = A-prms.A_t;
-    double energy = prms.kappa*trg.global_geometry().unit_bending_energy +
+    REAL V = trg.global_geometry().volume;
+    REAL A = trg.global_geometry().area;
+    REAL dV = V-prms.V_t;
+    REAL dA = A-prms.A_t;
+    REAL energy = prms.kappa*trg.global_geometry().unit_bending_energy +
                     prms.K_V*dV*dV/prms.V_t + prms.K_A*dA*dA/prms.A_t;
     return energy;
 }
 
+#include "../benchmarks/external/code_utils.hpp"
+
 int main(){
+    cutils::Timer t;
     int n_triang = 7; // triangulation iteration number of nodes N_node=12+30*n+20*n*(n-1)/2 where n is the same as n_trng
-    double l_min = 2;
-    double R = l_min/(2*sin(asin(1./(2*sin(2.*M_PI/5.)))/(n_triang+1.))); // estimate of a typical bond length in the initial triangulation and then create a sphere such that the initial bond length is close to minimal. This formula is derived from the equidistant sub-triangulation of an icosahedron, where geodesic distances are used as a distance measure.
-    double l_max = 2.*l_min; // if you make l_max closer to l_min bond_flip acceptance rate will go down
-    double r_Verlet = 2*l_max;
+    REAL l_min = 2;
+    REAL R = l_min/(2*sin(asin(1./(2*sin(2.*M_PI/5.)))/(n_triang+1.))); // estimate of a typical bond length in the initial triangulation and then create a sphere such that the initial bond length is close to minimal. This formula is derived from the equidistant sub-triangulation of an icosahedron, where geodesic distances are used as a distance measure.
+    REAL l_max = 2.*l_min; // if you make l_max closer to l_min bond_flip acceptance rate will go down
+    REAL r_Verlet = 2*l_max;
+    REAL red_vol = 0.6;
     EnergyParameters prms{.kappa=10 /*kBT*/,
             .K_V=100 /*kBT/area*/, .K_A=1000 /*kBT/volume*/,
-            .V_t=0.6*sphere_vol(R), .A_t=sphere_area(R)};
-    double linear_displ=l_min/8.; // side length of a voxel from which the displacement of the node is drawn
-    int max_mc_steps=1e5; // max number of iteration steps (depending on the strength of your CPU, this should take anywhere from a couple of seconds to a couple of minutes
+            .V_t=red_vol*sphere_vol(R), .A_t=sphere_area(R)};
+    REAL linear_displ=l_min/12.; // side length of a voxel from which the
+    // displacement of the node is drawn
+    int max_mc_steps=2e5; // max number of iteration steps (depending on the strength of your CPU, this should take anywhere from a couple of seconds to a couple of minutes
 
     std::random_device random_number_generator_seed;
     std::mt19937 rng(random_number_generator_seed()); // create a random number generator and seed it with the current time
 
     // All the flippy magic is happening on the following two lines
-    fp::Triangulation<double, unsigned int> guv(n_triang, R, r_Verlet);
-    fp::MonteCarloUpdater<double, unsigned int, EnergyParameters, std::mt19937, fp::SPHERICAL_TRIANGULATION> mc_updater(guv, prms, surface_energy, rng, l_min, l_max);
+    fp::Triangulation<REAL, unsigned int> guv(n_triang, R, r_Verlet);
+    fp::MonteCarloUpdater<REAL, unsigned int, EnergyParameters, std::mt19937, fp::SPHERICAL_TRIANGULATION> mc_updater(guv, prms, surface_energy, rng, l_min, l_max);
 
-    fp::vec3<double> displ{}; // declaring a 3d vector (using flippy's built in vec3 type) for later use as a random direction vector
-    std::uniform_real_distribution<double> displ_distr(-linear_displ, linear_displ); //define a distribution from which the small displacements in x y and z directions will be drawn
+    fp::vec3<REAL> displ{}; // declaring a 3d vector (using flippy's built in vec3 type) for later use as a random direction vector
+    std::uniform_real_distribution<REAL> displ_distr(-linear_displ, linear_displ); //define a distribution from which the small displacements in x y and z directions will be drawn
 
-    guv.scale_node_coordinates(1, 1, 0.8); // squish the sphere in the z-direction to break the initial symmetry. This speeds up the convergence to a biconcave shape greatly.
+    guv.scale_node_coordinates(1, 1, 0.85); // squish the sphere in the
+    // z-direction to break the initial symmetry. This speeds up the convergence to a biconcave shape greatly.
 
     fp::Json data_init = guv.make_egg_data();
     fp::json_dump("test_run_init", data_init);  // ATTENTION!!! this file will be saved in the same folder as the executable
@@ -65,8 +73,8 @@ int main(){
 
     // MonteCarloUpdater counts the number of accepted and rejected moves, distinguishing whether a rejection occurred because of the energy or the bond length constraint.
     // We can use this to print simple statistics here. For example, this will help us decide if our displacement size is too large.
-    std::cout<<"percentage of failed moves: "<<(mc_updater.move_back_count() + mc_updater.bond_length_move_rejection_count())/((long double)mc_updater.move_attempt_count())<<'\n';
-    std::cout<<"percentage of failed flips: "<<(mc_updater.flip_back_count() + mc_updater.bond_length_flip_rejection_count())/((long double)mc_updater.flip_attempt_count())<<'\n';
+    std::cout<<"percentage of failed moves: "<<(mc_updater.move_back_count() + mc_updater.bond_length_move_rejection_count())/((REAL)mc_updater.move_attempt_count())<<'\n';
+    std::cout<<"percentage of failed flips: "<<(mc_updater.flip_back_count() + mc_updater.bond_length_flip_rejection_count())/((REAL)mc_updater.flip_attempt_count())<<'\n';
 
     fp::Json data_final = guv.make_egg_data();
     fp::json_dump("test_run_final", data_final);  // ATTENTION!!! this file will be saved in the same folder as the executable
