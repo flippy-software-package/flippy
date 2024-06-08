@@ -1207,13 +1207,13 @@ private:
     {
         std::vector<Index> res;
         res.reserve(2);
-        std::vector<Index> nn_ids0 = nodes_[node_id_0].nn_ids;
-        std::vector<Index> nn_ids1 = nodes_[node_id_1].nn_ids;
-        std::sort(nn_ids0.begin(), nn_ids0.end());
-        std::sort(nn_ids1.begin(), nn_ids1.end());
-        std::set_intersection(nn_ids0.begin(), nn_ids0.end(),
-                nn_ids1.begin(), nn_ids1.end(),
-                std::back_inserter(res));
+        for (Index nn_of_n0: nodes_[node_id_0].nn_ids){
+            for (Index nn_of_n1: nodes_[node_id_1].nn_ids) {
+                if (nn_of_n0 == nn_of_n1){
+                    res.push_back(nn_of_n1);
+                }
+            }
+        }
         return res;
     }
 
