@@ -676,7 +676,7 @@ public:
             lij_p_1 = nodes_.nn_distances(node_id)[j_p_1];
             ljj_p_1 = lij_p_1 - lij;
 
-            cot_at_j = cot_between_vectors(lij, (-1)*ljj_p_1);
+            cot_at_j = -cot_between_vectors(lij, ljj_p_1);
             cot_at_j_p_1 = cot_between_vectors(lij_p_1, ljj_p_1);
 
 
