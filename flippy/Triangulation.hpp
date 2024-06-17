@@ -366,8 +366,8 @@ public:
      * currently there are no catches in place to gracefully handle malformed stl files. malformed stl files will simply result in runtime errors.
      *
      * @param stl_file_path an absolute or relative path to a binary stl file
-     * @param verlet_radius_inp
-     * @return
+     * @param verlet_radius_inp: stl_file specification has no provision for additional information, thus verlet radius of the triangulation must be provided additionally.
+     * @return This function tries to construct and return a spherical triangulation. If the stl file contains a triangulation of a different topology then the returned triangulation object will be malformed.
      */
     static Triangulation<Real, Index, SPHERICAL_TRIANGULATION> experimental_load_sphere_from_stl(std::filesystem::path const& stl_file_path, Real verlet_radius_inp){
             std::vector<implementation::stlTriangle<Real, Index>> triangles = implementation::stlSerializer<Real, Index>::read_STLSolid_into_triangle_vec(stl_file_path);
@@ -408,14 +408,10 @@ public:
             Triangulation<Real, Index, SPHERICAL_TRIANGULATION> tr;
             tr.verlet_radius = verlet_radius_inp;
             tr.R_initial = 1;
-//            std::cout << "finished stl parsing\n";
             tr.nodes_ = Nodes<Real, Index>(nodes);
             tr.all_nodes_are_bulk();
-//            std::cout << "node count: " << tr.nodes_.size() << "\n";
             tr.orient_surface_of_a_sphere();
-//            std::cout << "surface oriented\n";
             tr.initiate_advanced_geometry();
-//            std::cout << "advanced geometry initiated\n";
             return tr;
         }
 
