@@ -1,4 +1,5 @@
-#include "external/catch.hpp"
+#include <catch2/catch_test_macros.hpp>
+#include <catch2/catch_approx.hpp>
 #include <iostream>
 #include "flippy.hpp"
 
@@ -140,7 +141,7 @@ TEST_CASE("getter and setter tests for Nodes"){
             icosa_nodes.displace(i, vec3<real>{1,1,1});
             icosa_nodes.displace(i, vec3<real>{-1,-1,-1});
         }
-        auto zero = Approx(0).margin(1e-6);
+        auto zero = Catch::Approx(0).margin(1e-6);
         CHECK((icosa_nodes.pos(0) -vec3<real>{0.0,0.0,100.0}).norm()==zero);
         CHECK((icosa_nodes.pos(1) -vec3<real>{89.44271909999158,0.0,44.721359549995796}).norm()==zero);
         CHECK((icosa_nodes.pos(2) -vec3<real>{27.639320225002102,85.06508083520399,44.721359549995796}).norm()==zero);

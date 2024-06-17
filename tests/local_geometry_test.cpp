@@ -1,4 +1,6 @@
-#include "external/catch.hpp"
+#include <catch2/catch_test_macros.hpp>
+#include <catch2/catch_approx.hpp>
+
 #include <iostream>
 #define TESTING_FLIPPY_TRIANGULATION_ndh6jclc0qnp274b = 1
 #include "flippy.hpp"
@@ -41,12 +43,12 @@ TEST_CASE("Icosa geometry check test")
     double sin_ = sin(2*M_PI/5.);
     double A_SUB = R*R/(4.*tan(M_PI/3)*pow(sin_, 2));
     auto A_NODE = 5*A_SUB;
-    auto A_NODE_target = Approx(A_NODE).margin(EPSILON);
+    auto A_NODE_target = Catch::Approx(A_NODE).margin(EPSILON);
     double V_SUB = (R/3.)*A_SUB*sqrt(sin_*sin_ - 1/3.)/sin_;
     auto V_NODE = 5*V_SUB;
-    auto V_NODE_target = Approx(V_NODE).margin(EPSILON);
+    auto V_NODE_target = Catch::Approx(V_NODE).margin(EPSILON);
     auto K_SQUARE_NODE = 0.5*pow(2/R, 2)*A_NODE;
-    auto K_SQUARE_NODE_target = Approx(K_SQUARE_NODE).margin(EPSILON);
+    auto K_SQUARE_NODE_target = Catch::Approx(K_SQUARE_NODE).margin(EPSILON);
     for (auto const& node : icosahedron.nodes().data) {
         CHECK(A_NODE_target==node.area);
         CHECK(node.volume==V_NODE_target);
@@ -85,13 +87,13 @@ TEST_CASE("Sphere geometry test")
     auto ACCEPTABLE_ERROR = 0.01;
 
     double A_SPHERE = 4*M_PI*R*R;
-    auto A_SPHERE_target = Approx(A_SPHERE).epsilon(ACCEPTABLE_ERROR);
+    auto A_SPHERE_target = Catch::Approx(A_SPHERE).epsilon(ACCEPTABLE_ERROR);
 
     double V_SPHERE = A_SPHERE*R/3.;
-    auto V_SPHERE_target = Approx(V_SPHERE).epsilon(ACCEPTABLE_ERROR);
+    auto V_SPHERE_target = Catch::Approx(V_SPHERE).epsilon(ACCEPTABLE_ERROR);
 
     auto UNIT_BENDING_ENERGY_SPHERE = 8*M_PI;
-    auto UNIT_BENDING_ENERGY_SPHERE_target = Approx(UNIT_BENDING_ENERGY_SPHERE).epsilon(ACCEPTABLE_ERROR);
+    auto UNIT_BENDING_ENERGY_SPHERE_target = Catch::Approx(UNIT_BENDING_ENERGY_SPHERE).epsilon(ACCEPTABLE_ERROR);
 
     Geometry<double, unsigned long> lg{};
     for (auto const& node : sphere.nodes().data) {
@@ -143,10 +145,10 @@ TEST_CASE("Ellipse geometry test")
     auto ACCEPTABLE_ERROR = 0.01;
 
     double V_Ellipse = x_stretch*4.*M_PI*R*R*R/3.;
-    auto V_Ellipse_target = Approx(V_Ellipse).epsilon(ACCEPTABLE_ERROR);
+    auto V_Ellipse_target = Catch::Approx(V_Ellipse).epsilon(ACCEPTABLE_ERROR);
     auto e = sqrt(1 - 1./(x_stretch*x_stretch));
     double A_Ellipse = 2.*M_PI*R*R*(1 + (x_stretch/e)*asin(e));
-    auto A_Ellipse_target = Approx(A_Ellipse).epsilon(ACCEPTABLE_ERROR);
+    auto A_Ellipse_target = Catch::Approx(A_Ellipse).epsilon(ACCEPTABLE_ERROR);
 
 //    json_dump("../../../../data/ellipse_egg", ellipse.make_egg_data());
 
@@ -184,10 +186,10 @@ TEST_CASE("Ellipse geometry test for triangulator mesh")
     auto ACCEPTABLE_ERROR = 0.01;
 
     double V_Ellipse = x_stretch*4.*M_PI*R*R*R/3.;
-    auto V_Ellipse_target = Approx(V_Ellipse).epsilon(ACCEPTABLE_ERROR);
+    auto V_Ellipse_target = Catch::Approx(V_Ellipse).epsilon(ACCEPTABLE_ERROR);
     auto e = sqrt(1 - 1./(x_stretch*x_stretch));
     double A_Ellipse = 2.*M_PI*R*R*(1 + (x_stretch/e)*asin(e));
-    auto A_Ellipse_target = Approx(A_Ellipse).epsilon(ACCEPTABLE_ERROR);
+    auto A_Ellipse_target = Catch::Approx(A_Ellipse).epsilon(ACCEPTABLE_ERROR);
 
     SECTION("internally calculated global geometry") {
         CHECK(ellipse.global_geometry().volume==V_Ellipse_target);
@@ -244,8 +246,8 @@ TEST_CASE("cube geometry test")
 {
     Triangulation<double, unsigned long, SPHERICAL_TRIANGULATION> cube(CUBE_DATA(), 0);
     double ACCEPTABLE_ERROR = 0.01;
-    auto A_square = Approx(24.).margin(ACCEPTABLE_ERROR);
-    auto V_square = Approx(8).margin(ACCEPTABLE_ERROR);
+    auto A_square = Catch::Approx(24.).margin(ACCEPTABLE_ERROR);
+    auto V_square = Catch::Approx(8).margin(ACCEPTABLE_ERROR);
     SECTION("cube geometry") {
         CHECK(cube.global_geometry().area==A_square);
         CHECK(cube.global_geometry().volume==V_square);
@@ -263,8 +265,8 @@ TEST_CASE("Brick geometry test")
 {
     Triangulation<double, unsigned long, SPHERICAL_TRIANGULATION> brick(BRICK_DATA(), 0);
     double ACCEPTABLE_ERROR = 0.01;
-    auto A_square = Approx(32.).margin(ACCEPTABLE_ERROR);
-    auto V_square = Approx(12).margin(ACCEPTABLE_ERROR);
+    auto A_square = Catch::Approx(32.).margin(ACCEPTABLE_ERROR);
+    auto V_square = Catch::Approx(12).margin(ACCEPTABLE_ERROR);
     SECTION("square geometry") {
         CHECK(brick.global_geometry().area==A_square);
         CHECK(brick.global_geometry().volume==V_square);
@@ -309,8 +311,8 @@ TEST_CASE("Hyperstretch geometry test")
 {
     Triangulation<double, unsigned long, SPHERICAL_TRIANGULATION> brick(HYPERBRICK_DATA(), 0);
     double ACCEPTABLE_ERROR = 0.01;
-    auto A_square = Approx(2408.).margin(ACCEPTABLE_ERROR);
-    auto V_square = Approx(1200).margin(ACCEPTABLE_ERROR);
+    auto A_square = Catch::Approx(2408.).margin(ACCEPTABLE_ERROR);
+    auto V_square = Catch::Approx(1200).margin(ACCEPTABLE_ERROR);
     SECTION("square geometry") {
         CHECK(brick.global_geometry().area==A_square);
         CHECK(brick.global_geometry().volume==V_square);
@@ -327,8 +329,8 @@ TEST_CASE("Hyperqueeze geometry test")
 {
     Triangulation<double, unsigned long, SPHERICAL_TRIANGULATION> brick(HYPER_SQUEEZED_BRICK_DATA(), 0);
     double ACCEPTABLE_ERROR = 0.01;
-    auto A_square = Approx(8.24).margin(ACCEPTABLE_ERROR);
-    auto V_square = Approx(0.12).margin(ACCEPTABLE_ERROR);
+    auto A_square = Catch::Approx(8.24).margin(ACCEPTABLE_ERROR);
+    auto V_square = Catch::Approx(0.12).margin(ACCEPTABLE_ERROR);
     SECTION("square geometry") {
         CHECK(brick.global_geometry().area==A_square);
         CHECK(brick.global_geometry().volume==V_square);

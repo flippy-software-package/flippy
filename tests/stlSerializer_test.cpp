@@ -1,4 +1,5 @@
-#include "external/catch.hpp"
+#include <catch2/catch_test_macros.hpp>
+#include <catch2/catch_approx.hpp>
 #include "flippy.hpp"
 
 const std::string ASSETS_PATH{TEST_ASSET_PATH};
@@ -27,7 +28,7 @@ TEST_CASE("testing stlSerializer")
         double A = trg.global_geometry().area;
         double Rv = std::pow(3. * V / (4. * M_PI), 1./3.);
         double Ra = std::sqrt(A / (4. * M_PI));
-        CHECK(Rv == Approx(Ra).epsilon(0.01));
+        CHECK(Rv == Catch::Approx(Ra).epsilon(0.01));
     }
 
 

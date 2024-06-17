@@ -1,4 +1,6 @@
-#include "external/catch.hpp"
+#include <catch2/catch_test_macros.hpp>
+#include <catch2/catch_approx.hpp>
+#include <catch2/catch_template_test_macros.hpp>
 #include <array>
 #include <iostream>
 
@@ -58,7 +60,7 @@ fp::Json const STAR_DATA =
 
 template<floating_point_number Real, indexing_number Index>
 void radius_scaling_test(Triangulation<Real, Index, SPHERICAL_TRIANGULATION> const& triangulation, Real r_init){
-    auto target = Approx(r_init).margin(0.001);
+    auto target = Catch::Approx(r_init).margin(0.001);
     auto mc = triangulation.calculate_mass_center();
     for (unsigned long i = 0; i<triangulation.size(); ++i) {
         CHECK((triangulation[i].pos - mc).norm()==target);
@@ -66,43 +68,44 @@ void radius_scaling_test(Triangulation<Real, Index, SPHERICAL_TRIANGULATION> con
 
 }
 
-TEST_CASE("Proper scaling with initial Radius for Triangulation Instantiator")
+TEMPLATE_TEST_CASE("Proper scaling with initial Radius for Triangulation Instantiator", "", float, double)
 {
+    typedef TestType REAL;
+    typedef Triangulation<REAL, unsigned long, SPHERICAL_TRIANGULATION> SphericalTriangulation;
 
-
+    REAL r_init = 10.1f;
     SECTION("loading data instantiation"){
-        double r_init = 10.1;
-        Triangulation<double, unsigned long, SPHERICAL_TRIANGULATION> triangulation(ICOSA_DATA, 0);
+        SphericalTriangulation triangulation(ICOSA_DATA, 0);
         rescale_triangulation(r_init, triangulation);
         radius_scaling_test(triangulation, r_init);
     }
     SECTION("triangulator data instantiation"){
-        double r_init = 10.1;
-        Triangulation<double, unsigned long, SPHERICAL_TRIANGULATION> triangulation(0, r_init, 0);
+        SphericalTriangulation triangulation(0, r_init, 0);
         radius_scaling_test(triangulation, r_init);
     }
 
     SECTION("triangulator data instantiation with default triangulation type"){
-        double r_init = 10.1;
-        Triangulation<double, unsigned long> triangulation(0, r_init, 0);
+        Triangulation<REAL, unsigned long> triangulation(0, r_init, 0);
         radius_scaling_test(triangulation, r_init);
     }
 }
 
-TEST_CASE("Triangulator Instantiation: correct  node count and global geometry"){
+TEMPLATE_TEST_CASE("Triangulator Instantiation: correct  node count and global geometry", "", float, double){
+    using REAL = TestType;
     for (unsigned int nIter = 0; nIter<16; ++nIter) {
         unsigned int nBulk = nIter*(nIter-1)/2;
-        unsigned int expected_node_count = fp::implementation::IcosahedronSubTriangulation<float, unsigned int>::N_ICOSA_NODEs
-                    + fp::implementation::IcosahedronSubTriangulation<float, unsigned int>::N_ICOSA_EDGEs*nIter
-                    + fp::implementation::IcosahedronSubTriangulation<float, unsigned int>::N_ICOSA_FACEs * nBulk;
-        Triangulation<float, unsigned int, SPHERICAL_TRIANGULATION> trg(nIter, 1.,0.);
+        unsigned int expected_node_count =
+                fp::implementation::IcosahedronSubTriangulation<REAL, unsigned int>::N_ICOSA_NODEs
+                    + fp::implementation::IcosahedronSubTriangulation<REAL, unsigned int>::N_ICOSA_EDGEs*nIter
+                    + fp::implementation::IcosahedronSubTriangulation<REAL, unsigned int>::N_ICOSA_FACEs * nBulk;
+        Triangulation<REAL, unsigned int, SPHERICAL_TRIANGULATION> trg(nIter, 1., 0.);
         CHECK(trg.size()==expected_node_count);
         if(nIter>7){
-            float niter_inv = 1/((float)nIter);
-            float precision = 0.14f*niter_inv;
-            auto unit_sphere_volume = Approx(4.*M_PI/3.).epsilon(precision);
-            auto unit_sphere_area = Approx(4.*M_PI).epsilon(precision);
-            auto eight_PI = Approx(8.*M_PI).epsilon(precision);
+            REAL niter_inv = 1/((REAL)nIter);
+            REAL precision = 0.14f*niter_inv;
+            auto unit_sphere_volume = Catch::Approx(4.*M_PI/3.).epsilon(precision);
+            auto unit_sphere_area = Catch::Approx(4.*M_PI).epsilon(precision);
+            auto eight_PI = Catch::Approx(8.*M_PI).epsilon(precision);
             CHECK(trg.global_geometry().volume==unit_sphere_volume);
             CHECK(trg.global_geometry().area==unit_sphere_area);
             CHECK(trg.global_geometry().unit_bending_energy==eight_PI);
@@ -111,15 +114,16 @@ TEST_CASE("Triangulator Instantiation: correct  node count and global geometry")
     }
 }
 
-TEST_CASE("Proper move")
+TEMPLATE_TEST_CASE("Proper move", "", unsigned int, unsigned long, size_t)
 {
+    using INDEX = TestType;
     double r_init = 1;
-    Triangulation<double, unsigned long, SPHERICAL_TRIANGULATION> icosa_triangulation(ICOSA_DATA, 0);
+    using SphericalTriangulation = Triangulation<double, INDEX, SPHERICAL_TRIANGULATION>;
+    SphericalTriangulation icosa_triangulation (ICOSA_DATA, 0);
     rescale_triangulation(r_init, icosa_triangulation);
-    auto new_x_target = Approx(0).margin(0.01);
-    auto new_y_target = Approx(0).margin(0.01);
-    auto new_z_target = Approx(2).margin(0.01);
-//    auto new_mc_z_target = Approx(1./12.).margin(0.01);
+    auto new_x_target = Catch::Approx(0).margin(0.01);
+    auto new_y_target = Catch::Approx(0).margin(0.01);
+    auto new_z_target = Catch::Approx(2).margin(0.01);
     vec3<double> displ{0, 0, 1};
 
     SECTION("Just CHECK if nodes are moved to the right place") {
@@ -131,38 +135,34 @@ TEST_CASE("Proper move")
 
     SECTION("Just CHECK if move_node reverses things correctly") {
         vec3<double> displ2{0.1, -30, 1};
-        Triangulation<double, unsigned long, SPHERICAL_TRIANGULATION> copy_icosa_triangulation{icosa_triangulation};
+        SphericalTriangulation copy_icosa_triangulation{icosa_triangulation};
         icosa_triangulation.move_node(0, displ2);
         icosa_triangulation.move_node(0, -displ2);
         vec3<double> copy_mc = copy_icosa_triangulation.calculate_mass_center();
         vec3<double> mc = icosa_triangulation.calculate_mass_center();
         CHECK((copy_mc-mc).norm()
-                ==Approx(0).margin(0.001));
-        for (unsigned int i = 0; i<icosa_triangulation.size(); ++i) {
-            CHECK(copy_icosa_triangulation.nodes_[i].area==Approx(icosa_triangulation.nodes_[i].area).margin(0.01));
+                ==Catch::Approx(0).margin(0.001));
+        for (INDEX i = 0; i<icosa_triangulation.size(); ++i) {
+            CHECK(copy_icosa_triangulation.nodes_[i].area==Catch::Approx(icosa_triangulation.nodes_[i].area).margin(0.01));
             CHECK(copy_icosa_triangulation.nodes_[i].unit_bending_energy
-                    ==Approx(icosa_triangulation.nodes_[i].unit_bending_energy).margin(0.01));
+                    ==Catch::Approx(icosa_triangulation.nodes_[i].unit_bending_energy).margin(0.01));
             CHECK(copy_icosa_triangulation.nodes_[i].id==icosa_triangulation.nodes_[i].id);
             CHECK(copy_icosa_triangulation.nodes_[i].nn_ids==icosa_triangulation.nodes_[i].nn_ids);
             for (std::size_t j = 0; j<copy_icosa_triangulation.nodes_[i].nn_ids.size(); ++j) {
                 CHECK((copy_icosa_triangulation.nodes_[i].nn_distances[j]
-                        - icosa_triangulation.nodes_[i].nn_distances[j])
-                        .norm()==Approx(0).margin(0.01));
+                        - icosa_triangulation.nodes_[i].nn_distances[j]).norm()==Catch::Approx(0).margin(0.01));
             }
         }
     }
 
 }
+
 TEST_CASE("Proper topology change")
 {
 
     SECTION("flip_bond unit test"){
         Triangulation<double, unsigned long, SPHERICAL_TRIANGULATION> icosa(ICOSA_DATA, 0);
         icosa.orient_surface_of_a_sphere();
-//        cutils::print(icosa[0].nn_ids);
-//        cutils::print(icosa[1].nn_ids);
-//        cutils::print(icosa[2].nn_ids);
-//        cutils::print(icosa[7].nn_ids);
         auto bfd = icosa.flip_bond(1,2, 0, max_float);
         CHECK(bfd.flipped==true);
         CHECK(icosa[1].nn_ids==std::vector<unsigned long>{6,7,0,5});
@@ -189,9 +189,9 @@ TEST_CASE("Proper topology change")
             sphere.unflip_bond(rand_node_id, rand_nn_id, bfd);
             auto global_geometry_AFTER_FLIP_BACKFLIP = sphere.global_geometry();
             CHECK(bfd.flipped==true);
-            CHECK(Approx(global_geometry_ORIGINAL.area).margin(small_number)==global_geometry_AFTER_FLIP_BACKFLIP.area);
-            CHECK(Approx(global_geometry_ORIGINAL.volume).margin(small_number)==global_geometry_AFTER_FLIP_BACKFLIP.volume);
-            CHECK(Approx(global_geometry_ORIGINAL.unit_bending_energy).margin(small_number)==global_geometry_AFTER_FLIP_BACKFLIP.unit_bending_energy);
+            CHECK(Catch::Approx(global_geometry_ORIGINAL.area).margin(small_number)==global_geometry_AFTER_FLIP_BACKFLIP.area);
+            CHECK(Catch::Approx(global_geometry_ORIGINAL.volume).margin(small_number)==global_geometry_AFTER_FLIP_BACKFLIP.volume);
+            CHECK(Catch::Approx(global_geometry_ORIGINAL.unit_bending_energy).margin(small_number)==global_geometry_AFTER_FLIP_BACKFLIP.unit_bending_energy);
             bool nn_ids_are_directly_equal_or_equal_after_odd_perm = (nn_ids==sphere[rand_node_id].nn_ids)||(nn_ids==rotate_left(sphere[rand_node_id].nn_ids));
             CHECK(nn_ids_are_directly_equal_or_equal_after_odd_perm);
         }
@@ -249,6 +249,7 @@ TEST_CASE("Proper topology change")
             }
         }
     }
+
 }
 
 TEST_CASE("emplace_before unit test"){
@@ -336,31 +337,31 @@ TEST_CASE("unittest private static functions")
         auto li1 = vec3<double>{1, 0, 0};
         auto li2 = vec3<double>{0, -1, 0};
         double cot_angle = Triangulation<double, unsigned int, SPHERICAL_TRIANGULATION>::cot_between_vectors(li1, li2);
-        auto cot_angle_target = Approx(0).margin(0.001);
+        auto cot_angle_target = Catch::Approx(0).margin(0.001);
         CHECK(cot_angle==cot_angle_target);
 
         li1 = vec3<double>{sqrt(3), 0, 0};
         li2 = vec3<double>{sqrt(3), 0, 1};
         double cot_angle30 = Triangulation<double, unsigned int, SPHERICAL_TRIANGULATION>::cot_between_vectors(li1, li2);
-        cot_angle_target = Approx(sqrt(3)).margin(0.001);
+        cot_angle_target = Catch::Approx(sqrt(3)).margin(0.001);
         CHECK(cot_angle30==cot_angle_target);
 
         li1 = vec3<double>{1, sqrt(3), 0};
         li2 = vec3<double>{1, 0, 0};
         double cot_angle60 = Triangulation<double, unsigned int, SPHERICAL_TRIANGULATION>::cot_between_vectors(li1, li2);
-        cot_angle_target = Approx(1./sqrt(3)).margin(0.001);
+        cot_angle_target = Catch::Approx(1./sqrt(3)).margin(0.001);
         CHECK(cot_angle60==cot_angle_target);
 
         li1 = vec3<double>{0, 1, 0};
         li2 = vec3<double>{0, 1, 1};
         double cot_angle45 = Triangulation<double, unsigned int, SPHERICAL_TRIANGULATION>::cot_between_vectors(li1, li2);
-        cot_angle_target = Approx(1).margin(0.001);
+        cot_angle_target = Catch::Approx(1).margin(0.001);
         CHECK(cot_angle45==cot_angle_target);
 
         li1 = vec3<double>{1, 0, 0};
         li2 = vec3<double>{-1, 1, 0};
         double cot_angleMin45 = Triangulation<double, unsigned int>::cot_between_vectors(li1, li2);
-        cot_angle_target = Approx(-1).margin(0.001);
+        cot_angle_target = Catch::Approx(-1).margin(0.001);
         CHECK(cot_angleMin45==cot_angle_target);
     }
 }
