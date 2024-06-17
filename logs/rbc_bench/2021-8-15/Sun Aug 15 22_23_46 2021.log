@@ -1,0 +1,11 @@
+all_attempted_bead_moves: 133224000
+expensive_moves: 121035235
+rejected_moves_stochastic: 22616099
+all_attempted_flips: 128100000
+expensive_flips: 19101374
+rejected_flip_stochastic: 5643612
+total_simulation_time: 11  m (714  s)
+mps: 186572
+emps: 169502
+fps: 179396
+efps: 26750.3

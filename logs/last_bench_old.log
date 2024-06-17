@@ -1,0 +1,72 @@
+2021-08-08T20:46:11+02:00
+Running /Users/georgedadunash/Documents/TUD/flippy/cmake-build-default/benchmarks/micro_benchmarks/flippy_benchmark
+Run on (4 X 3100 MHz CPU s)
+CPU Caches:
+  L1 Data 32 KiB (x2)
+  L1 Instruction 32 KiB (x2)
+  L2 Unified 256 KiB (x2)
+  L3 Unified 4096 KiB (x1)
+Load Average: 3.53, 4.27, 4.45
+------------------------------------------------------------------------------------------
+Benchmark                                                Time             CPU   Iterations
+------------------------------------------------------------------------------------------
+unnamed creation base/repeats:20_mean                 5894 ns         4866 ns           20
+unnamed creation base/repeats:20_median               5288 ns         4699 ns           20
+unnamed creation base/repeats:20_stddev               1520 ns          454 ns           20
+unnamed creation experimental/repeats:20_mean         4558 ns         3569 ns           20
+unnamed creation experimental/repeats:20_median       3364 ns         3280 ns           20
+unnamed creation experimental/repeats:20_stddev       1733 ns          468 ns           20
+named creation base/repeats:20_mean                   3326 ns         3218 ns           20
+named creation base/repeats:20_median                 3264 ns         3210 ns           20
+named creation base/repeats:20_stddev                  131 ns         39.4 ns           20
+named creation experimental/repeats:20_mean           3484 ns         3269 ns           20
+named creation experimental/repeats:20_median         3358 ns         3266 ns           20
+named creation experimental/repeats:20_stddev          332 ns         73.4 ns           20
+dot product base/repeats:20_mean                      4827 ns         4372 ns           20
+dot product base/repeats:20_median                    4399 ns         4226 ns           20
+dot product base/repeats:20_stddev                     736 ns          308 ns           20
+dot product experimental/repeats:20_mean              4494 ns         4178 ns           20
+dot product experimental/repeats:20_median            4337 ns         4136 ns           20
+dot product experimental/repeats:20_stddev             482 ns          143 ns           20
+norm base/repeats:20_mean                             4500 ns         4381 ns           20
+norm base/repeats:20_median                           4479 ns         4369 ns           20
+norm base/repeats:20_stddev                            141 ns         78.7 ns           20
+norm experimental/repeats:20_mean                     3682 ns         3445 ns           20
+norm experimental/repeats:20_median                   3519 ns         3408 ns           20
+norm experimental/repeats:20_stddev                    467 ns          123 ns           20
+norm square base/repeats:20_mean                      4521 ns         4387 ns           20
+norm square base/repeats:20_median                    4445 ns         4365 ns           20
+norm square base/repeats:20_stddev                     157 ns         72.1 ns           20
+norm square experimental/repeats:20_mean              3435 ns         3352 ns           20
+norm square experimental/repeats:20_median            3406 ns         3344 ns           20
+norm square experimental/repeats:20_stddev             132 ns         33.2 ns           20
+vector minus base/repeats:20_mean                     4723 ns         4622 ns           20
+vector minus base/repeats:20_median                   4703 ns         4623 ns           20
+vector minus base/repeats:20_stddev                   74.5 ns         30.6 ns           20
+vector minus experimental/repeats:20_mean             3541 ns         3471 ns           20
+vector minus experimental/repeats:20_median           3514 ns         3461 ns           20
+vector minus experimental/repeats:20_stddev           57.5 ns         32.6 ns           20
+vector subtract base/repeats:20_mean                  6992 ns         5800 ns           20
+vector subtract base/repeats:20_median                6079 ns         5653 ns           20
+vector subtract base/repeats:20_stddev                1810 ns          345 ns           20
+vector subtract experimental/repeats:20_mean          5448 ns         3982 ns           20
+vector subtract experimental/repeats:20_median        3885 ns         3746 ns           20
+vector subtract experimental/repeats:20_stddev        3012 ns          416 ns           20
+vector add base/repeats:20_mean                       5922 ns         5593 ns           20
+vector add base/repeats:20_median                     5770 ns         5533 ns           20
+vector add base/repeats:20_stddev                      448 ns          157 ns           20
+vector add experimental/repeats:20_mean               4459 ns         3850 ns           20
+vector add experimental/repeats:20_median             3863 ns         3772 ns           20
+vector add experimental/repeats:20_stddev             1286 ns          193 ns           20
+multiply left base/repeats:20_mean                    5313 ns         4964 ns           20
+multiply left base/repeats:20_median                  5040 ns         4915 ns           20
+multiply left base/repeats:20_stddev                   613 ns          121 ns           20
+multiply left experimental/repeats:20_mean            5508 ns         4074 ns           20
+multiply left experimental/repeats:20_median          5186 ns         4008 ns           20
+multiply left experimental/repeats:20_stddev          1329 ns          244 ns           20
+multiply right base/repeats:20_mean                   6972 ns         5185 ns           20
+multiply right base/repeats:20_median                 5180 ns         4943 ns           20
+multiply right base/repeats:20_stddev                 4159 ns          542 ns           20
+multiply right experimental/repeats:20_mean           3924 ns         3760 ns           20
+multiply right experimental/repeats:20_median         3827 ns         3747 ns           20
+multiply right experimental/repeats:20_stddev          304 ns         58.9 ns           20

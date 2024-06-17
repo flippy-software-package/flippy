@@ -1,0 +1,144 @@
+{
+      "context": {
+            "date": "2021-08-09T17:15:15+02:00",
+            "host_name": "tud1000954",
+            "executable": "/Users/georgedadunash/Documents/TUD/flippy/cmake-build-default/benchmarks/micro_benchmarks/vec3_bench/flippy_benchmark",
+            "num_cpus": 4,
+            "mhz_per_cpu": 3100,
+            "cpu_scaling_enabled": false,
+            "caches": [
+                  {
+                        "type": "Data",
+                        "level": 1,
+                        "size": 32768,
+                        "num_sharing": 2
+                  },
+                  {
+                        "type": "Instruction",
+                        "level": 1,
+                        "size": 32768,
+                        "num_sharing": 2
+                  },
+                  {
+                        "type": "Unified",
+                        "level": 2,
+                        "size": 262144,
+                        "num_sharing": 2
+                  },
+                  {
+                        "type": "Unified",
+                        "level": 3,
+                        "size": 4194304,
+                        "num_sharing": 4
+                  }
+            ],
+            "load_avg": [
+                  5.91943,
+                  4.98438,
+                  4.40039
+            ],
+            "library_build_type": "release"
+      },
+      "diffs": {
+            "unnamed creation ": {
+                  "base time": 3823.018881904843,
+                  "base std": 697.6253235876617,
+                  "experimental time": 2102.1451196837425,
+                  "experimental std": 697.6253235876617,
+                  "diff": 1720.8737622211006,
+                  "av_noise": 697.6253235876617,
+                  "rel change": 0.45013477970678095,
+                  "rel error": 0.4053901796301719
+            },
+            "named creation ": {
+                  "base time": 3447.6385951252805,
+                  "base std": 201.1983096715607,
+                  "experimental time": 2170.9278653553956,
+                  "experimental std": 201.1983096715607,
+                  "diff": 1276.710729769885,
+                  "av_noise": 201.1983096715607,
+                  "rel change": 0.3703145485072201,
+                  "rel error": 0.15759114808083802
+            },
+            "dot product ": {
+                  "base time": 3047.311186009493,
+                  "base std": 51.67681894030127,
+                  "experimental time": 3114.305829403905,
+                  "experimental std": 51.67681894030127,
+                  "diff": -66.99464339441192,
+                  "av_noise": 51.67681894030127,
+                  "rel change": -0.021984838208185285,
+                  "rel error": 0.7713574745979119
+            },
+            "norm ": {
+                  "base time": 3348.400672914894,
+                  "base std": 125.79423779307282,
+                  "experimental time": 2634.7659522112363,
+                  "experimental std": 125.79423779307282,
+                  "diff": 713.6347207036579,
+                  "av_noise": 125.79423779307282,
+                  "rel change": 0.2131270389700451,
+                  "rel error": 0.17627258616149902
+            },
+            "norm square ": {
+                  "base time": 3804.168837100306,
+                  "base std": 736.9313182742181,
+                  "experimental time": 2491.61885792422,
+                  "experimental std": 736.9313182742181,
+                  "diff": 1312.5499791760863,
+                  "av_noise": 736.9313182742181,
+                  "rel change": 0.34502937050937144,
+                  "rel error": 0.5614501009224842
+            },
+            "vector minus ": {
+                  "base time": 3651.340809452715,
+                  "base std": 64.03612148837809,
+                  "experimental time": 2413.942915011517,
+                  "experimental std": 64.03612148837809,
+                  "diff": 1237.3978944411979,
+                  "av_noise": 64.03612148837809,
+                  "rel change": 0.33888863270111086,
+                  "rel error": 0.05175063071955238
+            },
+            "vector subtract ": {
+                  "base time": 4644.188008391183,
+                  "base std": 117.9078804836198,
+                  "experimental time": 2731.523024642151,
+                  "experimental std": 117.9078804836198,
+                  "diff": 1912.6649837490318,
+                  "av_noise": 117.9078804836198,
+                  "rel change": 0.4118405586279458,
+                  "rel error": 0.061645861395186685
+            },
+            "vector add ": {
+                  "base time": 4790.353071760763,
+                  "base std": 708.8452573876526,
+                  "experimental time": 2666.7179228872433,
+                  "experimental std": 708.8452573876526,
+                  "diff": 2123.6351488735195,
+                  "av_noise": 708.8452573876526,
+                  "rel change": 0.44331495342011334,
+                  "rel error": 0.33378862549136984
+            },
+            "multiply left ": {
+                  "base time": 4002.9004039170422,
+                  "base std": 176.87316707471638,
+                  "experimental time": 2668.8825909674133,
+                  "experimental std": 176.87316707471638,
+                  "diff": 1334.017812949629,
+                  "av_noise": 176.87316707471638,
+                  "rel change": 0.3332628040518381,
+                  "rel error": 0.132586810579114
+            },
+            "multiply right ": {
+                  "base time": 3992.1078257250933,
+                  "base std": 229.2095430643736,
+                  "experimental time": 2777.284002113959,
+                  "experimental std": 229.2095430643736,
+                  "diff": 1214.8238236111342,
+                  "av_noise": 229.2095430643736,
+                  "rel change": 0.3043063656203935,
+                  "rel error": 0.18867718809056194
+            }
+      }
+}

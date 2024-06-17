@@ -1,0 +1,15 @@
+{
+  "n_triang": 8,
+  "l_min": 2,
+  "seed": 12,
+  "verlet_update_frequency": 0.5,
+  "N_membrane_update": 2,
+  "kappa": 10,
+  "K_A": 1000,
+  "K_V": 100,
+  "red_vol": 0.6,
+  "max_mc_steps": 2e5,
+  "save_name": "data",
+  "save_dir": "../../../demo_out/rbc_bench/",
+  "log_dir": "../../../logs/rbc_bench/"
+}
