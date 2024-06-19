@@ -1,6 +1,6 @@
 #if ALLOCATIONTRACKING
 #include <iostream>
-#include <FlippyBenchmarkLogger.h>
+
 
 struct AllocMetrics{
   long allocation=0;
@@ -34,8 +34,6 @@ using INDEX = unsigned int;
 REAL operator"" _r(long double value) {
     return static_cast<REAL>(value);
 }
-
-// Optional: if you want to handle integer literals as well
 REAL operator"" _r(unsigned long long value) {
     return static_cast<REAL>(value);
 }
@@ -43,6 +41,8 @@ REAL operator"" _r(unsigned long long value) {
 constexpr REAL PI = static_cast<REAL>(M_PI);
 
 #include <flippy.hpp>
+#include <FlippyBenchmarkLogger.h>
+
 REAL sphere_vol(REAL R){return 4_r/3_r * PI *R*R*R;}
 REAL sphere_area(REAL R){return 4_r * PI *R*R;}
 
@@ -77,6 +77,7 @@ int main(int /*argc*/, char** argv) {
         REAL K_V = config["K_V"].get<REAL>(); /*kBT/area*/
         REAL red_vol = config["red_vol"].get<REAL>();
         int max_mc_steps = config["max_mc_steps"].get<int>();
+        std::string save_dir = config["save_dir"];
 
         // estimate of a typical bond length in the initial triangulation and then create a sphere such that the initial bond length is close to minimal. This formula is derived from the equidistant sub-triangulation of an icosahedron, where geodesic distances are used as a distance measure.
         REAL R = l_min / (2_r * sin(asin(1_r / (2_r * sin(2_r * PI / 5_r))) /
@@ -105,8 +106,7 @@ int main(int /*argc*/, char** argv) {
         guv.scale_node_coordinates(1_r, 1_r, 0.8_r);
 
         fp::Json data_init = guv.make_egg_data();
-        // ATTENTION!!! this file will be saved in the same folder as the executable
-        fp::json_dump("test_run_init", data_init);
+        fp::json_dump(save_dir+"test_run_init", data_init);
 
         std::vector<INDEX> shuffled_ids;
         shuffled_ids.reserve(guv.size());
@@ -116,15 +116,23 @@ int main(int /*argc*/, char** argv) {
             shuffled_ids.push_back(node.id);
         }
 
+        REAL probability_target = 0.5f;
+        REAL adaptation_magnitude = 0.1f;
+        std::optional<REAL> e_diff = 0;
+
+        auto displ_updater = fp::DynamicDisplacementUpdater<REAL, INDEX>(linear_displ, adaptation_magnitude, probability_target);
         auto logger = FlippyBenchmarkLogger<REAL, INDEX, MCU>::start_benchmark(mc_updater, guv);
+
         for (int mc_step = 0; mc_step < max_mc_steps; ++mc_step) {
             // we first loop through all the beads and move them
+//            displ_distr = std::uniform_real_distribution<REAL>(-linear_displ, linear_displ);
+            displ_distr = displ_updater.new_displ_distr();
             for (INDEX node_id: shuffled_ids) {
                 displ = {displ_distr(rng), displ_distr(rng), displ_distr(rng)};
-
-                // guv[node_id] returns the node which has id=node_id
-                mc_updater.move_MC_updater(guv[node_id], displ);
+                e_diff = mc_updater.move_MC_updater(guv[node_id], displ);
+                displ_updater.probability_aggregator(e_diff, mc_updater.kBT());
             }
+//            linear_displ = displ_updater.new_displacement_magnitude(e_diff, mc_updater.kBT());
 
             // then we shuffle the bead_ids
             std::shuffle(shuffled_ids.begin(), shuffled_ids.end(), rng);
@@ -143,7 +151,7 @@ int main(int /*argc*/, char** argv) {
 
         fp::Json data_final = guv.make_egg_data();
         // ATTENTION!!! this file will be saved in the same folder as the executable
-        fp::json_dump("test_run_final", data_final);
+        fp::json_dump(save_dir+"test_run_final", data_final);
     }
 
 #if ALLOCATIONTRACKING
