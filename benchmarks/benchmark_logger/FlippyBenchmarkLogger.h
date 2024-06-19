@@ -16,7 +16,7 @@ concept Updater = requires(U u,
                            std::ostream& os) {
 //  { U(triangulation, node) } -> std::same_as<U>;
 
-  {u.move_MC_updater(node, displacement)} -> std::same_as<void>;
+  {u.move_MC_updater(node, displacement)} -> std::same_as<std::optional<Real>>;
   {u.flip_MC_updater(node, nn_id)} -> std::same_as<void>;
 
   {u.move_attempt_count()} -> std::same_as<unsigned long>;
@@ -91,7 +91,7 @@ std::string log(std::string const& log_dir, fp::Json const& config_data){
   std::string log_name = log_sub_dir + time_stamp.str() + ".yml";
 
   std::ofstream log_file(log_name);
-  log_file<<"BENCHMARK VERSION: 3\n";
+  log_file<<"BENCHMARK VERSION: "<<config_data["benchmark_version"].get<int>()<< '\n';
   log_file<<"config: "<<config_data<<'\n';
   log_file<<"all_attempted_bead_moves: "<<attempt<<'\n';
   log_file<<"expensive_moves: "<< bond_length_legal_move<<'\n';
