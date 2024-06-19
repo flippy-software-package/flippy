@@ -3,7 +3,6 @@
 actions-runner/*
 actions-runner/_work
 actions-runner
-CMakeLists.txt
 assets/flippy.psd
 cmake-build*
 .idea

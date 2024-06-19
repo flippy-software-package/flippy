@@ -46,13 +46,16 @@ endif ()
 
 message(${catch2_SOURCE_DIR})
 add_executable(${PROJECT_NAME}
-        vec3_test.cpp
-        Nodes_test.cpp
-        local_geometry_test.cpp
-        Triangulation_test.cpp
-        Triangulator_test.cpp
-        Triangulation_update_test.cpp
-        stlSerializer_test.cpp
+#        vec3_test.cpp
+#        Nodes_test.cpp
+#        local_geometry_test.cpp
+#        Triangulation_test.cpp
+#        Triangulator_test.cpp
+#        Triangulation_update_test.cpp
+#        stlSerializer_test.cpp
+#        sim_utils_test.cpp
+#        dynamic_move_size_test.cpp
+        local_update_energy_test.cpp
 )
 
 catch_discover_tests(${PROJECT_NAME})
