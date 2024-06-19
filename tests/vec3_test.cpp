@@ -1,28 +1,12 @@
-#define CATCH_CONFIG_ENABLE_BENCHMARKING
 #include <catch2/catch_test_macros.hpp>
-#include <catch2/catch_approx.hpp>
+
 #include <catch2/generators/catch_generators_all.hpp>
-#include <catch2/matchers/catch_matchers_all.hpp>
+
 #include <catch2/catch_template_test_macros.hpp>
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
 #include "flippy.hpp"
+#include "test_helper.h"
 
-
-using Approx = Catch::Approx;
-using Catch::Matchers::WithinRel;
-using Catch::Matchers::WithinAbs;
-
-float SMALL_FRACTION = 1e-5f;
-const auto ZERO_ISH = WithinAbs(0, 0.00001);
-auto ish(auto num){
-    return (WithinRel(static_cast<float>(num),
-                     static_cast<float> (SMALL_FRACTION)));
-//    ||
-//            WithinAbs(0, 0.000001));
-}
-
-auto operator"" _ish(long double value) { return ish(value); }
-auto operator"" _ish(unsigned long long value) { return ish(value); }
 
 TEMPLATE_TEST_CASE("proper initiation for vec3", "", float, double ){
     using REAL = TestType;
