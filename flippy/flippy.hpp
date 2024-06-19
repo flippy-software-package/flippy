@@ -52,6 +52,7 @@
 #include "custom_concepts.hpp"
 #include "vec3.hpp"
 #include "utilities/utils.hpp"
+#include "utilities/sim_utils.hpp"
 #include "Nodes.hpp"
 #include "Triangulation.hpp"
 #include "MonteCarloUpdater.hpp"
