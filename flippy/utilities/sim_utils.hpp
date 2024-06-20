@@ -2,6 +2,8 @@
 #define FLIPPY_SIM_UTILS_H
 #include <custom_concepts.hpp>
 #include <random>
+#include <optional>
+
 namespace fp{
     template<fp::floating_point_number Real>
     Real PI = static_cast<Real>(M_PI);
@@ -25,7 +27,7 @@ namespace fp{
     }
 
     template<fp::floating_point_number Real, fp::indexing_number Index>
-    Real min_radius_With_non_overlapping_beads(Real min_allowed_distance_betwean_bead_centers, Index sub_triangulation_iteration_count){
+    Real min_radius_with_non_overlapping_beads(Real min_allowed_distance_betwean_bead_centers, Index sub_triangulation_iteration_count){
         Real l_min = min_allowed_distance_betwean_bead_centers;
         Real two = static_cast<Real>(2);
         Real one = static_cast<Real>(1);
@@ -72,6 +74,7 @@ namespace fp{
 
         void reset_target_acceptance_probability(Real p_target){ p_target_ = p_target; }
         [[nodiscard]] Real target_acceptance_probability() const { return p_target_; }
+
     };
 
 }

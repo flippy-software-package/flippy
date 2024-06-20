@@ -13,33 +13,15 @@ using Catch::Matchers::WithinAbs;
 struct EnergyParameters{REAL kappa, K_V, K_A, V_t, A_t;};
 
 // This is the energy function that is used by flippy's built-in updater to decide if a move was energetically favorable or not
-static REAL surface_energy([[maybe_unused]]fp::Node<REAL, INDEX> const& node,
+static REAL surface_energy(fp::Node<REAL, INDEX> const& node,
                     fp::Triangulation<REAL, INDEX> const& trg,
-                    EnergyParameters const& prms, std::optional<std::array<INDEX, 3>> flip_partners={}){
+                    EnergyParameters const& prms,
+                    std::vector<INDEX> const& changed_neighborhood){
 
     REAL eb_local = node.unit_bending_energy;
 
-    for (auto const& nn_id: node.nn_ids) {
-        eb_local += trg[nn_id].unit_bending_energy;
-    }
-
-    if(flip_partners.has_value()){
-        std::vector<INDEX> updated_neighborhood;
-        updated_neighborhood.reserve(30);
-        updated_neighborhood = node.nn_ids;
-        updated_neighborhood.push_back(node.id);
-        for (auto const& flip_partner_id: flip_partners.value()) {
-//            if(!fp::is_member(unique_neighbours, flip_partner_id)){ unique_neighbours.push_back(flip_partner_id);}
-            for(auto const& nn_id: trg[flip_partner_id].nn_ids)
-                if(!fp::is_member(updated_neighborhood, nn_id)){
-                    updated_neighborhood.push_back(nn_id);
-                }
-        }
-
-        for(auto const& node_id: updated_neighborhood){
-            eb_local += trg[node_id].unit_bending_energy;
-        }
-
+    for (auto const& changed_id: changed_neighborhood) {
+        eb_local += trg[changed_id].unit_bending_energy;
     }
 
     REAL V = trg.global_geometry().volume;
@@ -66,12 +48,12 @@ TEST_CASE("local update test"){
     REAL K_A =  1000;/*kBT/volume*/
     REAL K_V = 1000; /*kBT/area*/
     REAL red_vol = 0.6f;
-    int max_mc_steps = 1e5;
+    int max_mc_steps = 5e4;
     std::string save_dir = "../../demo_out/local_update_test/";
 
 
     // estimate of a typical bond length in the initial triangulation and then create a sphere such that the initial bond length is close to minimal. This formula is derived from the equidistant sub-triangulation of an icosahedron, where geodesic distances are used as a distance measure.
-    REAL R = fp::min_radius_With_non_overlapping_beads(l_min, n_triang);
+    REAL R = fp::min_radius_with_non_overlapping_beads(l_min, n_triang);
     REAL l_max = 1.7f * l_min; // if you make l_max closer to l_min
     // bond_flip acceptance rate will go down
     REAL r_Verlet = 2.f * l_max;

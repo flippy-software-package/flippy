@@ -32,13 +32,13 @@ concept Updater = requires(U u,
 template <fp::floating_point_number Real,
           fp::indexing_number Index, Updater<Real, Index> Updater>
 class FlippyBenchmarkLogger {
-  Updater const& mcu;
-  fp::Triangulation<Real, Index> const& triangulation;
+  Updater const& mcu_;
+  fp::Triangulation<Real, Index> const& triangulation_;
   cutils::Timer timer{};
 
 FlippyBenchmarkLogger(Updater const& mcu,
                       fp::Triangulation<Real, Index> const& triangulation
-                        ): mcu(mcu), triangulation(triangulation) {};
+                        ): mcu_(mcu), triangulation_(triangulation) {};
 
 public:
   static FlippyBenchmarkLogger start_benchmark(Updater const& mcu, fp::Triangulation<Real, Index> const& triangulation) {
@@ -55,22 +55,22 @@ std::string log(std::string const& log_dir, fp::Json const& config_data){
   cutils::HumanReadableTime elapsed_time = timer.stop();
   // MonteCarloUpdater counts the number of accepted and rejected moves, distinguishing whether a rejection occurred because of the energy or the bond length constraint.
   // We can use this to print simple statistics here. For example, this will help us decide if our displacement size is too large.
-  auto attempt = mcu.move_attempt_count();
-  auto put_back = mcu.move_back_count();
-  auto bond_length_legal_move = attempt - mcu.bond_length_move_rejection_count();
+  auto attempt = mcu_.move_attempt_count();
+  auto put_back = mcu_.move_back_count();
+  auto bond_length_legal_move = attempt - mcu_.bond_length_move_rejection_count();
 
-  auto attempt_flip = mcu.flip_attempt_count();
-  auto flip_back = mcu.flip_back_count();
+  auto attempt_flip = mcu_.flip_attempt_count();
+  auto flip_back = mcu_.flip_back_count();
 
-  auto topologically_successful_flip = mcu.flip_attempt_count() - flip_back;
+  auto topologically_successful_flip = mcu_.flip_attempt_count() - flip_back;
   PRINT("percentage of failed moves: ",
-        static_cast<long double>(mcu.move_back_count() +
-                                 mcu.bond_length_move_rejection_count()) /
-            static_cast<long double>(mcu.move_attempt_count() ));
+        static_cast<long double>(mcu_.move_back_count() +
+                                 mcu_.bond_length_move_rejection_count()) /
+        static_cast<long double>(mcu_.move_attempt_count() ));
   PRINT("percentage of failed flips: ",
-        static_cast<long double>(mcu .flip_back_count()
-                                        + mcu.bond_length_flip_rejection_count()) /
-               static_cast<long double>(mcu.flip_attempt_count()));
+        static_cast<long double>(mcu_ .flip_back_count()
+                                 + mcu_.bond_length_flip_rejection_count()) /
+        static_cast<long double>(mcu_.flip_attempt_count()));
 
   long double time_in_seconds = ((long double)elapsed_time.diff_ns)*1.e-9l;
   long double moves_ps = static_cast<long double>(attempt)/static_cast<long double>(time_in_seconds);

@@ -33,7 +33,7 @@ template<typename C> concept BeginIncrementable = requires(C c) {std::begin(c)++
 template<typename C> concept BeginDerefable = requires(C c) {*std::begin(c);};
 template<typename C> concept BeginDerefToVoid = requires(C c) {{*std::begin(c)} -> std::same_as<void>;};
 template<typename C> concept BeginAndEndCopyConstructibleAndDestructible = requires(C c) {
-  std::destructible<decltype(std::begin(c))> &&
+  requires std::destructible<decltype(std::begin(c))> &&
       std::destructible<decltype(std::end(c))> &&
       std::copy_constructible<decltype(std::begin(c))> &&
       std::copy_constructible<decltype(std::end(c))>;
@@ -239,7 +239,7 @@ public:
 
   xorshift32(): seed_(12) { }
 
-  explicit xorshift32(ResultType seed_): seed_(seed_) { }
+  explicit xorshift32(ResultType seed): seed_(seed) { }
 
   /* The state word must be initialized to non-zero */
   ResultType operator()()

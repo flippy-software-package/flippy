@@ -111,6 +111,7 @@ template<class T> concept indexing_number = std::is_unsigned_v<T> && std::is_int
 }
 
 
+
 #endif //FLIPPY_CUSTOM_CONCEPTS_HPP
 
 
@@ -23207,6 +23208,97 @@ template<typename T>
 
 
 
+// begin --- sim_utils.hpp --- 
+
+#ifndef FLIPPY_SIM_UTILS_H
+#define FLIPPY_SIM_UTILS_H
+#include <custom_concepts.hpp>
+#include <random>
+#include <optional>
+
+namespace fp{
+    template<fp::floating_point_number Real>
+    Real PI = static_cast<Real>(M_PI);
+
+    template<fp::floating_point_number Real> Real sphere_vol(Real R){return static_cast<Real>(4./3.)* PI<Real> *R*R*R;}
+    template<fp::floating_point_number Real> Real sphere_area(Real R){return static_cast<Real>(4.) * PI<Real> *R*R;}
+
+    template<fp::floating_point_number Real> Real linear_adaptation(Real x, Real x_init, Real x_fin,
+            Real val_init, Real val_fin)
+     {
+        if (x <= x_init) { return val_init; }
+        if (x > x_fin) { return val_fin; }
+//        if (std::abs(x_fin-x_init)<0.001){return val_init;}
+        return val_init + (val_fin-val_init)/(x_fin-x_init)*(x-x_init);
+    }
+
+    template<fp::floating_point_number Real, fp::indexing_number Index>
+    Index steps_for_fixed_speed_adaptation(Real x_init, Real val_init, Real val_fin, Real delta_val)
+    {
+        return static_cast<Index>(std::ceil((val_fin-val_init)/delta_val + x_init));
+    }
+
+    template<fp::floating_point_number Real, fp::indexing_number Index>
+    Real min_radius_with_non_overlapping_beads(Real min_allowed_distance_betwean_bead_centers, Index sub_triangulation_iteration_count){
+        Real l_min = min_allowed_distance_betwean_bead_centers;
+        Real two = static_cast<Real>(2);
+        Real one = static_cast<Real>(1);
+        Real five = static_cast<Real>(5);
+        Real n = static_cast<Real>(sub_triangulation_iteration_count);
+
+        return l_min / (two * std::sin(std::asin(one / (two * std::sin(two * PI<Real> / five ))) / (n + one)));
+    }
+
+
+
+    template<fp::floating_point_number Real, fp::indexing_number Index>
+    class DynamicDisplacementUpdater{
+        Real d0_;
+        Real delta_d_;
+        Real p_target_;
+        Real p_accum_{static_cast<Real>(0.f)};
+        Real p_count_{static_cast<Real>(1.f)};
+
+        Real prob(std::optional<Real> e_diff, Real kBT){ return (e_diff.has_value()?std::min(std::exp(e_diff.value()/kBT),1.f):0.f); }
+
+    public:
+        DynamicDisplacementUpdater(Real initial_displacement, Real displacement_adaptation_step_size, Real p_target)
+        : d0_(initial_displacement), delta_d_(displacement_adaptation_step_size), p_target_(p_target) { }
+
+        Real new_displacement_magnitude(){
+            Real p = p_accum_/p_count_;
+            p_accum_ = static_cast<Real>(0.f);
+            p_count_ = static_cast<Real>(1.f);
+            Real dp = p - p_target_;
+            d0_ = d0_ + 0.5f*dp*delta_d_*d0_;
+            return d0_;
+        }
+
+        std::uniform_real_distribution<Real> new_displ_distr(){
+            Real linear_displ = new_displacement_magnitude();
+            return std::uniform_real_distribution<Real>(-linear_displ, linear_displ);
+        }
+
+        void probability_aggregator(std::optional<Real> e_diff, Real kBt){
+            p_accum_ += prob(e_diff, kBt);
+            p_count_ += static_cast<Real>(1.);
+        }
+
+        void reset_target_acceptance_probability(Real p_target){ p_target_ = p_target; }
+        [[nodiscard]] Real target_acceptance_probability() const { return p_target_; }
+
+    };
+
+}
+
+
+#endif
+
+
+// end --- sim_utils.hpp --- 
+
+
+
 // begin --- Nodes.hpp --- 
 
 #ifndef FLIPPY_NODES_HPP
@@ -25220,6 +25312,7 @@ private:
                 .j_p_1 = Neighbors<Index>::plus_one(local_nn_id, nn_number)};
     }
 
+    public:
     //unit tested
     Neighbors<Index> previous_and_next_neighbour_global_ids(Index node_id, Index nn_id) const
     {
@@ -25237,6 +25330,7 @@ private:
         Neighbors<Index> neighbors = previous_and_next_neighbour_local_ids(node_id, nn_id);
         return {.j_m_1=nn_ids_view[neighbors.j_m_1], .j_p_1=nn_ids_view[neighbors.j_p_1]};
     }
+    private:
 
     void update_global_geometry(Geometry<Real, Index> const& lg_old, Geometry<Real, Index> const& lg_new)
     {
@@ -25297,32 +25391,35 @@ private:
     }
 
 
+    bool nodes_are_allowed_to_donate_a_bond(Index node_id, Index nn_id){
+        return (nodes_.nn_ids(node_id).size() <= BOND_DONATION_CUTOFF) && (nodes_.nn_ids(nn_id).size() <= BOND_DONATION_CUTOFF);
+    }
         //unit tested
         BondFlipData<Index> flip_bulk_bond(Index node_id, Index nn_id,
                                            Real min_bond_length_square,
                                            Real max_bond_length_square) {
             BondFlipData<Index> bfd{};
-            if (nodes_.nn_ids(node_id).size() > BOND_DONATION_CUTOFF) {
-                if (nodes_.nn_ids(nn_id).size() > BOND_DONATION_CUTOFF) {
-                    Neighbors<Index> common_nns = previous_and_next_neighbour_global_ids(node_id, nn_id);
-                    Real bond_length_square = (nodes_.pos(common_nns.j_m_1) - nodes_.pos(common_nns.j_p_1)).norm_square();
-                    if ((bond_length_square < max_bond_length_square) && (bond_length_square > min_bond_length_square)) {
-//                        if (has_two_common_neighbours(node_id, nn_id)) {
-                            pre_update_geometry = calculate_diamond_geometry(node_id, nn_id, common_nns.j_m_1,
-                                                                             common_nns.j_p_1);
-                            bfd = flip_bond_unchecked(node_id, nn_id, common_nns.j_m_1, common_nns.j_p_1);
-                            if (has_two_common_neighbours(bfd.common_nn_0, bfd.common_nn_1)) {
-                                update_diamond_geometry(node_id, nn_id, common_nns.j_m_1, common_nns.j_p_1);
-                                post_update_geometry = calculate_diamond_geometry(node_id, nn_id, common_nns.j_m_1,
-                                                                                  common_nns.j_p_1);
-                                update_global_geometry(pre_update_geometry, post_update_geometry);
-                            } else {
-                                flip_bond_unchecked(bfd.common_nn_0, bfd.common_nn_1, nn_id, node_id);
-                                bfd.flipped = false;
-                            }
-//                        }
-                    }
-                }
+//            if (nodes_.nn_ids(node_id).size() <= BOND_DONATION_CUTOFF) { return bfd; }
+//            if (nodes_.nn_ids(nn_id).size() <= BOND_DONATION_CUTOFF) { return bfd; }
+            nodes_are_allowed_to_donate_a_bond(node_id, nn_id);
+
+            Neighbors<Index> common_nns = previous_and_next_neighbour_global_ids(node_id, nn_id);
+
+            Real bond_length_square = (nodes_.pos(common_nns.j_m_1) - nodes_.pos(common_nns.j_p_1)).norm_square();
+            if ((bond_length_square > max_bond_length_square) || (bond_length_square < min_bond_length_square)) { return bfd;}
+
+            pre_update_geometry = calculate_diamond_geometry(node_id, nn_id, common_nns.j_m_1, common_nns.j_p_1);
+
+            bfd = flip_bond_unchecked(node_id, nn_id, common_nns.j_m_1, common_nns.j_p_1);
+
+            if (has_two_common_neighbours(bfd.common_nn_0, bfd.common_nn_1)) {
+                update_diamond_geometry(node_id, nn_id, common_nns.j_m_1, common_nns.j_p_1);
+                post_update_geometry = calculate_diamond_geometry(node_id, nn_id, common_nns.j_m_1,
+                                                                  common_nns.j_p_1);
+                update_global_geometry(pre_update_geometry, post_update_geometry);
+            } else {
+                flip_bond_unchecked(bfd.common_nn_0, bfd.common_nn_1, nn_id, node_id);
+                bfd.flipped = false;
             }
             return bfd;
         }
@@ -25337,7 +25434,7 @@ private:
             if (has_two_common_neighbours(node_id, nn_id)) {
                 pre_update_geometry = calculate_diamond_geometry(node_id, nn_id, common_nns.j_m_1, common_nns.j_p_1);
                 bfd = flip_bond_unchecked(node_id, nn_id, common_nns.j_m_1, common_nns.j_p_1);
-                if (has_two_common_neighbours(bfd.common_nn_0, bfd.common_nn_1).size()) {
+                if (has_two_common_neighbours(bfd.common_nn_0, bfd.common_nn_1)) {
                     update_diamond_geometry(node_id, nn_id, common_nns.j_m_1, common_nns.j_p_1);
                     post_update_geometry = calculate_diamond_geometry(node_id, nn_id, common_nns.j_m_1,
                                                                       common_nns.j_p_1);
@@ -25372,6 +25469,7 @@ private:
  * @brief This file contains the MonteCarloUpdater class template. Together with Triangulation.hpp, this file contains flippy's most important high-level interfaces.
  */
 #include <random>
+#include <variant>
 
 namespace fp {
 
@@ -25395,10 +25493,11 @@ class MonteCarloUpdater
 {
 private:
     static constexpr Real max_float = 3.40282347e+38;
-    Real e_old{}, e_new{}, e_diff{};
+//    Real e_old{}, e_new{}, e_diff{};
     fp::Triangulation<Real, Index, triangulation_type>& triangulation;
     EnergyFunctionParameters const& prms;
-    std::function<Real(fp::Node<Real, Index> const&, fp::Triangulation<Real, Index, triangulation_type> const&, EnergyFunctionParameters const&)> energy_function;
+    typedef std::function<Real(fp::Node<Real, Index> const&, fp::Triangulation<Real, Index, triangulation_type> const&, EnergyFunctionParameters const&, std::vector<Index> const&)> EnergyFunctionType;
+    EnergyFunctionType energy_function;
     RandomNumberEngine& rng;
     std::uniform_real_distribution<Real> unif_distr_on_01;
     Real kBT_{1};
@@ -25421,7 +25520,7 @@ public:
      */
     MonteCarloUpdater(fp::Triangulation<Real, Index, triangulation_type>& triangulation_inp,
                       EnergyFunctionParameters const& prms_inp,
-                      std::function<Real(fp::Node<Real, Index> const&, fp::Triangulation<Real, Index, triangulation_type> const&, EnergyFunctionParameters const&)> energy_function_inp,
+                      EnergyFunctionType energy_function_inp,
                       RandomNumberEngine& rng_inp, Real min_bond_length, Real max_bond_length)
     :triangulation(triangulation_inp), prms(prms_inp), energy_function(energy_function_inp), rng(rng_inp),
     unif_distr_on_01(std::uniform_real_distribution<Real>(0, 1)),
@@ -25437,9 +25536,8 @@ public:
      * @return `true` if the energy difference between the old and the new states is negative (i.e., the move costs energy)
      * and the random number is smaller than the Boltzmann Probability of accepting the move. `false` otherwise.
      */
-    bool move_needs_undoing()
+    bool move_needs_undoing(Real e_diff)
     {
-        e_diff = e_old - e_new;
         if(kBT_>0){ //temperature can safely be put to 0, this will make the algorithm greedy
             return (e_diff<0) && (unif_distr_on_01(rng)>std::exp(e_diff/kBT_));
         }else{
@@ -25530,17 +25628,26 @@ public:
      * [Metropolis algorithm](https://en.wikipedia.org/wiki/Metropolis-Hastings_algorithm) is used to evaluate whether the move should be accepted.
      * @param node @mcuNodeStub
      * @param displacement @mcuDisplacementStub
+     * @return This function returns the calculated energy difference. If not energy difference was calculated due to bond_length constraint rejection, then an empty optional is returned.
      *
      */
-    void move_MC_updater(fp::Node<Real, Index> const& node, fp::vec3<Real> const& displacement)
+    std::optional<Real> move_MC_updater(fp::Node<Real, Index> const& node, fp::vec3<Real> const& displacement)
     {
         ++move_attempt;
         if (new_neighbour_distances_are_between_min_and_max_length(node, displacement)) {
-            e_old = energy_function(node, triangulation, prms);
+            Real e_old = energy_function(node, triangulation, prms, node.nn_ids);
             triangulation.move_node(node.id, displacement);
-            e_new = energy_function(node, triangulation, prms);
-            if (move_needs_undoing()) {triangulation.move_node(node.id, -displacement); ++move_back;}
-        }else{++bond_length_move_rejection;}
+            Real e_new = energy_function(node, triangulation, prms, node.nn_ids);
+            Real e_diff = e_old - e_new;
+            if (move_needs_undoing(e_diff)) {
+                triangulation.move_node(node.id, -displacement);
+                ++move_back;
+            }
+            return e_diff;
+        }else{
+            ++bond_length_move_rejection;
+            return {};
+        }
     }
 
     //! Attempt a flip Monte Carlo Step.
@@ -25558,13 +25665,6 @@ public:
       Index number_nn_ids = static_cast<Index>(node.nn_ids.size());
       Index nn_id = node.nn_ids[std::uniform_int_distribution<Index>(0, number_nn_ids-1)(rng)];
       flip_MC_updater(node, nn_id);
-//        ++flip_attempt;
-//        e_old = energy_function(node, triangulation, prms);
-//        auto bfd = triangulation.flip_bond(node.id, nn_id, min_bond_length_square, max_bond_length_square);
-//        if (bfd.flipped) {
-//            e_new = energy_function(node, triangulation, prms);
-//            if (move_needs_undoing()) { triangulation.unflip_bond(node.id, nn_id, bfd); ++flip_back;}
-//        }else{++bond_length_flip_rejection;}
     }
 
     //! Attempt a flip Monte Carlo Step.
@@ -25581,13 +25681,18 @@ public:
     void flip_MC_updater(fp::Node<Real, Index> const& node, Index id_in_nn_ids)
     {
         ++flip_attempt;
-        e_old = energy_function(node, triangulation, prms);
-//        Index number_nn_ids = node.nn_ids.size();
-//        Index nn_id = index_in_nn_ids;//node.nn_ids[std::uniform_int_distribution<Index>(0, number_nn_ids-1)(rng)];
-        auto bfd = triangulation.flip_bond(node.id, id_in_nn_ids, min_bond_length_square, max_bond_length_square);
+        Neighbors<Index> cns = triangulation.previous_and_next_neighbour_global_ids(node.id, id_in_nn_ids);
+        static const auto changed_neighborhood = std::vector<Index>{id_in_nn_ids, cns.j_m_1, cns.j_p_1};
+        Real e_old = energy_function(node, triangulation, prms, changed_neighborhood);
+        BondFlipData<Index> bfd = triangulation.flip_bond(node.id, id_in_nn_ids, min_bond_length_square, max_bond_length_square);
         if (bfd.flipped) {
-            e_new = energy_function(node, triangulation, prms);
-            if (move_needs_undoing()) { triangulation.unflip_bond(node.id, id_in_nn_ids, bfd); ++flip_back;}
+            Real e_new = energy_function(node, triangulation, prms,  changed_neighborhood);
+            Real e_diff = e_old - e_new;
+            if (move_needs_undoing(e_diff)) {
+                triangulation.unflip_bond(node.id, id_in_nn_ids, bfd);
+                ++flip_back;
+
+            }
         }else{++bond_length_flip_rejection;}
     }
 

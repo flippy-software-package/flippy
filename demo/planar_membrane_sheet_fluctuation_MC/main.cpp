@@ -72,7 +72,8 @@ struct EnergyParameters{double kappa, K_A, A_t;};
 // This is the energy function that is used by flippy's built-in updater to decide if a move was energetically favorable or not
 double surface_energy([[maybe_unused]]fp::Node<double, unsigned int> const& node,
                       fp::Triangulation<double, unsigned int, fp::EXPERIMENTAL_PLANAR_TRIANGULATION> const& trg,
-                      EnergyParameters const& prms){
+                      EnergyParameters const& prms,
+                      std::vector<unsigned int>&){
     double A = trg.global_geometry().area;
     double dA = A-prms.A_t;
     double energy = prms.kappa*trg.global_geometry().unit_bending_energy + prms.K_A*dA*dA/prms.A_t;

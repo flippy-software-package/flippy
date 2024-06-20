@@ -18,7 +18,8 @@ using MCU = fp::MonteCarloUpdater<REAL, INDEX, EnergyParameters, std::mt19937, f
 // This is the energy function that is used by flippy's built-in updater to decide if a move was energetically favorable or not
 REAL surface_energy([[maybe_unused]]fp::Node<REAL, INDEX> const& node,
                     fp::Triangulation<REAL, INDEX> const& trg,
-                    EnergyParameters const& prms){
+                    EnergyParameters const& prms,
+                    std::vector<INDEX>const&){
     REAL V = trg.global_geometry().volume;
     REAL A = trg.global_geometry().area;
     REAL dV = V-prms.V_t;
@@ -38,11 +39,11 @@ TEST_CASE("spherical triangulation, with initially broken symmetry (stretched to
         REAL K_V = 100; /*kBT/area*/
         REAL red_vol = 0.64f;
         int max_mc_steps = 1e4;
-        std::string save_dir = ".";
+        std::string save_dir = "./";
 
 
         // estimate of a typical bond length in the initial triangulation and then create a sphere such that the initial bond length is close to minimal. This formula is derived from the equidistant sub-triangulation of an icosahedron, where geodesic distances are used as a distance measure.
-        REAL R = fp::min_radius_With_non_overlapping_beads(l_min, n_triang);
+        REAL R = fp::min_radius_with_non_overlapping_beads(l_min, n_triang);
         REAL l_max = 2.f * l_min; // if you make l_max closer to l_min
         // bond_flip acceptance rate will go down
         REAL r_Verlet = 2.f * l_max;

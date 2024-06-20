@@ -8,6 +8,7 @@
 
 #include "custom_concepts.hpp"
 #include <random>
+#include <variant>
 #include "Nodes.hpp"
 #include "Triangulation.hpp"
 
@@ -33,10 +34,11 @@ class MonteCarloUpdater
 {
 private:
     static constexpr Real max_float = 3.40282347e+38;
-    Real e_old{}, e_new{}, e_diff{};
+//    Real e_old{}, e_new{}, e_diff{};
     fp::Triangulation<Real, Index, triangulation_type>& triangulation;
     EnergyFunctionParameters const& prms;
-    std::function<Real(fp::Node<Real, Index> const&, fp::Triangulation<Real, Index, triangulation_type> const&, EnergyFunctionParameters const&)> energy_function;
+    typedef std::function<Real(fp::Node<Real, Index> const&, fp::Triangulation<Real, Index, triangulation_type> const&, EnergyFunctionParameters const&, std::vector<Index> const&)> EnergyFunctionType;
+    EnergyFunctionType energy_function;
     RandomNumberEngine& rng;
     std::uniform_real_distribution<Real> unif_distr_on_01;
     Real kBT_{1};
@@ -59,7 +61,7 @@ public:
      */
     MonteCarloUpdater(fp::Triangulation<Real, Index, triangulation_type>& triangulation_inp,
                       EnergyFunctionParameters const& prms_inp,
-                      std::function<Real(fp::Node<Real, Index> const&, fp::Triangulation<Real, Index, triangulation_type> const&, EnergyFunctionParameters const&)> energy_function_inp,
+                      EnergyFunctionType energy_function_inp,
                       RandomNumberEngine& rng_inp, Real min_bond_length, Real max_bond_length)
     :triangulation(triangulation_inp), prms(prms_inp), energy_function(energy_function_inp), rng(rng_inp),
     unif_distr_on_01(std::uniform_real_distribution<Real>(0, 1)),
@@ -75,9 +77,8 @@ public:
      * @return `true` if the energy difference between the old and the new states is negative (i.e., the move costs energy)
      * and the random number is smaller than the Boltzmann Probability of accepting the move. `false` otherwise.
      */
-    bool move_needs_undoing()
+    bool move_needs_undoing(Real e_diff)
     {
-        e_diff = e_old - e_new;
         if(kBT_>0){ //temperature can safely be put to 0, this will make the algorithm greedy
             return (e_diff<0) && (unif_distr_on_01(rng)>std::exp(e_diff/kBT_));
         }else{
@@ -168,17 +169,26 @@ public:
      * [Metropolis algorithm](https://en.wikipedia.org/wiki/Metropolis-Hastings_algorithm) is used to evaluate whether the move should be accepted.
      * @param node @mcuNodeStub
      * @param displacement @mcuDisplacementStub
+     * @return This function returns the calculated energy difference. If not energy difference was calculated due to bond_length constraint rejection, then an empty optional is returned.
      *
      */
-    void move_MC_updater(fp::Node<Real, Index> const& node, fp::vec3<Real> const& displacement)
+    std::optional<Real> move_MC_updater(fp::Node<Real, Index> const& node, fp::vec3<Real> const& displacement)
     {
         ++move_attempt;
         if (new_neighbour_distances_are_between_min_and_max_length(node, displacement)) {
-            e_old = energy_function(node, triangulation, prms);
+            Real e_old = energy_function(node, triangulation, prms, node.nn_ids);
             triangulation.move_node(node.id, displacement);
-            e_new = energy_function(node, triangulation, prms);
-            if (move_needs_undoing()) {triangulation.move_node(node.id, -displacement); ++move_back;}
-        }else{++bond_length_move_rejection;}
+            Real e_new = energy_function(node, triangulation, prms, node.nn_ids);
+            Real e_diff = e_old - e_new;
+            if (move_needs_undoing(e_diff)) {
+                triangulation.move_node(node.id, -displacement);
+                ++move_back;
+            }
+            return e_diff;
+        }else{
+            ++bond_length_move_rejection;
+            return {};
+        }
     }
 
     //! Attempt a flip Monte Carlo Step.
@@ -196,13 +206,6 @@ public:
       Index number_nn_ids = static_cast<Index>(node.nn_ids.size());
       Index nn_id = node.nn_ids[std::uniform_int_distribution<Index>(0, number_nn_ids-1)(rng)];
       flip_MC_updater(node, nn_id);
-//        ++flip_attempt;
-//        e_old = energy_function(node, triangulation, prms);
-//        auto bfd = triangulation.flip_bond(node.id, nn_id, min_bond_length_square, max_bond_length_square);
-//        if (bfd.flipped) {
-//            e_new = energy_function(node, triangulation, prms);
-//            if (move_needs_undoing()) { triangulation.unflip_bond(node.id, nn_id, bfd); ++flip_back;}
-//        }else{++bond_length_flip_rejection;}
     }
 
     //! Attempt a flip Monte Carlo Step.
@@ -219,13 +222,18 @@ public:
     void flip_MC_updater(fp::Node<Real, Index> const& node, Index id_in_nn_ids)
     {
         ++flip_attempt;
-        e_old = energy_function(node, triangulation, prms);
-//        Index number_nn_ids = node.nn_ids.size();
-//        Index nn_id = index_in_nn_ids;//node.nn_ids[std::uniform_int_distribution<Index>(0, number_nn_ids-1)(rng)];
-        auto bfd = triangulation.flip_bond(node.id, id_in_nn_ids, min_bond_length_square, max_bond_length_square);
+        Neighbors<Index> cns = triangulation.previous_and_next_neighbour_global_ids(node.id, id_in_nn_ids);
+        static const auto changed_neighborhood = std::vector<Index>{id_in_nn_ids, cns.j_m_1, cns.j_p_1};
+        Real e_old = energy_function(node, triangulation, prms, changed_neighborhood);
+        BondFlipData<Index> bfd = triangulation.flip_bond(node.id, id_in_nn_ids, min_bond_length_square, max_bond_length_square);
         if (bfd.flipped) {
-            e_new = energy_function(node, triangulation, prms);
-            if (move_needs_undoing()) { triangulation.unflip_bond(node.id, id_in_nn_ids, bfd); ++flip_back;}
+            Real e_new = energy_function(node, triangulation, prms,  changed_neighborhood);
+            Real e_diff = e_old - e_new;
+            if (move_needs_undoing(e_diff)) {
+                triangulation.unflip_bond(node.id, id_in_nn_ids, bfd);
+                ++flip_back;
+
+            }
         }else{++bond_length_flip_rejection;}
     }
 

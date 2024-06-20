@@ -28,6 +28,9 @@ void operator delete(void* memory, std::size_t) noexcept{
 
 #endif
 
+#include <flippy.hpp>
+#include <FlippyBenchmarkLogger.h>
+
 using REAL = float;
 using INDEX = unsigned int;
 
@@ -38,14 +41,6 @@ REAL operator"" _r(unsigned long long value) {
     return static_cast<REAL>(value);
 }
 
-constexpr REAL PI = static_cast<REAL>(M_PI);
-
-#include <flippy.hpp>
-#include <FlippyBenchmarkLogger.h>
-
-REAL sphere_vol(REAL R){return 4_r/3_r * PI *R*R*R;}
-REAL sphere_area(REAL R){return 4_r * PI *R*R;}
-
 struct EnergyParameters{REAL kappa, K_V, K_A, V_t, A_t;};
 using Triangulation = fp::Triangulation<REAL, INDEX, fp::SPHERICAL_TRIANGULATION>;
 using MCU = fp::MonteCarloUpdater<REAL, INDEX, EnergyParameters, std::mt19937, fp::SPHERICAL_TRIANGULATION>;
@@ -53,7 +48,9 @@ using MCU = fp::MonteCarloUpdater<REAL, INDEX, EnergyParameters, std::mt19937, f
 // This is the energy function that is used by flippy's built-in updater to decide if a move was energetically favorable or not
 REAL surface_energy([[maybe_unused]]fp::Node<REAL, INDEX> const& node,
                       fp::Triangulation<REAL, INDEX> const& trg,
-                      EnergyParameters const& prms){
+                      EnergyParameters const& prms,
+                      std::vector<INDEX>const&
+                      ){
     REAL V = trg.global_geometry().volume;
     REAL A = trg.global_geometry().area;
     REAL dV = V-prms.V_t;
@@ -70,7 +67,7 @@ int main(int /*argc*/, char** argv) {
         auto json_path = std::string(argv[1]);
         fp::Json config = fp::json_read(json_path);
         // N_node=12+30*n+20*n*(n-1)/2 where n is the same as n_trng
-        uint n_triang = config["n_triang"].get<uint>();
+        unsigned int n_triang = config["n_triang"].get<unsigned int>();
         REAL l_min = config["l_min"].get<REAL>();
         REAL kappa = config["kappa"].get<REAL>(); /*kBT*/
         REAL K_A = config["K_A"].get<REAL>(); /*kBT/volume*/
@@ -80,14 +77,14 @@ int main(int /*argc*/, char** argv) {
         std::string save_dir = config["save_dir"];
 
         // estimate of a typical bond length in the initial triangulation and then create a sphere such that the initial bond length is close to minimal. This formula is derived from the equidistant sub-triangulation of an icosahedron, where geodesic distances are used as a distance measure.
-        REAL R = l_min / (2_r * sin(asin(1_r / (2_r * sin(2_r * PI / 5_r))) /
-                (static_cast<REAL>(n_triang) + 1_r)));
-        REAL l_max = 2_r * l_min; // if you make l_max closer to l_min
+        REAL R = fp::min_radius_with_non_overlapping_beads(l_min, n_triang);
+        REAL l_max = 1.8_r * l_min; // if you make l_max closer to l_min
         // bond_flip acceptance rate will go down
         REAL r_Verlet = 2_r * l_max;
 
-        EnergyParameters prms{.kappa= kappa, .K_V=K_V, .K_A=K_A,
-                              .V_t=red_vol * sphere_vol(R), .A_t=sphere_area(R)};
+        REAL Vt = red_vol * fp::sphere_vol(R);
+        REAL At = fp::sphere_area(R);
+        EnergyParameters prms{.kappa= kappa, .K_V=K_V, .K_A=K_A, .V_t=Vt, .A_t=At};
         // side length of a voxel from which the displacement of the node is drawn
         REAL linear_displ = l_min / 8_r;
         // max number of iteration steps (depending on the strength of your CPU, this should take anywhere from a couple of seconds to a couple of minutes
@@ -120,19 +117,26 @@ int main(int /*argc*/, char** argv) {
         REAL adaptation_magnitude = 0.1f;
         std::optional<REAL> e_diff = 0;
 
+        REAL V0 = guv.global_geometry().volume;
+        REAL A0 = guv.global_geometry().area;
         auto displ_updater = fp::DynamicDisplacementUpdater<REAL, INDEX>(linear_displ, adaptation_magnitude, probability_target);
         auto logger = FlippyBenchmarkLogger<REAL, INDEX, MCU>::start_benchmark(mc_updater, guv);
 
         for (int mc_step = 0; mc_step < max_mc_steps; ++mc_step) {
-            // we first loop through all the beads and move them
-//            displ_distr = std::uniform_real_distribution<REAL>(-linear_displ, linear_displ);
+            auto t = static_cast<REAL>(mc_step);
+            auto t_max = static_cast<REAL>(max_mc_steps);
+            prms.V_t = fp::linear_adaptation(t, 0.f, 0.3f*t_max, V0, Vt);
+            prms.A_t = fp::linear_adaptation(t, 0.f, 0.3f*t_max, A0, At);
+            REAL kT = fp::linear_adaptation(t, 0.7f*t_max, 0.9f*t_max, 1.f, 0.1f);
+            mc_updater.reset_kBT(kT);
             displ_distr = displ_updater.new_displ_distr();
             for (INDEX node_id: shuffled_ids) {
                 displ = {displ_distr(rng), displ_distr(rng), displ_distr(rng)};
                 e_diff = mc_updater.move_MC_updater(guv[node_id], displ);
                 displ_updater.probability_aggregator(e_diff, mc_updater.kBT());
             }
-//            linear_displ = displ_updater.new_displacement_magnitude(e_diff, mc_updater.kBT());
+            REAL pt = fp::linear_adaptation(t, 0.7f*t_max, 0.9f*t_max, probability_target, 0.2f);
+            displ_updater.reset_target_acceptance_probability(pt);
 
             // then we shuffle the bead_ids
             std::shuffle(shuffled_ids.begin(), shuffled_ids.end(), rng);

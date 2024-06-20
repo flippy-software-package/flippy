@@ -57,7 +57,6 @@ SCENARIO("Random bond flips do not destroy the topology"){
         }
 
         WHEN("Bonds are flipped randomly"){
-            BondFlipData<Index> bfd{};
             Index rn = rg.get();
             rg.get();
 
@@ -65,7 +64,7 @@ SCENARIO("Random bond flips do not destroy the topology"){
                 for (auto const &node: tr.nodes()) {
                     Index n_neighbors = node.nn_ids.size();
                     Index rand_id = rn % n_neighbors;
-                    tr.unflip_bond(node.id, node.nn_ids[rand_id], bfd);
+                    tr.flip_bond(node.id, node.nn_ids[rand_id], 0, r_init*r_init);
                 }
             }
 

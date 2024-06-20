@@ -33,4 +33,5 @@ template<class T> concept indexing_number = std::is_unsigned_v<T> && std::is_int
 }
 
 
+
 #endif //FLIPPY_CUSTOM_CONCEPTS_HPP

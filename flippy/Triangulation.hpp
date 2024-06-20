@@ -1294,6 +1294,7 @@ private:
                 .j_p_1 = Neighbors<Index>::plus_one(local_nn_id, nn_number)};
     }
 
+    public:
     //unit tested
     Neighbors<Index> previous_and_next_neighbour_global_ids(Index node_id, Index nn_id) const
     {
@@ -1311,6 +1312,7 @@ private:
         Neighbors<Index> neighbors = previous_and_next_neighbour_local_ids(node_id, nn_id);
         return {.j_m_1=nn_ids_view[neighbors.j_m_1], .j_p_1=nn_ids_view[neighbors.j_p_1]};
     }
+    private:
 
     void update_global_geometry(Geometry<Real, Index> const& lg_old, Geometry<Real, Index> const& lg_new)
     {
@@ -1371,32 +1373,35 @@ private:
     }
 
 
+    bool nodes_are_allowed_to_donate_a_bond(Index node_id, Index nn_id){
+        return (nodes_.nn_ids(node_id).size() <= BOND_DONATION_CUTOFF) && (nodes_.nn_ids(nn_id).size() <= BOND_DONATION_CUTOFF);
+    }
         //unit tested
         BondFlipData<Index> flip_bulk_bond(Index node_id, Index nn_id,
                                            Real min_bond_length_square,
                                            Real max_bond_length_square) {
             BondFlipData<Index> bfd{};
-            if (nodes_.nn_ids(node_id).size() > BOND_DONATION_CUTOFF) {
-                if (nodes_.nn_ids(nn_id).size() > BOND_DONATION_CUTOFF) {
-                    Neighbors<Index> common_nns = previous_and_next_neighbour_global_ids(node_id, nn_id);
-                    Real bond_length_square = (nodes_.pos(common_nns.j_m_1) - nodes_.pos(common_nns.j_p_1)).norm_square();
-                    if ((bond_length_square < max_bond_length_square) && (bond_length_square > min_bond_length_square)) {
-//                        if (has_two_common_neighbours(node_id, nn_id)) {
-                            pre_update_geometry = calculate_diamond_geometry(node_id, nn_id, common_nns.j_m_1,
-                                                                             common_nns.j_p_1);
-                            bfd = flip_bond_unchecked(node_id, nn_id, common_nns.j_m_1, common_nns.j_p_1);
-                            if (has_two_common_neighbours(bfd.common_nn_0, bfd.common_nn_1)) {
-                                update_diamond_geometry(node_id, nn_id, common_nns.j_m_1, common_nns.j_p_1);
-                                post_update_geometry = calculate_diamond_geometry(node_id, nn_id, common_nns.j_m_1,
-                                                                                  common_nns.j_p_1);
-                                update_global_geometry(pre_update_geometry, post_update_geometry);
-                            } else {
-                                flip_bond_unchecked(bfd.common_nn_0, bfd.common_nn_1, nn_id, node_id);
-                                bfd.flipped = false;
-                            }
-//                        }
-                    }
-                }
+//            if (nodes_.nn_ids(node_id).size() <= BOND_DONATION_CUTOFF) { return bfd; }
+//            if (nodes_.nn_ids(nn_id).size() <= BOND_DONATION_CUTOFF) { return bfd; }
+            nodes_are_allowed_to_donate_a_bond(node_id, nn_id);
+
+            Neighbors<Index> common_nns = previous_and_next_neighbour_global_ids(node_id, nn_id);
+
+            Real bond_length_square = (nodes_.pos(common_nns.j_m_1) - nodes_.pos(common_nns.j_p_1)).norm_square();
+            if ((bond_length_square > max_bond_length_square) || (bond_length_square < min_bond_length_square)) { return bfd;}
+
+            pre_update_geometry = calculate_diamond_geometry(node_id, nn_id, common_nns.j_m_1, common_nns.j_p_1);
+
+            bfd = flip_bond_unchecked(node_id, nn_id, common_nns.j_m_1, common_nns.j_p_1);
+
+            if (has_two_common_neighbours(bfd.common_nn_0, bfd.common_nn_1)) {
+                update_diamond_geometry(node_id, nn_id, common_nns.j_m_1, common_nns.j_p_1);
+                post_update_geometry = calculate_diamond_geometry(node_id, nn_id, common_nns.j_m_1,
+                                                                  common_nns.j_p_1);
+                update_global_geometry(pre_update_geometry, post_update_geometry);
+            } else {
+                flip_bond_unchecked(bfd.common_nn_0, bfd.common_nn_1, nn_id, node_id);
+                bfd.flipped = false;
             }
             return bfd;
         }
@@ -1411,7 +1416,7 @@ private:
             if (has_two_common_neighbours(node_id, nn_id)) {
                 pre_update_geometry = calculate_diamond_geometry(node_id, nn_id, common_nns.j_m_1, common_nns.j_p_1);
                 bfd = flip_bond_unchecked(node_id, nn_id, common_nns.j_m_1, common_nns.j_p_1);
-                if (has_two_common_neighbours(bfd.common_nn_0, bfd.common_nn_1).size()) {
+                if (has_two_common_neighbours(bfd.common_nn_0, bfd.common_nn_1)) {
                     update_diamond_geometry(node_id, nn_id, common_nns.j_m_1, common_nns.j_p_1);
                     post_update_geometry = calculate_diamond_geometry(node_id, nn_id, common_nns.j_m_1,
                                                                       common_nns.j_p_1);
