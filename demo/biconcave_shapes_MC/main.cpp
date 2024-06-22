@@ -5,15 +5,16 @@
 
 using REAL = float;
 
-REAL sphere_vol(REAL R){return 4./3. * M_PI *R*R*R;}
-REAL sphere_area(REAL R){return 4. * M_PI *R*R;}
+REAL sphere_vol(REAL R){return fp::Real(4./3.) * fp::PI *R*R*R;}
+REAL sphere_area(REAL R){return fp::Real(4.) * fp::PI *R*R;}
 
 struct EnergyParameters{REAL kappa, K_V, K_A, V_t, A_t;};
 
 // This is the energy function that is used by flippy's built-in updater to decide if a move was energetically favorable or not
-REAL surface_energy([[maybe_unused]]fp::Node<REAL, unsigned int> const& node,
-                      fp::Triangulation<REAL, unsigned int> const& trg,
-                      EnergyParameters const& prms){
+REAL surface_energy([[maybe_unused]]fp::Node const& node,
+                      fp::Triangulation<fp::SPHERICAL_TRIANGULATION> const& trg,
+                      EnergyParameters const& prms,
+                      std::vector<fp::Index> changed_neighbourhood){
     REAL V = trg.global_geometry().volume;
     REAL A = trg.global_geometry().area;
     REAL dV = V-prms.V_t;

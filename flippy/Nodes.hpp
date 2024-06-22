@@ -5,6 +5,7 @@
  * @brief This file contains the fp::Node and fp::Nodes classes, data structures that represent a single node of the triangulation
  * and the collection of all nodes of the triangulation, respectively.
  */
+#include <utility>
 #include <vector>
 #include <unordered_set>
 
@@ -25,7 +26,6 @@ using Json = nlohmann::json;
  * @tparam Real @RealStub
  * @tparam Index @IndexStub
  */
-template<floating_point_number Real, indexing_number Index>
 struct Node
 {
   //! @NodeIDStub
@@ -84,6 +84,24 @@ struct Node
   //! The Verlet list contains the ids of nodes that are close to this node.
   std::vector<Index> verlet_list;
 
+    auto find_nns_loc_pointer(Index nn_id){
+        /**
+         * @brief Given the global id of the next neighbor, this function can be used to locate it in the Node::nn_ids vector.
+         *
+         * This function is just a convenient wrapper around the [std::find](https://en.cppreference.com/w/cpp/algorithm/find) function.
+         * ```
+         * std::find(nn_ids.begin(), nn_ids.end(), to_pop_nn_id);
+         * ```
+         * @param nn_id @NNIDStub
+         * @return if `nn_id` is contained in Node::nn_ids then the pointer to the position of that id in the `nn_ids` vector will be returned.
+         * Otherwise `nn_ids.end()`.
+         * @warning This function is not responsible for graceful handling of `nn_id`'s that are not found in the Node::nn_ids vector.
+         * If the `nn_id` is not contained in Node::nn_ids then the `nn_ids.end()` iterator will be returned.
+         * It is up to the user to perform the necessary checks to avoid undefined behavior that might result from trying to delete uninitiated memory.
+         */
+        return std::find(nn_ids.begin(), nn_ids.end(), nn_id);
+    }
+
   // unit-tested
   //! Find and deletes the element with the id `to_pop_nn_id` in the `nn_id` vector.
   void pop_nn(Index to_pop_nn_id)
@@ -105,23 +123,7 @@ struct Node
       }
   }
 
-  auto find_nns_loc_pointer(Index nn_id){
-      /**
-       * @brief Given the global id of the next neighbor, this function can be used to locate it in the Node::nn_ids vector.
-       *
-       * This function is just a convenient wrapper around the [std::find](https://en.cppreference.com/w/cpp/algorithm/find) function.
-       * ```
-       * std::find(nn_ids.begin(), nn_ids.end(), to_pop_nn_id);
-       * ```
-       * @param nn_id @NNIDStub
-       * @return if `nn_id` is contained in Node::nn_ids then the pointer to the position of that id in the `nn_ids` vector will be returned.
-       * Otherwise `nn_ids.end()`.
-       * @warning This function is not responsible for graceful handling of `nn_id`'s that are not found in the Node::nn_ids vector.
-       * If the `nn_id` is not contained in Node::nn_ids then the `nn_ids.end()` iterator will be returned.
-       * It is up to the user to perform the necessary checks to avoid undefined behavior that might result from trying to delete uninitiated memory.
-       */
-      return std::find(nn_ids.begin(), nn_ids.end(), nn_id);
-  }
+
 
   // unit-tested
   void emplace_nn_id(Index to_emplace_nn_id, vec3<Real> const& to_emplace_nn_pos, Index loc_idx)
@@ -177,7 +179,7 @@ struct Node
    * @param other_node constant reference to the other Node.
    * @return True if both nodes are equal.
    */
-  bool operator==(Node<Real, Index> const& other_node) const = default;
+  bool operator==(Node const& other_node) const = default;
 
   /**
    * @brief Streaming operator that can print formatted output to standard out with all Node data fields.
@@ -186,7 +188,7 @@ struct Node
    * @param node The streamed node.
    * @return Updated stream.
    */
-  friend std::ostream& operator<<(std::ostream& os, Node<Real, Index> const& node)
+  friend std::ostream& operator<<(std::ostream& os, Node const& node)
   {
 
       os << "node: " << node.id << '\n'
@@ -214,18 +216,17 @@ struct Node
  * @brief Data structure containing all nodes of the Triangulation.
  *
  * The Nodes struct is capable of reinitializing nodes from a well-formed JSON object or from a simple [std::vector](https://en.cppreference.com/w/cpp/container/vector) that contains all nodes of a triangulation.
- * The nodes class is basically a wrapper around a vector of nodes, i.e., `std::vector<Node<Real, Index>>`, and provides additional functionality to manipulate and query this data structure.
+ * The nodes class is basically a wrapper around a vector of nodes, i.e., `std::vector<Node>`, and provides additional functionality to manipulate and query this data structure.
  * Nodes class is also meant to be the interface with which the end user is manipulating individual nodes.
  * @tparam Real @RealStub
  * @tparam Index @IndexStub
  */
-template<floating_point_number Real, indexing_number Index>
 struct Nodes
 {
-    std::vector<Node<Real, Index>> data;    //!< Data member that contains the individual nodes.
+    std::vector<Node> data;    //!< Data member that contains the individual nodes.
 
     Nodes() = default;    //!< Default constructor.
-    explicit Nodes(std::vector<Node<Real, Index> > data_inp):data(data_inp)
+    explicit Nodes(std::vector<Node> data_inp):data(data_inp)
     {
     /**
      * Copies the data from a vector of nodes and creates a new Nodes struct.
@@ -270,14 +271,14 @@ struct Nodes
         }
     }    //!< Constructor from JSON.
 
-    typename std::vector<Node<Real, Index>>::iterator begin()
+    typename std::vector<Node>::iterator begin()
     {
     /**
      * This function allows the Nodes struct to be used in range-based `for` loops.
      * @return `data.begin()`
      */
      return data.begin();}    //!< Returns an iterator to the beginning of the underlying data member that contains the collection of the nodes.
-    typename std::vector<Node<Real, Index>>::const_iterator begin() const
+    [[nodiscard]] typename std::vector<Node>::const_iterator begin() const
     {
     /**
      * This function allows the Nodes struct to be used in range-based `for` loops in constant environments.
@@ -286,7 +287,7 @@ struct Nodes
         return data.begin();
     }    //!< \overload
 
-    typename std::vector<Node<Real, Index>>::iterator end()
+    typename std::vector<Node>::iterator end()
     {
         /**
      * This function allows the Nodes struct to be used in range-based `for` loops.
@@ -294,7 +295,7 @@ struct Nodes
      */
         return data.end();
     }    //!< Returns an iterator to the end of the underlying data member that contains the collection of the nodes.
-    typename std::vector<Node<Real, Index>>::const_iterator end() const
+    [[nodiscard]] typename std::vector<Node>::const_iterator end() const
     {
     /**
      * This function allows the Nodes struct to be used in range-based `for` loops in constant environments.
@@ -487,7 +488,7 @@ struct Nodes
 
     [[nodiscard]] Index size() const { return static_cast<Index>(data.size()); } //!< Size of the Nodes data member. @return Size of the data vector, same as the number of nodes.
 
-    Node<Real, Index>& operator[](Index node_id) {
+    Node& operator[](Index node_id) {
     /**
      * Nodes[node_id] is the same as Nodes.data[node_id].
      * @param node_id @NodeIDStub
@@ -495,7 +496,7 @@ struct Nodes
      */
         return data[node_id];
     }   //!< Square bracket operator overload for convenient indexing of the Nodes struct.
-    const Node<Real, Index>& operator[](Index node_id) const {
+    const Node& operator[](Index node_id) const {
     /**
      * Nodes[node_id] in the constant environment is the same as Nodes.data.at(node_id).
      * @param node_id @NodeIDStub

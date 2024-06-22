@@ -19,9 +19,8 @@ template<typename Index> std::string face_namer(Index a, Index b, Index c){
         + std::to_string(arr[2]);
 }
 
-template<fp::indexing_number Index>  std::array<Index, 2> get_two_common_neighbours(std::vector<Index> nn_arr_0, std::vector<Index> nn_arr_1){
-    static const Index vln = static_cast<const Index>(VERY_LARGE_NUMBER_);
-    std::array<Index, 2> res{vln, vln};
+std::array<fp::Index, 2> get_two_common_neighbours(std::vector<fp::Index> nn_arr_0, std::vector<fp::Index> nn_arr_1){
+    std::array<fp::Index, 2> res{fp::VERY_LARGE_NUMBER_, fp::VERY_LARGE_NUMBER_};
     for (auto res_p = res.begin(); auto n0_nn_id: nn_arr_0) {
         if (res_p==res.end()) { break; }
         else {
@@ -39,7 +38,7 @@ TEST_CASE("correct euler number up to nIter=31 count"){
     std::unordered_set<std::string> edge_name_hash;
     std::string edge_name, face_name_0, face_name_1;
     for(unsigned short nIter=0; nIter<=31;++nIter){
-        fp::Triangulation<float, unsigned short, fp::SPHERICAL_TRIANGULATION> trg(nIter, 1.f, 0.f);
+        fp::Triangulation<fp::SPHERICAL_TRIANGULATION> trg(nIter, 1.f, 0.f);
         for (auto const& node: trg.nodes()) {
             for(auto nn_id: node.nn_ids){
                 edge_name = edge_namer(node.id, nn_id);

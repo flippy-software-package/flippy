@@ -20,8 +20,7 @@ using namespace fp;
 //    tr.make_verlet_list();
 //}
 
-template<floating_point_number Real, indexing_number Index>
-bool euler_number_is_2(Triangulation<Real,Index, SPHERICAL_TRIANGULATION>const& triangulation)
+bool euler_number_is_2(Triangulation<SPHERICAL_TRIANGULATION>const& triangulation)
 {
     /**
      * General euler formula for flat polyhedra: `V - E + F = 2`
@@ -43,13 +42,11 @@ bool euler_number_is_2(Triangulation<Real,Index, SPHERICAL_TRIANGULATION>const& 
 
 SCENARIO("Random bond flips do not destroy the topology"){
     GIVEN("A a spherical triangulation"){
-        using Index = unsigned long;
-        using Real = float;
         constexpr Index subriang_level = 10;
         constexpr Real verlet_radius = 0.f;
         constexpr Real r_init = 13.f;
         constexpr Index test_repetitions = 10;
-        Triangulation<Real, Index> tr(subriang_level, r_init, verlet_radius);
+        Triangulation<SPHERICAL_TRIANGULATION> tr(subriang_level, r_init, verlet_radius);
         auto rg = Catch::Generators::RandomIntegerGenerator<Index>(0, tr.size(), Catch::Generators::Detail::getSeed());
 
         THEN("Euler Number is 2"){
@@ -62,7 +59,7 @@ SCENARIO("Random bond flips do not destroy the topology"){
 
             for(Index _=0; _<test_repetitions;++_) {
                 for (auto const &node: tr.nodes()) {
-                    Index n_neighbors = node.nn_ids.size();
+                    auto n_neighbors = static_cast<Index>(node.nn_ids.size());
                     Index rand_id = rn % n_neighbors;
                     tr.flip_bond(node.id, node.nn_ids[rand_id], 0, r_init*r_init);
                 }

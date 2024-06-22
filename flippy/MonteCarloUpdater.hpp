@@ -29,15 +29,15 @@ namespace fp {
  * @tparam triangulation_type One of the types specified by the TriangulationType enum.
  * This must match the type of triangulation provided during the class instantiation.
  */
-template<floating_point_number Real, indexing_number Index, typename EnergyFunctionParameters, typename RandomNumberEngine, TriangulationType triangulation_type>
+template<typename EnergyFunctionParameters, typename RandomNumberEngine, TriangulationType triangulation_type>
 class MonteCarloUpdater
 {
 private:
-    static constexpr Real max_float = 3.40282347e+38;
+    static constexpr Real max_float = 3.40282347e+38f;
 //    Real e_old{}, e_new{}, e_diff{};
-    fp::Triangulation<Real, Index, triangulation_type>& triangulation;
+    fp::Triangulation<triangulation_type>& triangulation;
     EnergyFunctionParameters const& prms;
-    typedef std::function<Real(fp::Node<Real, Index> const&, fp::Triangulation<Real, Index, triangulation_type> const&, EnergyFunctionParameters const&, std::vector<Index> const&)> EnergyFunctionType;
+    typedef std::function<Real(fp::Node const&, fp::Triangulation<triangulation_type> const&, EnergyFunctionParameters const&, std::vector<Index> const&)> EnergyFunctionType;
     EnergyFunctionType energy_function;
     RandomNumberEngine& rng;
     std::uniform_real_distribution<Real> unif_distr_on_01;
@@ -59,7 +59,7 @@ public:
      * If set too high, the stability of the updater will suffer, and nonphysical shapes with self-intersecting triangulation will be common.
      * Conversely, setting this variable too low will significantly reduce the chance of a successful bond flip.
      */
-    MonteCarloUpdater(fp::Triangulation<Real, Index, triangulation_type>& triangulation_inp,
+    MonteCarloUpdater(fp::Triangulation<triangulation_type>& triangulation_inp,
                       EnergyFunctionParameters const& prms_inp,
                       EnergyFunctionType energy_function_inp,
                       RandomNumberEngine& rng_inp, Real min_bond_length, Real max_bond_length)
@@ -93,12 +93,12 @@ public:
      * @param node @mcuNodeStub
      * @param displacement @mcuDisplacementStub
      * @return `true` if
-     * new_next_neighbour_distances_are_between_min_and_max_length(fp::Node<Real, Index> const&, fp::vec3<Real> const&)
+     * new_next_neighbour_distances_are_between_min_and_max_length(fp::Node const&, fp::vec3<Real> const&)
      * and
-     * new_verlet_neighbour_distances_are_between_min_and_max_length(fp::Node<Real, Index> const&, fp::vec3<Real> const&)
+     * new_verlet_neighbour_distances_are_between_min_and_max_length(fp::Node const&, fp::vec3<Real> const&)
      * conditions are both satisfied, `false` otherwise.
      */
-    bool new_neighbour_distances_are_between_min_and_max_length(fp::Node<Real, Index> const& node,
+    bool new_neighbour_distances_are_between_min_and_max_length(fp::Node const& node,
                                                                      fp::vec3<Real> const& displacement)
 
     {
@@ -118,7 +118,7 @@ public:
      * @return `true` if all next neighbor distances are between minimal and maximal allowed values,
      * provided during the instantiation of the MonteCarloUpdater class, `false` otherwise.
      */
-    bool new_next_neighbour_distances_are_between_min_and_max_length(fp::Node<Real, Index> const& node,
+    bool new_next_neighbour_distances_are_between_min_and_max_length(fp::Node const& node,
                                                                      fp::vec3<Real> const& displacement)
 
     {
@@ -148,7 +148,7 @@ public:
      * @param displacement @mcuDisplacementStub
      * @return `true` if the nodes did not overlap before but overlap now. `false` otherwise.
      */
-    bool new_verlet_neighbour_distances_are_between_min_and_max_length(fp::Node<Real, Index> const& node,
+    bool new_verlet_neighbour_distances_are_between_min_and_max_length(fp::Node const& node,
                                                                      fp::vec3<Real> const& displacement)
 
     {
@@ -172,7 +172,7 @@ public:
      * @return This function returns the calculated energy difference. If not energy difference was calculated due to bond_length constraint rejection, then an empty optional is returned.
      *
      */
-    std::optional<Real> move_MC_updater(fp::Node<Real, Index> const& node, fp::vec3<Real> const& displacement)
+    std::optional<Real> move_MC_updater(fp::Node const& node, fp::vec3<Real> const& displacement)
     {
         ++move_attempt;
         if (new_neighbour_distances_are_between_min_and_max_length(node, displacement)) {
@@ -199,9 +199,9 @@ public:
      * otherwise, the flippy will fail silently.
      * @note This function randomly chooses the next neighbor of the `node` and flips the edge between them.
      * If more precise control is required, i.e., if it is necessary to control exactly which edge needs to be flipped,
-     * then the flip_MC_updater(fp::Node<Real, Index> const& node, Index id_in_nn_ids) method can be used.
+     * then the flip_MC_updater(fp::Node const& node, Index id_in_nn_ids) method can be used.
      */
-    void flip_MC_updater(fp::Node<Real, Index> const& node)
+    void flip_MC_updater(fp::Node const& node)
     {
       Index number_nn_ids = static_cast<Index>(node.nn_ids.size());
       Index nn_id = node.nn_ids[std::uniform_int_distribution<Index>(0, number_nn_ids-1)(rng)];
@@ -217,15 +217,15 @@ public:
      * otherwise, the flippy will fail silently.
      * @warning For performance reasons, this function does not check if `id_in_nn_ids` is really a `nn_id` of the `node` provided in the first argument.
      * The user is required to guarantee this fact. Otherwise, flippy will fail unpredictably.
-     * flip_MC_updater(fp::Node<Real, Index> const&) is the safer method if the user does not care exactly which bond is flipped.
+     * flip_MC_updater(fp::Node const&) is the safer method if the user does not care exactly which bond is flipped.
      */
-    void flip_MC_updater(fp::Node<Real, Index> const& node, Index id_in_nn_ids)
+    void flip_MC_updater(fp::Node const& node, Index id_in_nn_ids)
     {
         ++flip_attempt;
-        Neighbors<Index> cns = triangulation.previous_and_next_neighbour_global_ids(node.id, id_in_nn_ids);
-        static const auto changed_neighborhood = std::vector<Index>{id_in_nn_ids, cns.j_m_1, cns.j_p_1};
+        Neighbors cns = triangulation.previous_and_next_neighbour_global_ids(node.id, id_in_nn_ids);
+        static const auto changed_neighborhood = std::vector{id_in_nn_ids, cns.j_m_1, cns.j_p_1};
         Real e_old = energy_function(node, triangulation, prms, changed_neighborhood);
-        BondFlipData<Index> bfd = triangulation.flip_bond(node.id, id_in_nn_ids, min_bond_length_square, max_bond_length_square);
+        BondFlipData bfd = triangulation.flip_bond(node.id, id_in_nn_ids, min_bond_length_square, max_bond_length_square);
         if (bfd.flipped) {
             Real e_new = energy_function(node, triangulation, prms,  changed_neighborhood);
             Real e_diff = e_old - e_new;
@@ -270,7 +270,7 @@ public:
     [[nodiscard]] unsigned long bond_length_move_rejection_count() const {
     /**
      * Moves that cause nodes to overlap with their Verlet list neighbors or move them too far away from any of their next neighbors are rejected. Every time such rejection happens, a private internal state variable `bond_length_move_rejection` is incremented by move_MC_updater().
-     * The specifics of this rejection criteria are calculated in the function new_neighbour_distances_are_between_min_and_max_length(fp::Node<Real, Index> const& node, fp::vec3<Real> const& displacement)
+     * The specifics of this rejection criteria are calculated in the function new_neighbour_distances_are_between_min_and_max_length(fp::Node const& node, fp::vec3<Real> const& displacement)
      * Every time a node move would lead that node to have a bond with one of its next neighbors, which is longer than a specified maximal length (max_bond_length()), the move will be rejected.
      * This variable can be used for diagnostics or statistical tracking, but its state does not impact the function of the updater.
      * @return current state of `bond_length_move_rejection`.
@@ -292,7 +292,7 @@ public:
     //!@getterFunctionStub
     [[nodiscard]] unsigned long flip_attempt_count() const {
     /**
-     * Every time a flip is attempted, a private internal state variable `flip_attempt` is incremented by flip_MC_updater() and flip_MC_updater(fp::Node<Real, Index> const& node, Index index_in_nn_ids).
+     * Every time a flip is attempted, a private internal state variable `flip_attempt` is incremented by flip_MC_updater() and flip_MC_updater(fp::Node const& node, Index index_in_nn_ids).
      * This variable can be used for diagnostics or statistical tracking, but its state does not impact the function of the updater.
      * @return current state of `flip_attempt`.
      */
@@ -301,23 +301,23 @@ public:
     //! @getterFunctionStub
     [[nodiscard]] unsigned long bond_length_flip_rejection_count() const {
     /**
-     * If a flip would turn a valid bond into a bond that is too long, the flip is rejected, a private internal state variable `bond_length_flip_rejection` is incremented by flip_MC_updater() and flip_MC_updater(fp::Node<Real, Index> const& node, Index index_in_nn_ids).
+     * If a flip would turn a valid bond into a bond that is too long, the flip is rejected, a private internal state variable `bond_length_flip_rejection` is incremented by flip_MC_updater() and flip_MC_updater(fp::Node const& node, Index index_in_nn_ids).
      * The rejection of flips is handled by the Triangulation class itself and reported through the BondFlipData to the flip functions of the updater.
      * This variable can be used for diagnostics or statistical tracking, but its state does not impact the function of the updater.
      * @return current state of `bond_length_flip_rejection`.
-     * @see Triangulation::flip_bond(Index, Index, Real, Real) Triangulation::unflip_bond(Index, Index, BondFlipData<Index> const&)
+     * @see Triangulation::flip_bond(Index, Index, Real, Real) Triangulation::unflip_bond(Index, Index, BondFlipData const&)
      */
         return bond_length_flip_rejection;
     }
     //! @getterFunctionStub
     [[nodiscard]] unsigned long flip_back_count() const {
     /**
-     * Every time a flip is rejected because the energy requirement was not satisfied, a private internal state variable `flip_back` is incremented by flip_MC_updater() and flip_MC_updater(fp::Node<Real, Index> const& node, Index index_in_nn_ids).
+     * Every time a flip is rejected because the energy requirement was not satisfied, a private internal state variable `flip_back` is incremented by flip_MC_updater() and flip_MC_updater(fp::Node const& node, Index index_in_nn_ids).
      * The rejection of flips is handled by the Triangulation class itself and reported through the BondFlipData to the flip functions of the updater.
      * This variable does not track the rejections resulting from bond length restriction violations.
      * This variable can be used for diagnostics or statistical tracking, but its state does not impact the function of the updater.
      * @return current state of `flip_back`.
-     * @see Triangulation:: unflip_bond(Index node_id, Index nn_id, BondFlipData<Index> const& common_nns) bond_length_flip_rejection_count()
+     * @see Triangulation:: unflip_bond(Index node_id, Index nn_id, BondFlipData const& common_nns) bond_length_flip_rejection_count()
      */
         return flip_back;
     }

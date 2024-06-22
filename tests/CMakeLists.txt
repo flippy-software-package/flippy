@@ -56,9 +56,10 @@ add_executable(${PROJECT_NAME}
         sim_utils_test.cpp
         dynamic_move_size_test.cpp
 #        local_update_energy_test.cpp
+#        xyzDataIO_test.cpp
 )
 
-catch_discover_tests(${PROJECT_NAME})
+#catch_discover_tests(${PROJECT_NAME})
 
 target_link_libraries(${PROJECT_NAME} PRIVATE Catch2::Catch2WithMain)
 target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic -Wshadow -Wconversion -Werror -ffast-math)

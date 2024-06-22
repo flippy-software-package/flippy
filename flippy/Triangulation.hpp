@@ -12,6 +12,12 @@
 #include "Triangulator.hpp"
 #include "stlSerializer.hpp"
 
+
+/**
+ * flippy's namespace.
+ */
+namespace fp {
+
 /**
  * @GlobalsStub
  * @{
@@ -33,13 +39,9 @@
  * fp::Triangulation::two_common_neighbours(Index, Index) const
  * fp::Triangulation::two_common_neighbour_positions(Index, Index) const
  */
-#define VERY_LARGE_NUMBER_ LONG_LONG_MAX
+static constexpr auto VERY_LARGE_NUMBER_ = static_cast<Index>(LONG_LONG_MAX);
 /**@}*/
 
-/**
- * flippy's namespace.
- */
-namespace fp {
 /**
  * @GlobalsStub
  * @{
@@ -79,12 +81,11 @@ static constexpr int BOND_DONATION_CUTOFF = 4;
  * @see Triangulation.unflip_bond(Index, Index, BondFlipData<Index> const&)
  * @see Triangulation.flip_bond_unchecked(Index, Index, Index, Index)
  */
-template<indexing_number Index>
 struct BondFlipData
 {
   bool flipped = false; //!< track if the bond was flipped.
-  Index common_nn_0 = static_cast<Index>(VERY_LARGE_NUMBER_); //!< Global id of a node that is supposed to receive a bond after a flip.
-  Index common_nn_1 = static_cast<Index>(VERY_LARGE_NUMBER_); //!< Global id of a node that is supposed to receive a bond after a flip.
+  Index common_nn_0 = VERY_LARGE_NUMBER_; //!< Global id of a node that is supposed to receive a bond after a flip.
+  Index common_nn_1 = VERY_LARGE_NUMBER_; //!< Global id of a node that is supposed to receive a bond after a flip.
 };
 
 /**
@@ -95,7 +96,6 @@ struct BondFlipData
  * @see fp::Node.
  * @tparam Index @IndexStub
  */
-template<indexing_number Index>
 struct Neighbors
 {
   //! neighbor j+1
@@ -133,24 +133,22 @@ struct Neighbors
  * @tparam Real @RealStub
  * @tparam Index @IndexStub
  */
-template<floating_point_number Real, indexing_number Index>
 struct Geometry
 {
   Real area; //!< Area of the patch. Sum over the associated areas of individual nodes that comprise the patch. (Compare to Node::area).
   Real volume; //!< Volume of the patch. Sum over the associated volumes of individual nodes that comprise the patch. (Compare to Node::volume).
-  Real unit_bending_energy; //!< Volume of the patch. Sum over the associated unit bending energies of individual nodes that comprise the patch. (Compare to Node::unit_bending_energy).
   //! Default constructor, that zero initiates all the data members.
-  Geometry() :area(0.), volume(0.), unit_bending_energy(0.) { }
+  Geometry() :area(0.), volume(0.) { }
   //! Construct from a node.
-  explicit Geometry(Node<Real, Index> const& node)
-  :area(node.area), volume(node.volume), unit_bending_energy(node.unit_bending_energy) {
+  explicit Geometry(Node const& node)
+  :area(node.area), volume(node.volume) {
   /**
    * @param node Initiates data members of the struct with the geometric values of this single node.
    */
   }
   //! Direct Constructor.
-  Geometry(Real area_inp, Real volume_inp, Real unit_bending_energy_inp)
-  :area(area_inp), volume(volume_inp), unit_bending_energy(unit_bending_energy_inp) {
+  Geometry(Real area_inp, Real volume_inp)
+  :area(area_inp), volume(volume_inp) {
   /**
    * Initiates data members from directly provided numeric values.
    * @param area_inp Input area.
@@ -176,10 +174,10 @@ struct Geometry
    * @param rhs
    * @return lhs+rhs
    */
-  friend Geometry<Real, Index> operator+(Geometry<Real, Index> const& lhs, Geometry<Real, Index> const& rhs)
+  friend Geometry operator+(Geometry const& lhs, Geometry const& rhs)
   {
 
-      return Geometry<Real, Index>(lhs.area + rhs.area, lhs.volume + rhs.volume, lhs.unit_bending_energy + rhs.unit_bending_energy);
+      return Geometry(lhs.area + rhs.area, lhs.volume + rhs.volume);
   }
     //! Overloaded subtraction operator.
     /**
@@ -198,9 +196,9 @@ struct Geometry
      * @param rhs
      * @return lhs-rhs
      */
-  friend Geometry<Real, Index> operator-(Geometry<Real, Index> const& lhs, Geometry<Real, Index> const& rhs)
+  friend Geometry operator-(Geometry const& lhs, Geometry const& rhs)
   {
-      return Geometry<Real, Index>(lhs.area - rhs.area, lhs.volume - rhs.volume, lhs.unit_bending_energy - rhs.unit_bending_energy);
+      return Geometry(lhs.area - rhs.area, lhs.volume - rhs.volume);
   }
 
     //! Overloaded addition and assignment operator.
@@ -210,9 +208,9 @@ struct Geometry
      *
      * @param lhs
      * @param rhs
-     * @see Geometry<Real, Index> operator+(Geometry<Real, Index> const& lhs, Geometry<Real, Index> const& rhs)
+     * @see Geometry operator+(Geometry const& lhs, Geometry const& rhs)
      */
-    friend void operator+=(Geometry<Real, Index>& lhs, Geometry<Real, Index> const& rhs)
+    friend void operator+=(Geometry& lhs, Geometry const& rhs)
     {
         lhs = lhs + rhs;
     }
@@ -224,9 +222,9 @@ struct Geometry
      *
      * @param lhs
      * @param rhs
-     * @see Geometry<Real, Index> operator-(Geometry<Real, Index> const& lhs, Geometry<Real, Index> const& rhs)
+     * @see Geometry operator-(Geometry const& lhs, Geometry const& rhs)
      */
-    friend void operator-=(Geometry<Real, Index>& lhs, Geometry<Real, Index> const& rhs){
+    friend void operator-=(Geometry& lhs, Geometry const& rhs){
         lhs = lhs - rhs;
     }
 
@@ -235,10 +233,9 @@ struct Geometry
      * Can accumulate a node onto a Geometry struct.
      * @param node Geometric data from this node is added to the corresponding data members of the Geometry struct.
      */
-    void operator+=(Node<Real, Index> const& node){
+    void operator+=(Node const& node){
       area += node.area;
       volume += node.volume;
-      unit_bending_energy += node.unit_bending_energy;
     }
 
 };
@@ -292,7 +289,7 @@ enum TriangulationType{
  * This parameter must be chosen from the fp::TriangulationType `enum`.
  * Defaulted to fp::SPHERICAL_TRIANGULATION.
  */
-template<floating_point_number Real, indexing_number Index, TriangulationType triangulation_type=SPHERICAL_TRIANGULATION>
+template<TriangulationType triangulation_type=SPHERICAL_TRIANGULATION>
 class Triangulation
 {
 private:
@@ -311,7 +308,7 @@ public:
     Triangulation(Json const& nodes_input, Real verlet_radius_inp):Triangulation(verlet_radius_inp)
     {
         if constexpr(triangulation_type==SPHERICAL_TRIANGULATION) {
-            nodes_ = Nodes<Real, Index>(nodes_input);
+            nodes_ = Nodes(nodes_input);
             all_nodes_are_bulk();
             initiate_advanced_geometry();
         }
@@ -369,12 +366,12 @@ public:
      * @param verlet_radius_inp: stl_file specification has no provision for additional information, thus verlet radius of the triangulation must be provided additionally.
      * @return This function tries to construct and return a spherical triangulation. If the stl file contains a triangulation of a different topology then the returned triangulation object will be malformed.
      */
-    static Triangulation<Real, Index, SPHERICAL_TRIANGULATION> experimental_load_sphere_from_stl(std::filesystem::path const& stl_file_path, Real verlet_radius_inp){
+    static Triangulation<SPHERICAL_TRIANGULATION> experimental_load_sphere_from_stl(std::filesystem::path const& stl_file_path, Real verlet_radius_inp){
             std::vector<implementation::stlTriangle<Real, Index>> triangles = implementation::stlSerializer<Real, Index>::read_STLSolid_into_triangle_vec(stl_file_path);
 
-            std::vector<Node<Real, Index>> nodes;
+            std::vector<Node> nodes;
             std::vector<implementation::stlNode<Real, Index>> unique_nodes;
-            Triangulation<Real, Index> triangulation;
+            Triangulation triangulation;
             nodes.resize(triangles.size()/2 + 2);
             for (Index i=0; implementation::stlTriangle<Real, Index> &triangle : triangles) {
                 for (unsigned int tr_idx = 0; tr_idx < 3; ++tr_idx) {
@@ -385,7 +382,7 @@ public:
                         triangle[tr_idx].id = i;
                         ++i;
                         unique_nodes.push_back(node);
-                        Node<Real, Index> n{};
+                        Node n{};
                         n.pos = node.pos;
                         n.id = node.id;
                         nodes[n.id] = n;
@@ -405,10 +402,10 @@ public:
 
                 }
             }
-            Triangulation<Real, Index, SPHERICAL_TRIANGULATION> tr;
+            Triangulation<SPHERICAL_TRIANGULATION> tr;
             tr.verlet_radius = verlet_radius_inp;
             tr.R_initial = 1;
-            tr.nodes_ = Nodes<Real, Index>(nodes);
+            tr.nodes_ = Nodes(nodes);
             tr.all_nodes_are_bulk();
             tr.orient_surface_of_a_sphere();
             tr.initiate_advanced_geometry();
@@ -516,7 +513,7 @@ public:
     /** \brief Securely flip the bond inside a quadrilateral formed by the nodes given by node_id,
      * nn_id and their two common next neighbors, if all topological requirements are satisfied.
      */
-    BondFlipData<Index> flip_bond(Index node_id, Index nn_id,
+    BondFlipData flip_bond(Index node_id, Index nn_id,
                                   Real min_bond_length_square,
                                   Real max_bond_length_square){
    /**
@@ -546,13 +543,13 @@ public:
 
             if (boundary_nodes_ids_set_.contains(node_id) or boundary_nodes_ids_set_.contains(nn_id)){
             }else{
-                Neighbors<Index> common_nns = previous_and_next_neighbour_global_ids(node_id, nn_id);
+                Neighbors common_nns = previous_and_next_neighbour_global_ids(node_id, nn_id);
                 if(boundary_nodes_ids_set_.contains(common_nns.j_m_1) or boundary_nodes_ids_set_.contains(common_nns.j_p_1)){
                 }else{
                     return flip_bond_in_quadrilateral(node_id, nn_id, common_nns, min_bond_length_square, max_bond_length_square);
                 }
             }
-            return BondFlipData<Index>();
+            return BondFlipData();
 
         }else{
             static_assert(triangulation_type == TriangulationType::SPHERICAL_TRIANGULATION or triangulation_type == TriangulationType::EXPERIMENTAL_PLANAR_TRIANGULATION,
@@ -585,7 +582,7 @@ public:
      *
      * ```c++
      *  // `e_old`, `e_new`, `triangulation and `parameters` are data members of the updater
-     *  void mc_flipp_update(fp::Node<Real, Index> const& node)
+     *  void mc_flipp_update(fp::Node const& node)
      *  {
      *       e_old = energy_function(node, triangulation, parameters);
      *       Index number_nn_ids = node.nn_ids.size();
@@ -603,7 +600,7 @@ public:
      * @param nn_id @NNIDStub
      * @param common_nns BondFlipData containing information on the common next neighbor ids.
      */
-    void unflip_bond(Index node_id, Index nn_id, BondFlipData<Index> const& common_nns)
+    void unflip_bond(Index node_id, Index nn_id, BondFlipData const& common_nns)
     {
         flip_bond_unchecked(common_nns.common_nn_0, common_nns.common_nn_1, nn_id, node_id);
         update_diamond_geometry(node_id, nn_id, common_nns.common_nn_0, common_nns.common_nn_1);
@@ -630,8 +627,7 @@ public:
      * @param common_nn_j_p_1
      * @return BondFlipData, where the flipped field is always set to `True`.
      */
-    BondFlipData<Index> flip_bond_unchecked(Index node_id, Index nn_id,
-                                            Index common_nn_j_m_1, Index common_nn_j_p_1)
+    BondFlipData flip_bond_unchecked(Index node_id, Index nn_id, Index common_nn_j_m_1, Index common_nn_j_p_1)
     {
         emplace_before(common_nn_j_m_1, node_id, common_nn_j_p_1);
         emplace_before(common_nn_j_p_1, nn_id, common_nn_j_m_1);
@@ -666,7 +662,7 @@ public:
 
         for (Index j = 0; j<nn_number; ++j) {
             //return j+1 element of ordered_nn_ids unless j has the last value then wrap around and return 0th element
-            j_p_1 = Neighbors<Index>::plus_one(j,nn_number);
+            j_p_1 = Neighbors::plus_one(j,nn_number);
 
             lij = nodes_.nn_distances(node_id)[j];
             lij_p_1 = nodes_.nn_distances(node_id)[j_p_1];
@@ -692,8 +688,6 @@ public:
         nodes_.set_area(node_id, area_sum);
         nodes_.set_volume(node_id, nodes_[node_id].pos.dot(face_normal_sum)/((Real) 3.)); // 18=3*6: 6 has the aforementioned justification. 3 is part of the formula for the tetrahedron volume
         nodes_.set_curvature_vec(node_id,  -local_curvature_vec/((Real) 2.*area_sum)); // 2 is part of the formula to calculate the local curvature I just did not divide the vector inside the loop
-        nodes_.set_unit_bending_energy(node_id, local_curvature_vec.dot(local_curvature_vec)/((Real) 8.*area_sum)); // 8 is 2*4, where 4 is the square of the above two and the area in the denominator is what remains after canceling. 1/ comes from the pre-factor to bending energy
-
     };
 
 
@@ -772,18 +766,19 @@ public:
     {
         vec3<Real> ljj_p_1 = lij_p_1 - lij;
 
-        Real cot_at_j = cot_between_vectors(lij, (-1)*ljj_p_1);
+        Real cot_at_j = cot_between_vectors(lij, (-1_r)*ljj_p_1);
         Real cot_at_j_p_1 = cot_between_vectors(lij_p_1, ljj_p_1);
-        if ((cot_at_j>Real(0.)) && (cot_at_j_p_1>Real(0.))) { // both angles at j and j+1 are smaller than 90 deg so the triangle can only be obtuse at the node
-            if (lij.dot(lij_p_1)>Real(0.)) { // cos at i is positive i.e. angle at i is not obtuse
-                return (cot_at_j_p_1*lij.dot(lij) + cot_at_j*lij_p_1.dot(lij_p_1))/8.;
+        if ((cot_at_j > 0._r) && (cot_at_j_p_1> 0._r)) { // both angles at j and j+1 are smaller than 90 deg so
+            // the triangle can only be obtuse at the node
+            if (lij.dot(lij_p_1) > 0._r) { // cos at i is positive i.e. angle at i is not obtuse
+                return (cot_at_j_p_1*lij.dot(lij) + cot_at_j*lij_p_1.dot(lij_p_1))/8._r;
             }
             else {//obtuse at node i.
-                return triangle_area/Real(2.);
+                return triangle_area/2._r;
             }
         }
         else {//obtuse at node j or j+1.
-            return triangle_area/Real(4.);
+            return triangle_area/4._r;
         }
 
     }
@@ -795,11 +790,11 @@ public:
      * Two-ring refers to the second concentric ring of the next-nearest-neighbor nodes surrounding the center node.
      *
      * @param node_id
-     * @return Geometry<Real, Index> object containing the geometric quantities of the center node and its next neighbor nodes.
+     * @return Geometry object containing the geometric quantities of the center node and its next neighbor nodes.
      */
-    [[nodiscard]] Geometry<Real, Index> get_two_ring_geometry(Index node_id) const
+    [[nodiscard]] Geometry get_two_ring_geometry(Index node_id) const
     {
-        Geometry<Real, Index> trg(nodes_[node_id]);
+        Geometry trg(nodes_[node_id]);
         for (auto const& nn_id: nodes_[node_id].nn_ids) {
             trg += nodes_[nn_id];
         }
@@ -876,10 +871,10 @@ public:
      * @param cnn_1 Global id of the common next nearest neighbor of node_id and nn_id.
      * @return Geometric quantities aggregated over the diamond configuration of nodes associated with a bond flip.
      */
-    [[nodiscard]] Geometry<Real, Index> calculate_diamond_geometry(Index node_id, Index nn_id,
+    [[nodiscard]] Geometry calculate_diamond_geometry(Index node_id, Index nn_id,
                                                              Index cnn_0, Index cnn_1) const
     {
-        Geometry<Real, Index> diamond_geometry(nodes_[node_id]);
+        Geometry diamond_geometry(nodes_[node_id]);
         diamond_geometry += nodes_[nn_id];
         diamond_geometry += nodes_[cnn_0];
         diamond_geometry += nodes_[cnn_1];
@@ -929,12 +924,12 @@ public:
      * @param idx @NodeIDStub
      * @return Constant reference to the node with the given id.
      */
-    const Node<Real, Index>& operator[](Index idx) const { return nodes_.data.at(idx); }
+    const Node& operator[](Index idx) const { return nodes_.data.at(idx); }
     //! Returns a constant reference to the underlying Nodes container.
     /**
      * @return Constant reference to the underlying Nodes container.
      */
-    const Nodes<Real, Index>& nodes() const { return nodes_; }
+    const Nodes& nodes() const { return nodes_; }
     //! Creates a JSON object with the data of the triangulation.
     /**
      * Egg refers to the fact that the data can be used to recreate the triangulation using the Triangulation(Json const& nodes_input, Real verlet_radius_inp) constructor.
@@ -947,7 +942,7 @@ public:
     /**
      * @return Geometric quantities of the triangulation aggregated over all nodes.
      */
-    [[nodiscard]] const Geometry<Real, Index>& global_geometry() const { return global_geometry_; }
+    [[nodiscard]] const Geometry& global_geometry() const { return global_geometry_; }
 
     //Todo unittest
     //! Initiates the global geometry of the triangulation.
@@ -957,15 +952,15 @@ public:
      */
     void make_global_geometry()
     {
-        const Geometry<Real, Index> empty{};
+        const Geometry empty{};
         global_geometry_ = empty;
         for (auto node_id: bulk_nodes_ids) {
             update_bulk_node_geometry(node_id);
-            update_global_geometry(empty, Geometry<Real, Index>(nodes_[node_id]));
+            update_global_geometry(empty, Geometry(nodes_[node_id]));
         }
         for (auto node_id: boundary_nodes_ids_set_) {
             update_boundary_node_geometry(node_id);
-            update_global_geometry(empty, Geometry<Real, Index>(nodes_[node_id]));
+            update_global_geometry(empty, Geometry(nodes_[node_id]));
         }
     }
 
@@ -997,10 +992,10 @@ public:
 private:
 #endif
     Real R_initial;
-    Nodes<Real, Index> nodes_;
+    Nodes nodes_;
     std::vector<Index> bulk_nodes_ids;
-    Geometry<Real, Index> global_geometry_;
-    Geometry<Real, Index> pre_update_geometry, post_update_geometry;
+    Geometry global_geometry_;
+    Geometry pre_update_geometry, post_update_geometry;
     mutable vec3<Real> l0_, l1_;
     Real verlet_radius{};
     Real verlet_radius_squared{};
@@ -1192,7 +1187,7 @@ private:
     // Todo unittest
     void initiate_distance_vectors()
     {
-        for (Node<Real, Index>& node: nodes_.data) {
+        for (Node& node: nodes_.data) {
             node.nn_distances.resize(node.nn_ids.size());
             update_nn_distance_vectors(node.id);
         }
@@ -1242,22 +1237,22 @@ private:
         return res;
     }
 
-    std::array<Index, 2> fast_two_common_neighbours(Index node_id_0, Index node_id_1) const
-    {
-
-        Index j = nodes_.find_nns_loc_idx(node_id_0, node_id_1);
-        indexing_number auto nn_number = (Index)nodes_.nn_ids(node_id_0).size();
-        Index j_p_1 = Neighbors<Index>::plus_one(j, nn_number);
-        Index j_m_1 = Neighbors<Index>::plus_one(j, nn_number);
-        std::array<Index, 2> res{nodes_.nn_id(node_id_0,j_m_1),
-                nodes_.nn_id(node_id_0,j_p_1)};
-        return res;
-    }
+//    std::array<Index, 2> fast_two_common_neighbours(Index node_id_0, Index node_id_1) const
+//    {
+//
+//        Index j = nodes_.find_nns_loc_idx(node_id_0, node_id_1);
+//        indexing_number auto nn_number = (Index)nodes_.nn_ids(node_id_0).size();
+//        Index j_p_1 = Neighbors::plus_one(j, nn_number);
+//        Index j_m_1 = Neighbors::plus_one(j, nn_number);
+//        std::array<Index, 2> res{nodes_.nn_id(node_id_0,j_m_1),
+//                nodes_.nn_id(node_id_0,j_p_1)};
+//        return res;
+//    }
 
     std::array<Index, 2> two_common_neighbour_positions(Index node_id_0, Index node_id_1) const
     {
-        static const Index vln = static_cast<const Index>(VERY_LARGE_NUMBER_);
-        std::array<Index, 2> res{vln, vln};
+//        static const Index vln = static_cast<const Index>(VERY_LARGE_NUMBER_);
+        std::array<Index, 2> res{VERY_LARGE_NUMBER_, VERY_LARGE_NUMBER_};
         short counter = 0;
         for (auto const& n0_nn_id: nodes_[node_id_0].nn_ids) {
             if (counter==2) { break; }
@@ -1274,7 +1269,7 @@ private:
 
     //Todo unittest
     //unit tested
-    Neighbors<Index> previous_and_next_neighbour_local_ids(Index node_id, Index nn_id) const
+    Neighbors previous_and_next_neighbour_local_ids(Index node_id, Index nn_id) const
     {
         /**
          *        j+1
@@ -1290,13 +1285,13 @@ private:
         auto const local_nn_id = (Index) (std::find(nn_ids_view.begin(), nn_ids_view.end(), nn_id)
                 - nn_ids_view.begin());
         auto const nn_number = (Index) nn_ids_view.size();
-        return {.j_m_1= Neighbors<Index>::minus_one(local_nn_id, nn_number),
-                .j_p_1 = Neighbors<Index>::plus_one(local_nn_id, nn_number)};
+        return {.j_m_1= Neighbors::minus_one(local_nn_id, nn_number),
+                .j_p_1 = Neighbors::plus_one(local_nn_id, nn_number)};
     }
 
     public:
     //unit tested
-    Neighbors<Index> previous_and_next_neighbour_global_ids(Index node_id, Index nn_id) const
+    Neighbors previous_and_next_neighbour_global_ids(Index node_id, Index nn_id) const
     {
         /**
          *        j+1
@@ -1309,12 +1304,12 @@ private:
          *     	not
          */
         auto const& nn_ids_view = nodes_[node_id].nn_ids;
-        Neighbors<Index> neighbors = previous_and_next_neighbour_local_ids(node_id, nn_id);
+        Neighbors neighbors = previous_and_next_neighbour_local_ids(node_id, nn_id);
         return {.j_m_1=nn_ids_view[neighbors.j_m_1], .j_p_1=nn_ids_view[neighbors.j_p_1]};
     }
     private:
 
-    void update_global_geometry(Geometry<Real, Index> const& lg_old, Geometry<Real, Index> const& lg_new)
+    void update_global_geometry(Geometry const& lg_old, Geometry const& lg_new)
     {
         global_geometry_ += lg_new - lg_old;
     }
@@ -1326,7 +1321,7 @@ private:
         nodes_[old_node_id1].pop_nn(old_node_id0);
     }
 
-    static Nodes<Real, Index> triangulate_sphere_nodes(Index n_iter){
+    static Nodes triangulate_sphere_nodes(Index n_iter){
         std::unordered_map<std::string,fp::implementation::SimpleNodeData<Real, Index>> simpleNodeData =
                 fp::implementation::IcosahedronSubTriangulation<Real,Index>::make_corner_nodes();
         fp::implementation::IcosahedronSubTriangulation<Real,Index>::make_face_nodes(simpleNodeData, n_iter);
@@ -1336,7 +1331,7 @@ private:
         fp::indexing_number auto nNodes = static_cast<Index>(fp::implementation::IcosahedronSubTriangulation<Real,Index>::N_ICOSA_NODEs
             + fp::implementation::IcosahedronSubTriangulation<Real,Index>::N_ICOSA_EDGEs*n_iter
             + fp::implementation::IcosahedronSubTriangulation<Real,Index>::N_ICOSA_FACEs*nBulk);
-        std::vector<Node<Real, Index>> nodeData(nNodes);
+        std::vector<Node> nodeData(nNodes);
         for(Index id; auto & nodeEl :simpleNodeData){
             id = nodeEl.second.id;
             nodeData[id].id = nodeEl.second.id;
@@ -1345,21 +1340,21 @@ private:
                 nodeData[id].nn_ids.push_back(simpleNodeData[hash].id);
             }
         }
-        return Nodes<Real, Index>(nodeData);
+        return Nodes(nodeData);
     }
 
     void triangulate_planar_nodes(Index n_length, Index n_width, Real length, Real width){
         Index N_nodes = n_length*n_width;
         fp::implementation::PlanarTriangulation<Real, Index> triang(n_length, n_width);
-//        Nodes<Real, Index> bulk_nodes;
-        Node<Real, Index> node{};
-        node.curvature_vec=fp::vec3<Real>{0.,0.,0.};
+//        Nodes bulk_nodes;
+        Node node{};
+        node.curvature_vec=fp::vec3<Real>{0._r,0._r,0._r};
         for(Index node_id=0; node_id<N_nodes; ++node_id){
             node.id = node_id;
             node.pos = fp::vec3<Real>{
-                    triang.id_to_j(node_id)*length/n_length,
-                    triang.id_to_i(node_id)*width/n_width,
-                    0.
+                    triang.id_to_j(node_id)*length/static_cast<Real>(n_length),
+                    triang.id_to_i(node_id)*width/static_cast<Real>(n_width),
+                    0._r
             };
 
             node.nn_ids = triang.nn_ids[node_id];
@@ -1377,15 +1372,15 @@ private:
         return (nodes_.nn_ids(node_id).size() <= BOND_DONATION_CUTOFF) && (nodes_.nn_ids(nn_id).size() <= BOND_DONATION_CUTOFF);
     }
         //unit tested
-        BondFlipData<Index> flip_bulk_bond(Index node_id, Index nn_id,
+        BondFlipData flip_bulk_bond(Index node_id, Index nn_id,
                                            Real min_bond_length_square,
                                            Real max_bond_length_square) {
-            BondFlipData<Index> bfd{};
+            BondFlipData bfd{};
 //            if (nodes_.nn_ids(node_id).size() <= BOND_DONATION_CUTOFF) { return bfd; }
 //            if (nodes_.nn_ids(nn_id).size() <= BOND_DONATION_CUTOFF) { return bfd; }
             nodes_are_allowed_to_donate_a_bond(node_id, nn_id);
 
-            Neighbors<Index> common_nns = previous_and_next_neighbour_global_ids(node_id, nn_id);
+            Neighbors common_nns = previous_and_next_neighbour_global_ids(node_id, nn_id);
 
             Real bond_length_square = (nodes_.pos(common_nns.j_m_1) - nodes_.pos(common_nns.j_p_1)).norm_square();
             if ((bond_length_square > max_bond_length_square) || (bond_length_square < min_bond_length_square)) { return bfd;}
@@ -1407,10 +1402,9 @@ private:
         }
 
     ///// EXPERIMENTAL SUPPORT /////
-    BondFlipData <Index>
-    flip_bond_in_quadrilateral(Index node_id, Index nn_id, const Neighbors <Index> &common_nns,
+    BondFlipData flip_bond_in_quadrilateral(Index node_id, Index nn_id, const Neighbors &common_nns,
                                Real min_bond_length_square, Real max_bond_length_square) {
-        BondFlipData<Index> bfd{};
+        BondFlipData bfd{};
         Real bond_length_square = (nodes_.pos(common_nns.j_m_1) - nodes_.pos(common_nns.j_p_1)).norm_square();
         if ((bond_length_square<max_bond_length_square) && (bond_length_square>min_bond_length_square)) {
             if (has_two_common_neighbours(node_id, nn_id)) {

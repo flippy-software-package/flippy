@@ -79,7 +79,7 @@ def get_all_logs(logs_dir: str,
 
 def main():
     logs_dir = sys.argv[1]
-    all_logs: List[ParsedData] = get_all_logs(logs_dir, 2)
+    all_logs: List[ParsedData] = get_all_logs(logs_dir)
 
     df = pd.DataFrame(all_logs)
     def version_num_to_category(num: float):

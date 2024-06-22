@@ -30,6 +30,18 @@ template<class T> concept floating_point_number = std::is_floating_point_v<T>;
  */
 template<class T> concept indexing_number = std::is_unsigned_v<T> && std::is_integral_v<T>;
 /**@}*/
+
+using Index = unsigned int;
+using Real = double;
+
+static Real operator"" _r(long double value) {
+    return static_cast<Real>(value);
+}
+static Real operator"" _r(unsigned long long value) {
+    return static_cast<Real>(value);
+}
+
+static constexpr auto PI = static_cast<Real>(3.14159265358979323846264338327950288);
 }
 
 

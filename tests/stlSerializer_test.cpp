@@ -13,7 +13,7 @@ TEST_CASE("testing stlSerializer")
     SECTION("basic serialization, test 1") {
         std::filesystem::path stl_solid_path{stl_solids.append("icosasphere.stl")};
 
-        auto trg = fp::Triangulation<double, unsigned int>::experimental_load_sphere_from_stl(stl_solid_path, 1.);
+        auto trg = fp::Triangulation<fp::SPHERICAL_TRIANGULATION>::experimental_load_sphere_from_stl(stl_solid_path, 1.);
 
         CHECK(trg.size() == 42);
     }
@@ -21,7 +21,7 @@ TEST_CASE("testing stlSerializer")
     SECTION("basic serialization, test 2") {
         std::filesystem::path stl_solid_path{stl_solids.append("icosasphere_1082.stl")};
 
-        auto trg = fp::Triangulation<double, unsigned int>::experimental_load_sphere_from_stl(stl_solid_path, 1.);
+        auto trg = fp::Triangulation<fp::SPHERICAL_TRIANGULATION>::experimental_load_sphere_from_stl(stl_solid_path, 1.);
 
         CHECK(trg.size() == 1082);
         double V = trg.global_geometry().volume;

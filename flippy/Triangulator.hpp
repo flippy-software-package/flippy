@@ -15,14 +15,6 @@
 #include "vec3.hpp"
 
 
-/**
- * @GlobalsStub
- * @{
- */
-//! The M_PI macro is not defined on for all compilers, so it is defined here (if a definition does not already exist).
-#ifndef M_PI
-#define M_PI 3.14159265358979323846	/* pi */
-#endif
 /**@}*/
 
 /**
@@ -148,8 +140,8 @@ public:
                     .hash=hash,
                     .id=i,
                     .pos=r_S1(R,
-                            static_cast<Real>(M_PI/2. - std::atan(0.5)),
-                            static_cast<Real>(2.*M_PI*(static_cast<Real>(i) - 1.)/5.))};
+                            static_cast<Real>(PI/2. - std::atan(0.5)),
+                            static_cast<Real>(2.*PI*(static_cast<Real>(i) - 1.)/5.))};
         }
 
         for (Index i = 6; i<N_ICOSA_NODEs - 1; ++i) {
@@ -158,14 +150,14 @@ public:
                     .hash=hash,
                     .id=i,
                     .pos=r_S1(R,
-                            static_cast<Real>(M_PI/2. + std::atan(0.5)),
-                            static_cast<Real>(2.*M_PI*(static_cast<Real>(i) - 6.5)/5.))};
+                            static_cast<Real>(PI/2. + std::atan(0.5)),
+                            static_cast<Real>(2.*PI*(static_cast<Real>(i) - 6.5)/5.))};
         }
         hash = hash_node(N_ICOSA_NODEs - 1);
         base_nodes[hash] = {
                 .hash=hash,
                 .id=static_cast<Index>(N_ICOSA_NODEs - 1),
-                .pos=r_S1(R, static_cast<Real>(M_PI), static_cast<Real>(0.))};
+                .pos=r_S1(R, PI, 0._r)};
         return base_nodes;
     }
 
@@ -327,7 +319,7 @@ public:
         hash.reserve(10);
 
         std::string c0_h, c1_h, c2_h;
-        for (auto face: FACE_CORNER_NODES) {
+        for (auto const& face: FACE_CORNER_NODES) {
             auto[c0, c1, c2] = get_sorted_face_nodes(face);
             c0_h = hash_node(c0);
             c1_h = hash_node(c1);
