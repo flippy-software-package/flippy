@@ -56,19 +56,7 @@ struct Node
    * @see Node::curvature_vec Triangulation::update_bulk_node_geometry(Index)
    */
   Real volume;
-  //! `unit_bending_energy` corresponds to the [Helfrich bending energy](https://en.wikipedia.org/wiki/Elasticity_of_cell_membranes) with bending rigidity 1 and gaussian bending stiffness 0.
-  /**
-   * \f[
-   *  \mathrm{unit\_bending\_energy} = \frac{1}{2} A_{\mathrm{node}} (2 H_{node})^2
-   * \f]
-   * where \f$ H_{node} \f$ is the mean curvature of the node given by:
-   * \f[
-   * H_{node}^2 = \frac{\vec{K}_{node}}{2A_{node}} \cdot \frac{\vec{K}_{node}}{2A_{node}}
-   * \f],
-   * with  \f$ \vec{K} \f$ denoting the Node::curvature_vector.
-   * @see Node::curvature_vec Triangulation::update_bulk_node_geometry(Index)
-   */
-  Real unit_bending_energy;
+
   //! Position of the node in the lab frame.
   vec3<Real> pos;
   //! Curvature vector of the node.
@@ -204,7 +192,6 @@ struct Node
       os << "node: " << node.id << '\n'
          << "area: " << node.area << '\n'
          << "volume: " << node.volume << '\n'
-         << "unit_bending_energy: " << node.unit_bending_energy << '\n'
          << "curvature_vec: " << node.curvature_vec << '\n'
          << "pos: " << node.pos << '\n'
          << "nn_ids: ";
@@ -263,7 +250,6 @@ struct Nodes
 
             auto const& raw_curv = node.value()["curvature_vec"];
             vec3<Real> curvature_vec{(Real) raw_curv[0], (Real) raw_curv[1], (Real) raw_curv[2]};
-            Real unit_bending_energy = node.value()["unit_bending_energy"];
             Real area = node.value()["area"];
             Real volume = node.value()["volume"];
 
@@ -271,11 +257,10 @@ struct Nodes
             verlet_list_temp = node_dict[node_id]["verlet_list"].get<std::vector<Index>>();
             std::vector<vec3<Real>> nn_distances;
 
-            data[static_cast<size_t>(node_index)] = Node<Real, Index>{
-                    .id{node_index},
-                    .area{area},
-                    .volume{volume},
-                    .unit_bending_energy{unit_bending_energy},
+            data[static_cast<size_t>(node_index)] = Node{
+                    .id=node_index,
+                    .area=area,
+                    .volume=volume,
                     .pos{pos},
                     .curvature_vec{curvature_vec},
                     .nn_ids{nn_ids_temp},
@@ -417,24 +402,6 @@ struct Nodes
         data[node_id].volume = new_volume;
     }   //!< Given a node id and a new volume value, reset the current value of the node volume.
 
-    // Unit bending rigidity block
-    [[nodiscard]] Real unit_bending_energy(Index node_id)const{
-    /**
-     *
-     * @param node_id @NodeIDStub
-     * @return Area associated to the node, Node::unit_bending_energy.
-     */
-        return data[node_id].unit_bending_energy;
-    }   //!< Given a node id, return node-associated unit bending energy.
-    void set_unit_bending_energy(Index node_id, Real new_ube){
-    /**
-     *
-     * @param node_id @NodeIDStub
-     * @param new_ube New value of the unit bending energy (mathematical definition can be found at Node::unit_bending_energy).
-     */
-        data[node_id].unit_bending_energy=new_ube;
-    } //! Given a node id and a new value for the node-associated unit bending energy, update the current value of Node::unit_bending_energy.
-
     // nn_id[s] block
     //unit-tested
     [[nodiscard]] const auto& nn_ids(Index node_id)const{
@@ -547,7 +514,6 @@ struct Nodes
             json_data[std::to_string(node.id)] = {
                     {"area", node.area},
                     {"volume", node.volume},
-                    {"unit_bending_energy", node.unit_bending_energy},
                     {"pos", {node.pos[0], node.pos[1], node.pos[2]}},
                     {"curvature_vec", {node.curvature_vec[0], node.curvature_vec[1], node.curvature_vec[2]}},
                     {"nn_ids", node.nn_ids},
