@@ -8,7 +8,7 @@
   "K_A": 1000,
   "K_V": 100,
   "red_vol": 0.6,
-  "max_mc_steps": 1e5,
+  "max_mc_steps": 3e5,
   "benchmark_version": 5,
   "save_name": "data",
   "save_dir": "../../../demo_out/rbc_bench/",

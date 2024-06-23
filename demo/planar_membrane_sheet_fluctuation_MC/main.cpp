@@ -6,28 +6,27 @@
 // exyzStream is a class that can be used to stream data to a file in extended xyz format
 // (see https://docs.ovito.org/reference/file_formats/input/xyz.html)
 // Then the file can be read by ovito to visualize the data.
-template<fp::floating_point_number Real, fp::indexing_number Index>
 class exyzStream
 {
     std::string xyzStream;
-    std::vector<Index>* shuffled_ids_p;
-    fp::Triangulation<Real,Index,fp::EXPERIMENTAL_PLANAR_TRIANGULATION>* triangulation;
+    std::vector<fp::Index>* shuffled_ids_p;
+    fp::Triangulation<fp::EXPERIMENTAL_PLANAR_TRIANGULATION>* triangulation;
     std::string size_string{};
     std::string properties_string{"Properties=species:S:1:pos:R:3\n"};
 public:
     exyzStream()=default;
-    exyzStream(std::vector<Index>* shuffled_ids_p_inp ,
-               fp::Triangulation<Real, Index, fp::EXPERIMENTAL_PLANAR_TRIANGULATION>* guv_p_inp)
+    exyzStream(std::vector<fp::Index>* shuffled_ids_p_inp ,
+               fp::Triangulation<fp::EXPERIMENTAL_PLANAR_TRIANGULATION>* guv_p_inp)
             : shuffled_ids_p(shuffled_ids_p_inp),
               triangulation(guv_p_inp),
               size_string(std::to_string(shuffled_ids_p->size())+'\n'){}
 
 
-    void append_XYZ_stream_with_test_node(Index test_node_id){
+    void append_XYZ_stream_with_test_node(fp::Index test_node_id){
         xyzStream.append(size_string);
         xyzStream.append(properties_string);
         auto test_node_neighbours = (*triangulation)[test_node_id].nn_ids;
-        for(Index node_id: *shuffled_ids_p){
+        for(fp::Index node_id: *shuffled_ids_p){
             if(node_id==test_node_id){
                 xyzStream.append(stream_particle("11", (*triangulation)[node_id].pos));
             }
@@ -42,7 +41,7 @@ public:
     void append_XYZ_stream(){
         xyzStream.append(size_string);
         xyzStream.append(properties_string);
-        for(Index node_id: *shuffled_ids_p){
+        for(fp::Index node_id: *shuffled_ids_p){
             xyzStream.append(stream_particle("1", (*triangulation)[node_id].pos));
         }
     }
@@ -70,13 +69,19 @@ public:
 struct EnergyParameters{double kappa, K_A, A_t;};
 
 // This is the energy function that is used by flippy's built-in updater to decide if a move was energetically favorable or not
-double surface_energy([[maybe_unused]]fp::Node<double, unsigned int> const& node,
-                      fp::Triangulation<double, unsigned int, fp::EXPERIMENTAL_PLANAR_TRIANGULATION> const& trg,
+double surface_energy([[maybe_unused]]fp::Node const& node,
+                      fp::Triangulation<fp::EXPERIMENTAL_PLANAR_TRIANGULATION> const& trg,
                       EnergyParameters const& prms,
-                      std::vector<unsigned int>&){
-    double A = trg.global_geometry().area;
-    double dA = A-prms.A_t;
-    double energy = prms.kappa*trg.global_geometry().unit_bending_energy + prms.K_A*dA*dA/prms.A_t;
+                      std::vector<fp::Index> const& changed_neighborhood){
+    fp::Real A = trg.global_geometry().area;
+    fp::Real dA = A-prms.A_t;
+    fp::Real eb = fp::node_unit_bending_energy(node.id, trg.nodes());
+    for(fp::Index changed_node_id: changed_neighborhood){
+        eb += fp::node_unit_bending_energy(changed_node_id, trg.nodes());
+    }
+
+    fp::Real energy = prms.kappa*eb + prms.K_A*dA*dA/prms.A_t;
+
     return energy;
 }
 
@@ -99,8 +104,8 @@ int main(){
     std::mt19937 rng(seed); // create a random number generator and seed it with the current time
 
     // All the flippy magic is happening on the following two lines
-    fp::Triangulation<double, unsigned int, fp::EXPERIMENTAL_PLANAR_TRIANGULATION> planar_trg(n_x, n_y, l_x, l_y, r_Verlet);
-    fp::MonteCarloUpdater<double, unsigned int, EnergyParameters, std::mt19937, fp::EXPERIMENTAL_PLANAR_TRIANGULATION> mc_updater(planar_trg, prms, surface_energy, rng, l_min, l_max);
+    fp::Triangulation<fp::EXPERIMENTAL_PLANAR_TRIANGULATION> planar_trg(n_x, n_y, l_x, l_y, r_Verlet);
+    fp::MonteCarloUpdater<EnergyParameters, std::mt19937, fp::EXPERIMENTAL_PLANAR_TRIANGULATION> mc_updater(planar_trg, prms, surface_energy, rng, l_min, l_max);
 
     fp::vec3<double> displ{}; // declaring a 3d vector (using flippy's built in vec3 type) for later use as a random direction vector
     std::uniform_real_distribution<double> displ_distr(-linear_displ, linear_displ); //define a distribution from which the small displacements in x y and z directions will be drawn
@@ -111,7 +116,7 @@ int main(){
     std::vector<unsigned int> shuffled_ids;
     shuffled_ids.reserve(planar_trg.size());
     for(auto const& node: planar_trg.nodes()){ shuffled_ids.push_back(node.id);} //create a vector that contains all node ids. We can shuffle this vector in each MC step to iterate randomly through the nodes
-    exyzStream<double, unsigned int> xyzStream(&shuffled_ids, &planar_trg);
+    exyzStream xyzStream(&shuffled_ids, &planar_trg);
     xyzStream.append_XYZ_stream();
     xyzStream.streamXYZ();
 
@@ -133,9 +138,6 @@ int main(){
         if(mc_step%300==0){
             xyzStream.append_XYZ_stream();
             xyzStream.streamXYZ(); // ATTENTION!!! this file will be saved in the same folder as the executable
-            std::cout<<"mc_step: "<<mc_step<<'\n';
-            std::cout<<"Energy: "<<planar_trg.global_geometry().unit_bending_energy <<'\n';
-            std::cout<<"-------------------------\n";
         }
     }
     xyzStream.streamXYZ();
