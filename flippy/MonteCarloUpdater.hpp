@@ -34,7 +34,6 @@ class MonteCarloUpdater
 {
 private:
     static constexpr Real max_float = 3.40282347e+38f;
-//    Real e_old{}, e_new{}, e_diff{};
     fp::Triangulation<triangulation_type>& triangulation;
     EnergyFunctionParameters const& prms;
     typedef std::function<Real(fp::Node const&, fp::Triangulation<triangulation_type> const&, EnergyFunctionParameters const&, std::vector<Index> const&)> EnergyFunctionType;
@@ -223,7 +222,10 @@ public:
     {
         ++flip_attempt;
         Neighbors cns = triangulation.previous_and_next_neighbour_global_ids(node.id, id_in_nn_ids);
-        static const auto changed_neighborhood = std::vector{id_in_nn_ids, cns.j_m_1, cns.j_p_1};
+        //This one line leads to an allocation each MC step for each node, which can easily number in billions
+        // for even small simulations. This can not be deploied to production! For even single flip per move, this
+        // leads to a 10% regression in banchmarks.
+        const auto changed_neighborhood = std::vector{id_in_nn_ids, cns.j_m_1, cns.j_p_1};
         Real e_old = energy_function(node, triangulation, prms, changed_neighborhood);
         BondFlipData bfd = triangulation.flip_bond(node.id, id_in_nn_ids, min_bond_length_square, max_bond_length_square);
         if (bfd.flipped) {
