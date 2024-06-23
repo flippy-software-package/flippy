@@ -4,19 +4,17 @@
 #include <flippy.hpp>
 #include <code_utils.hpp>
 
-template <typename U,  typename Real, typename Index>
+template <typename U>
 concept Updater = requires(U u,
-                           Real r, Index i,
-                           fp::Triangulation<Real, Index,
-                                             fp::SPHERICAL_TRIANGULATION> triangulation,
-                           fp::Node<Real, Index> node, Index nn_id,
-                           fp::vec3<Real> displacement,
+                           fp::Triangulation<fp::SPHERICAL_TRIANGULATION> triangulation,
+                           fp::Node node, fp::Index nn_id,
+                           fp::vec3<fp::Real> displacement,
                            unsigned
                            long long z,
                            std::ostream& os) {
 //  { U(triangulation, node) } -> std::same_as<U>;
 
-  {u.move_MC_updater(node, displacement)} -> std::same_as<std::optional<Real>>;
+  {u.move_MC_updater(node, displacement)} -> std::same_as<std::optional<fp::Real>>;
   {u.flip_MC_updater(node, nn_id)} -> std::same_as<void>;
 
   {u.move_attempt_count()} -> std::same_as<unsigned long>;
@@ -29,19 +27,18 @@ concept Updater = requires(U u,
 
 };
 
-template <fp::floating_point_number Real,
-          fp::indexing_number Index, Updater<Real, Index> Updater>
+template <Updater Updater>
 class FlippyBenchmarkLogger {
   Updater const& mcu_;
-  fp::Triangulation<Real, Index> const& triangulation_;
+  fp::Triangulation<fp::SPHERICAL_TRIANGULATION> const& triangulation_;
   cutils::Timer timer{};
 
 FlippyBenchmarkLogger(Updater const& mcu,
-                      fp::Triangulation<Real, Index> const& triangulation
+                      fp::Triangulation<fp::SPHERICAL_TRIANGULATION> const& triangulation
                         ): mcu_(mcu), triangulation_(triangulation) {};
 
 public:
-  static FlippyBenchmarkLogger start_benchmark(Updater const& mcu, fp::Triangulation<Real, Index> const& triangulation) {
+  static FlippyBenchmarkLogger start_benchmark(Updater const& mcu, fp::Triangulation<fp::SPHERICAL_TRIANGULATION> const& triangulation) {
     FlippyBenchmarkLogger logger(mcu, triangulation);
 
     PRINT("each of ", triangulation.size(), " beads will be attempted to be moved: ",
@@ -64,13 +61,9 @@ std::string log(std::string const& log_dir, fp::Json const& config_data){
 
   auto topologically_successful_flip = mcu_.flip_attempt_count() - flip_back;
   PRINT("percentage of failed moves: ",
-        static_cast<long double>(mcu_.move_back_count() +
-                                 mcu_.bond_length_move_rejection_count()) /
-        static_cast<long double>(mcu_.move_attempt_count() ));
+        static_cast<long double>(mcu_.move_back_count() + mcu_.bond_length_move_rejection_count()) / static_cast<long double>(mcu_.move_attempt_count() ));
   PRINT("percentage of failed flips: ",
-        static_cast<long double>(mcu_ .flip_back_count()
-                                 + mcu_.bond_length_flip_rejection_count()) /
-        static_cast<long double>(mcu_.flip_attempt_count()));
+        static_cast<long double>(mcu_ .flip_back_count() + mcu_.bond_length_flip_rejection_count()) / static_cast<long double>(mcu_.flip_attempt_count()));
 
   long double time_in_seconds = ((long double)elapsed_time.diff_ns)*1.e-9l;
   long double moves_ps = static_cast<long double>(attempt)/static_cast<long double>(time_in_seconds);
