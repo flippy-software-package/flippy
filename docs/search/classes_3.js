@@ -1,6 +1,4 @@
 var searchData=
 [
-  ['neighbors_0',['Neighbors',['../structfp_1_1_neighbors.html',1,'fp']]],
-  ['node_1',['Node',['../structfp_1_1_node.html',1,'fp']]],
-  ['nodes_2',['Nodes',['../structfp_1_1_nodes.html',1,'fp']]]
+  ['jsondatasaver_0',['jsonDataSaver',['../classfp_1_1json_data_saver.html',1,'fp']]]
 ];

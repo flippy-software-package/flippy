@@ -1,0 +1,18 @@
+<map id="fp::Triangulation::update_diamond_geometry" name="fp::Triangulation::update_diamond_geometry">
+<area shape="rect" id="Node000001" title="Calculates and updates the geometric quantities of the diamond configuration of nodes associated with..." alt="" coords="5,113,184,153"/>
+<area shape="rect" id="Node000002" href="$classfp_1_1_triangulation.html#a3b7b50584514fb20c9922b43cf684a31" title="Update the geometric quantities associated with the given node." alt="" coords="232,113,420,153"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="184,130,219,130,219,135,184,135"/>
+<area shape="rect" id="Node000003" href="$classfp_1_1vec3.html#ae64d6fa0ceec87d5a26cac17560f1d7c" title="Calculate cross product between two vectors." alt="" coords="493,5,603,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="353,110,405,75,467,41,487,33,489,38,469,46,407,80,356,115"/>
+<area shape="rect" id="Node000004" href="$classfp_1_1_triangulation.html#add5f9a26549294b8b94c623056a58b0d" title="The node&#45;associated area inside a triangle." alt="" coords="487,55,609,95"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="403,110,472,92,474,97,405,115"/>
+<area shape="rect" id="Node000006" href="$classfp_1_1vec3.html#a8568d337f067bd43b63508174f047df2" title="Returns the norm of the vector." alt="" coords="495,120,601,145"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="420,130,481,130,481,135,420,135"/>
+<area shape="rect" id="Node000007" href="$structfp_1_1_neighbors.html#aa5cd15f625ae3e2e92e5361f1c8d20bd" title=" " alt="" coords="468,169,628,195"/>
+<area shape="poly" id="edge7_Node000002_Node000007" title=" " alt="" coords="417,150,477,164,476,169,416,155"/>
+<area shape="rect" id="Node000008" href="$structfp_1_1_nodes.html#a6eca1b76638e0a84bbd2bf4a031da3ab" title="Size of the Nodes data member." alt="" coords="493,219,603,244"/>
+<area shape="poly" id="edge8_Node000002_Node000008" title=" " alt="" coords="363,150,413,177,469,204,490,212,489,217,467,208,410,182,361,155"/>
+<area shape="rect" id="Node000005" href="$classfp_1_1vec3.html#a3097ff5c62f8bb0da1c5e87fb9384da9" title="Calculate dot product with another vector." alt="" coords="676,92,771,117"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="610,83,663,92,662,97,609,88"/>
+<area shape="poly" id="edge6_Node000006_Node000005" title=" " alt="" coords="601,122,662,112,663,117,602,127"/>
+</map>

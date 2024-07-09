@@ -1,14 +1,13 @@
 var structfp_1_1_geometry =
 [
-    [ "Geometry", "structfp_1_1_geometry.html#a6bababab0cc9d995cd9d52dfc87442a0", null ],
-    [ "Geometry", "structfp_1_1_geometry.html#a6627a3e6e7ec703d8db7c756464aed8e", null ],
-    [ "Geometry", "structfp_1_1_geometry.html#a2c84ea40f4dec6a64541e9d4aaa9eda3", null ],
-    [ "operator+=", "structfp_1_1_geometry.html#af64274f242f134f791bb381ce1419753", null ],
-    [ "operator+", "structfp_1_1_geometry.html#a1ae896003b13c5f110116085a2658471", null ],
-    [ "operator-", "structfp_1_1_geometry.html#ad1551fc47c469d47625068d5424a2cef", null ],
-    [ "operator+=", "structfp_1_1_geometry.html#a7d19899dde91a5b7b30635de7b321dd9", null ],
-    [ "operator-=", "structfp_1_1_geometry.html#ad54e751bccf6ae11d4af543ef6a23c23", null ],
-    [ "area", "structfp_1_1_geometry.html#a261444235eb423476167d8185b59cd67", null ],
-    [ "volume", "structfp_1_1_geometry.html#a04eb3d9d41651703001ab4601a1fd353", null ],
-    [ "unit_bending_energy", "structfp_1_1_geometry.html#a8ae88ad31c5e8ad04e949d508d3023e8", null ]
+    [ "Geometry", "structfp_1_1_geometry.html#ab34dc017d3d153b9d6dce5cbe85b00a2", null ],
+    [ "Geometry", "structfp_1_1_geometry.html#afe19ae70a18f105e616394c979739f89", null ],
+    [ "Geometry", "structfp_1_1_geometry.html#afcb524f26e28258ab595cf67969e4f2f", null ],
+    [ "operator+=", "structfp_1_1_geometry.html#a1ad7209337ace3bfb8ca54e3c1f74e85", null ],
+    [ "operator+", "structfp_1_1_geometry.html#acfea07971d44f8daf22bfc023f49b2a3", null ],
+    [ "operator-", "structfp_1_1_geometry.html#a3714cc223f61f406d01becb91cab6ab9", null ],
+    [ "operator+=", "structfp_1_1_geometry.html#ac692b9c2c5ebc614b36fb9771a07e773", null ],
+    [ "operator-=", "structfp_1_1_geometry.html#a768de5f3d63132e0be2ad65c3840c8bc", null ],
+    [ "area", "structfp_1_1_geometry.html#a1f0f7950d80852acf9af7ee9891624b9", null ],
+    [ "volume", "structfp_1_1_geometry.html#ad2705489aa1d5f77b99b2bbdf522d226", null ]
 ];

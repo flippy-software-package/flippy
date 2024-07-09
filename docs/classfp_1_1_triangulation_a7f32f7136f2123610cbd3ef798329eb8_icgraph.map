@@ -1,0 +1,10 @@
+<map id="fp::Triangulation::flip_bond_unchecked" name="fp::Triangulation::flip_bond_unchecked">
+<area shape="rect" id="Node000001" title=" " alt="" coords="379,37,523,77"/>
+<area shape="rect" id="Node000002" href="$classfp_1_1_triangulation.html#af9b5579bc1812246b7cf96a5c208d7bc" title="Securely flip the bond inside a quadrilateral formed by the nodes given by node_id,..." alt="" coords="208,5,331,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="364,45,331,39,332,34,365,40"/>
+<area shape="rect" id="Node000004" href="$classfp_1_1_triangulation.html#a2b6043010d90086720ac6b2b2e1a9cfa" title="Un&#45;flip a bond that was just flipped." alt="" coords="208,69,331,109"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="365,75,332,81,331,76,364,70"/>
+<area shape="rect" id="Node000003" href="$classfp_1_1_monte_carlo_updater.html#abab166d4505421306c99986145f0c183" title="Attempt a flip Monte Carlo Step." alt="" coords="5,37,160,77"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="195,41,161,47,160,41,194,36"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="194,79,160,73,161,68,195,74"/>
+</map>

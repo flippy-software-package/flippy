@@ -1,5 +1,0 @@
-<map id="fp::Nodes::set_nn_id" name="fp::Nodes::set_nn_id">
-<area shape="rect" id="Node000001" title="For a node specified by node_id, resets the value of the requested nn_id." alt="" coords="5,5,148,31"/>
-<area shape="rect" id="Node000002" href="$structfp_1_1_nodes.html#a65c0fd75105d0110c204b2b9c2af5640" title="Given a node id and the local index in the Node::nn_ids vector, returns the next neighbour id." alt="" coords="196,5,315,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="148,15,182,15,182,21,148,21"/>
-</map>

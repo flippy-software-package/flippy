@@ -1,0 +1,8 @@
+<map id="fp::Triangulation::previous_and_next_neighbour_global_ids" name="fp::Triangulation::previous_and_next_neighbour_global_ids">
+<area shape="rect" id="Node000001" title=" " alt="" coords="379,27,573,82"/>
+<area shape="rect" id="Node000002" href="$classfp_1_1_triangulation.html#af9b5579bc1812246b7cf96a5c208d7bc" title="Securely flip the bond inside a quadrilateral formed by the nodes given by node_id,..." alt="" coords="208,5,331,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="365,42,330,37,331,31,366,36"/>
+<area shape="rect" id="Node000003" href="$classfp_1_1_monte_carlo_updater.html#abab166d4505421306c99986145f0c183" title="Attempt a flip Monte Carlo Step." alt="" coords="5,35,160,75"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="365,60,331,60,208,60,160,59,160,54,208,55,331,55,365,54"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="195,40,161,45,160,40,194,34"/>
+</map>

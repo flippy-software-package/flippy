@@ -1,0 +1,7 @@
+<map id="fp::node_unit_bending_energy" name="fp::node_unit_bending_energy">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,155,45"/>
+<area shape="rect" id="Node000002" href="$classfp_1_1vec3.html#a8f4f85470de85d92876fe2c93ea0f425" title="Returns the square of the norm of the vector." alt="" coords="203,13,355,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="155,23,188,23,188,28,155,28"/>
+<area shape="rect" id="Node000003" href="$classfp_1_1vec3.html#a3097ff5c62f8bb0da1c5e87fb9384da9" title="Calculate dot product with another vector." alt="" coords="403,13,497,38"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="355,23,389,23,389,28,355,28"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="fp::Triangulation::emplace_before" name="fp::Triangulation::emplace_before">
+<area shape="rect" id="Node000001" title="Adds a new node to the next neighbor list of a given node and calculates their mutual distance." alt="" coords="5,55,128,95"/>
+<area shape="rect" id="Node000002" href="$structfp_1_1_nodes.html#a9244b582d9d23771c04ef519a4014edf" title="Returns an iterator to the beginning of the underlying data member that contains the collection of th..." alt="" coords="185,5,303,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="127,53,190,33,192,38,129,58"/>
+<area shape="rect" id="Node000003" href="$structfp_1_1_nodes.html#a30ea8ac2096ede34251f77fbea6be2d2" title="Emplace a the id of a new node in the Node::nn_ids vector, in front of the loc_idx position." alt="" coords="176,55,312,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="128,73,162,73,162,78,128,78"/>
+<area shape="rect" id="Node000004" href="$structfp_1_1_nodes.html#adfa27f36d1528e84e9b56f4f94f534dd" title="Returns an iterator to the end of the underlying data member that contains the collection of the node..." alt="" coords="190,120,298,145"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="129,93,192,113,190,118,127,98"/>
+</map>

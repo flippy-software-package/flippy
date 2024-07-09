@@ -1,5 +1,0 @@
-<map id="fp::Nodes::unit_bending_energy" name="fp::Nodes::unit_bending_energy">
-<area shape="rect" id="Node000001" title="Given a node id, return node&#45;associated unit bending energy." alt="" coords="179,5,339,45"/>
-<area shape="rect" id="Node000002" href="$structfp_1_1_nodes.html#aeab72aa27fd66417ac8d5d0c9d000be6" title="Constructor from JSON." alt="" coords="5,13,131,38"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="165,28,131,28,131,23,165,23"/>
-</map>

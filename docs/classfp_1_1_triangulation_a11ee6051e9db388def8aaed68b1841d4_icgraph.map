@@ -1,9 +1,0 @@
-<map id="fp::Triangulation::emplace_before" name="fp::Triangulation::emplace_before">
-<area shape="rect" id="Node000001" title="Adds a new node to the next neighbor list of a given node and calculates their mutual distance." alt="" coords="571,5,693,45"/>
-<area shape="rect" id="Node000002" href="$classfp_1_1_triangulation.html#a077d1be6c31f16241e9035c5a0f93652" title=" " alt="" coords="379,5,523,45"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="557,28,523,28,523,23,557,23"/>
-<area shape="rect" id="Node000003" href="$classfp_1_1_triangulation.html#a5d1ec431a7a0040d7963e4297a80faaa" title="Un&#45;flip a bond that was just flipped." alt="" coords="208,5,331,45"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="365,28,331,28,331,23,365,23"/>
-<area shape="rect" id="Node000004" href="$classfp_1_1_monte_carlo_updater.html#acf28ad26646a0e87dce57eed5ca5047c" title="Attempt a flip Monte Carlo Step." alt="" coords="5,5,160,45"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="194,28,161,28,161,23,194,23"/>
-</map>

@@ -1,7 +1,0 @@
-<map id="fp::Triangulation::scale_node_coordinates" name="fp::Triangulation::scale_node_coordinates">
-<area shape="rect" id="Node000001" title="Method for stretching or squeezing the initial triangulation shape." alt="" coords="5,5,168,45"/>
-<area shape="rect" id="Node000002" href="$classfp_1_1_triangulation.html#ad8102adbe7dab80cda3209844a939e30" title="Move an individual node of the triangulation and update all the geometric quantities of the triangula..." alt="" coords="216,5,339,45"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="168,23,202,23,202,28,168,28"/>
-<area shape="rect" id="Node000003" href="$classfp_1_1_triangulation.html#a3c660cb2bec69afe055843975698cfd0" title="Aggregates and Returns the geometric quantities of the center node and its next neighbor nodes." alt="" coords="387,5,544,45"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="339,23,373,23,373,28,339,28"/>
-</map>

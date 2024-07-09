@@ -1,0 +1,5 @@
+<map id="fp::Triangulation::move_node" name="fp::Triangulation::move_node">
+<area shape="rect" id="Node000001" title="Move an individual node of the triangulation and update all the geometric quantities of the triangula..." alt="" coords="5,5,128,45"/>
+<area shape="rect" id="Node000002" href="$classfp_1_1_triangulation.html#aa7d571edcee24274dfd464f08d0f187f" title="Aggregates and Returns the geometric quantities of the center node and its next neighbor nodes." alt="" coords="176,5,333,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="128,23,162,23,162,28,128,28"/>
+</map>

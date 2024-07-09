@@ -1,0 +1,15 @@
+<map id="fp::MonteCarloUpdater::move_MC_updater" name="fp::MonteCarloUpdater::move_MC_updater">
+<area shape="rect" id="Node000001" title="Attempt a move Monte Carlo Step." alt="" coords="5,69,160,109"/>
+<area shape="rect" id="Node000002" href="$classfp_1_1_monte_carlo_updater.html#af4528387b65d1058714b1f6aa0fdb90b" title="Implementation of the Metropolis algorithm." alt="" coords="247,5,403,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="158,67,235,46,236,51,160,72"/>
+<area shape="rect" id="Node000003" href="$classfp_1_1_triangulation.html#a37457b9568e1338750e153471a4b7b59" title="Move an individual node of the triangulation and update all the geometric quantities of the triangula..." alt="" coords="263,69,386,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="160,87,250,87,250,92,160,92"/>
+<area shape="rect" id="Node000005" href="$classfp_1_1_monte_carlo_updater.html#a173b77e5381e7d98ceb77aaa040b29dd" title="Pre&#45;update check to test that the update step will not result in an unphysical configuration." alt="" coords="208,137,441,191"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="149,107,223,130,222,135,147,112"/>
+<area shape="rect" id="Node000004" href="$classfp_1_1_triangulation.html#aa7d571edcee24274dfd464f08d0f187f" title="Aggregates and Returns the geometric quantities of the center node and its next neighbor nodes." alt="" coords="494,65,651,105"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="386,86,480,84,480,89,386,91"/>
+<area shape="rect" id="Node000006" href="$classfp_1_1_monte_carlo_updater.html#adff0b592bb81bdc289bcdbd170b78401" title="Pre&#45;update check to test that the update step will not result in an unphysical configuration." alt="" coords="489,129,656,199"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="441,161,476,161,476,167,441,167"/>
+<area shape="rect" id="Node000007" href="$classfp_1_1_monte_carlo_updater.html#aaf82cdb55f4bf12468ca2a744ac81ffe" title="Pre&#45;update check to test that the update step will not result in an unphysical configuration." alt="" coords="489,223,656,292"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="399,189,478,219,476,224,397,194"/>
+</map>

@@ -108,7 +108,10 @@ $(function(){initNavTree('custom__concepts_8hpp.html',''); initResizable(true); 
 <div class="header">
   <div class="summary">
 <a href="#namespaces">Namespaces</a> &#124;
-<a href="#concepts">Concepts</a>  </div>
+<a href="#concepts">Concepts</a> &#124;
+<a href="#typedef-members">Typedefs</a> &#124;
+<a href="#func-members">Functions</a> &#124;
+<a href="#var-members">Variables</a>  </div>
   <div class="headertitle"><div class="title">custom_concepts.hpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
@@ -131,31 +134,41 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="custom__concepts_8hpp__dep__incl.png" border="0" usemap="#aflippy_2custom__concepts_8hppdep" alt=""/></div>
 <map name="aflippy_2custom__concepts_8hppdep" id="aflippy_2custom__concepts_8hppdep">
-<area shape="rect" title="This file contains the concepts that are costomly defined for the flippy class templates." alt="" coords="37,5,222,31"/>
-<area shape="rect" href="_monte_carlo_updater_8hpp.html" title="This file contains the MonteCarloUpdater class template. Together with Triangulation...." alt="" coords="169,299,364,324"/>
-<area shape="poly" title=" " alt="" coords="127,45,122,107,125,142,134,176,158,216,189,250,222,277,249,296,246,301,218,281,186,254,154,219,130,178,119,143,116,107,121,44"/>
-<area shape="rect" href="flippy_8hpp.html" title="This header file exists for convenience. Including this header will automatically include all parts o..." alt="" coords="77,372,187,397"/>
-<area shape="poly" title=" " alt="" coords="98,40,69,62,39,90,17,125,10,143,8,163,8,239,11,262,19,282,46,319,80,349,112,370,109,374,77,353,42,323,14,285,6,263,3,240,3,163,5,142,12,122,35,87,65,58,95,36"/>
-<area shape="rect" href="_triangulator_8hpp.html" title="This file contains internal implementation details and is not part of the stable public api...." alt="" coords="512,152,661,177"/>
-<area shape="poly" title=" " alt="" coords="180,32,321,76,552,149,550,154,319,81,178,37"/>
-<area shape="rect" href="vec3_8hpp.html" title="Header file containing the definition and implementation a 3 dimensional vector class,..." alt="" coords="197,79,307,104"/>
-<area shape="poly" title=" " alt="" coords="162,35,233,76,231,81,159,40"/>
-<area shape="poly" title=" " alt="" coords="234,333,155,374,153,369,232,328"/>
-<area shape="rect" href="_triangulation_8hpp.html" title="This file contains the fp::Triangulation class and several related helper classes...." alt="" coords="279,225,435,251"/>
-<area shape="poly" title=" " alt="" coords="537,184,395,228,394,223,536,179"/>
-<area shape="poly" title=" " alt="" coords="333,261,283,301,280,296,330,257"/>
-<area shape="poly" title=" " alt="" coords="375,262,385,294,385,310,378,326,365,337,347,346,298,361,188,380,187,375,297,356,345,341,362,332,374,322,380,309,380,294,370,264"/>
-<area shape="poly" title=" " alt="" coords="190,111,159,128,134,154,121,182,113,212,111,244,112,275,120,332,131,371,125,372,115,333,106,276,105,244,108,211,116,180,130,150,155,124,187,107"/>
-<area shape="poly" title=" " alt="" coords="320,104,533,149,532,154,319,109"/>
-<area shape="poly" title=" " alt="" coords="271,114,351,224,347,227,267,117"/>
-<area shape="rect" href="_nodes_8hpp.html" title="This file contains the fp::Node and fp::Nodes classes, data structures that represent a single node o..." alt="" coords="144,152,264,177"/>
-<area shape="poly" title=" " alt="" coords="239,117,214,153,210,150,234,114"/>
-<area shape="rect" href="stl_serializer_8hpp_source.html" title=" " alt="" coords="339,152,488,177"/>
-<area shape="poly" title=" " alt="" coords="291,107,388,149,386,154,289,112"/>
-<area shape="poly" title=" " alt="" coords="217,189,264,297,259,300,212,191"/>
-<area shape="poly" title=" " alt="" coords="198,191,160,299,138,373,133,371,155,298,192,190"/>
-<area shape="poly" title=" " alt="" coords="242,181,333,223,331,228,240,185"/>
-<area shape="poly" title=" " alt="" coords="398,190,368,227,364,224,393,187"/>
+<area shape="rect" title="This file contains the concepts that are costomly defined for the flippy class templates." alt="" coords="382,5,567,31"/>
+<area shape="rect" href="_monte_carlo_updater_8hpp.html" title="This file contains the MonteCarloUpdater class template. Together with Triangulation...." alt="" coords="93,387,288,412"/>
+<area shape="poly" title=" " alt="" coords="377,36,322,52,266,75,215,109,194,129,176,153,162,184,155,216,154,250,158,284,173,344,188,386,183,388,167,346,153,285,149,251,150,216,157,182,171,151,190,126,212,104,263,70,320,47,375,31"/>
+<area shape="rect" href="flippy_8hpp.html" title="This header file exists for convenience. Including this header will automatically include all parts o..." alt="" coords="270,460,381,485"/>
+<area shape="poly" title=" " alt="" coords="369,33,254,51,136,78,85,95,44,115,17,138,10,151,8,164,8,327,10,347,15,365,36,396,66,420,104,438,147,451,190,460,270,468,270,473,190,465,145,456,102,443,64,424,32,399,11,367,5,348,3,327,3,163,5,149,13,135,41,111,83,90,134,73,253,45,368,28"/>
+<area shape="rect" href="_triangulator_8hpp.html" title="This file contains internal implementation details and is not part of the stable public api...." alt="" coords="481,152,631,177"/>
+<area shape="poly" title=" " alt="" coords="490,42,552,150,547,153,486,44"/>
+<area shape="rect" href="_data_i_o_8hpp_source.html" title=" " alt="" coords="414,387,583,412"/>
+<area shape="poly" title=" " alt="" coords="582,27,645,42,705,68,730,86,749,107,762,133,767,163,767,247,762,278,748,304,728,326,702,345,642,373,580,389,579,384,640,368,700,341,724,323,744,301,757,276,761,246,761,164,757,135,745,110,726,90,702,72,644,47,580,32"/>
+<area shape="rect" href="sim__utils_8hpp_source.html" title=" " alt="" coords="604,225,727,265"/>
+<area shape="poly" title=" " alt="" coords="511,35,580,81,615,113,645,151,661,189,667,225,662,226,656,190,640,153,611,117,577,86,508,40"/>
+<area shape="rect" href="vec3_8hpp.html" title="Header file containing the definition and implementation a 3 dimensional vector class,..." alt="" coords="338,79,449,104"/>
+<area shape="poly" title=" " alt="" coords="453,42,408,80,405,76,450,38"/>
+<area shape="poly" title=" " alt="" coords="226,416,305,457,302,462,223,421"/>
+<area shape="rect" href="_triangulation_8hpp.html" title="This file contains the fp::Triangulation class and several related helper classes...." alt="" coords="335,313,491,339"/>
+<area shape="poly" title=" " alt="" coords="561,192,559,229,553,249,543,267,527,284,508,298,466,316,464,311,505,293,524,280,539,264,548,247,554,228,556,191"/>
+<area shape="poly" title=" " alt="" coords="366,345,228,389,226,384,364,340"/>
+<area shape="poly" title=" " alt="" coords="401,352,335,461,330,458,397,349"/>
+<area shape="poly" title=" " alt="" coords="439,345,486,384,483,388,436,349"/>
+<area shape="poly" title=" " alt="" coords="459,420,355,462,353,457,457,415"/>
+<area shape="poly" title=" " alt="" coords="663,280,656,312,643,348,624,384,598,414,560,433,503,448,381,468,381,463,502,443,558,428,594,410,620,381,638,346,651,310,658,278"/>
+<area shape="poly" title=" " alt="" coords="593,272,451,316,449,311,591,267"/>
+<area shape="poly" title=" " alt="" coords="324,98,287,104,247,114,209,131,175,154,148,181,129,206,115,231,106,257,95,315,84,387,81,400,84,411,95,420,112,429,160,444,270,463,269,468,159,449,110,434,92,425,79,413,75,400,79,386,90,314,101,255,111,229,124,203,144,177,172,150,206,126,245,109,286,99,323,93"/>
+<area shape="poly" title=" " alt="" coords="433,107,530,149,528,154,431,112"/>
+<area shape="poly" title=" " alt="" coords="385,118,375,148,367,185,364,225,371,264,385,291,403,311,399,315,380,294,365,266,359,226,361,184,370,147,380,116"/>
+<area shape="poly" title=" " alt="" coords="411,114,437,145,471,175,503,193,538,208,605,229,603,234,536,213,501,198,468,180,433,149,407,117"/>
+<area shape="rect" href="_nodes_8hpp.html" title="This file contains the fp::Node and fp::Nodes classes, data structures that represent a single node o..." alt="" coords="185,152,305,177"/>
+<area shape="poly" title=" " alt="" coords="359,112,271,154,268,149,356,107"/>
+<area shape="rect" href="stl_serializer_8hpp_source.html" title=" " alt="" coords="380,233,529,258"/>
+<area shape="poly" title=" " alt="" coords="405,116,428,176,452,231,447,233,423,178,400,118"/>
+<area shape="poly" title=" " alt="" coords="237,191,225,226,205,318,195,387,189,386,200,317,220,225,232,189"/>
+<area shape="poly" title=" " alt="" coords="254,190,325,459,320,460,249,191"/>
+<area shape="poly" title=" " alt="" coords="262,187,290,224,326,263,360,290,394,311,391,315,357,295,322,267,286,228,258,190"/>
+<area shape="poly" title=" " alt="" coords="320,177,604,230,603,235,319,182"/>
+<area shape="poly" title=" " alt="" coords="445,271,422,314,417,312,440,269"/>
 </map>
 </div>
 </div>
@@ -164,6 +177,8 @@ This graph shows which files directly or indirectly include this file:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
 Namespaces</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacefp.html">fp</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacefp_1_1implementation.html">fp::implementation</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="concepts" name="concepts"></a>
@@ -174,6 +189,46 @@ Concepts</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">concept &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="conceptfp_1_1indexing__number.html">fp::indexing_number</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Here we implement the concepts of a positive integer number that is used throughout the code for indexing. <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">concept &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="conceptfp_1_1implementation_1_1_beginable.html">fp::implementation::Beginable</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">concept &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="conceptfp_1_1implementation_1_1_endable.html">fp::implementation::Endable</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">concept &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="conceptfp_1_1implementation_1_1_neqable_begin_and_end.html">fp::implementation::NeqableBeginAndEnd</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">concept &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="conceptfp_1_1implementation_1_1_begin_incrementable.html">fp::implementation::BeginIncrementable</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">concept &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="conceptfp_1_1implementation_1_1_begin_derefable.html">fp::implementation::BeginDerefable</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">concept &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="conceptfp_1_1implementation_1_1_begin_deref_to_void.html">fp::implementation::BeginDerefToVoid</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">concept &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="conceptfp_1_1implementation_1_1_begin_and_end_copy_constructible_and_destructible.html">fp::implementation::BeginAndEndCopyConstructibleAndDestructible</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">concept &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="conceptfp_1_1_container.html">fp::Container</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:ae22f62fe05e46b39ed5dafe77cb50a43" id="r_ae22f62fe05e46b39ed5dafe77cb50a43"><td class="memItemLeft" align="right" valign="top"><a id="ae22f62fe05e46b39ed5dafe77cb50a43" name="ae22f62fe05e46b39ed5dafe77cb50a43"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>fp::Index</b> = unsigned int</td></tr>
+<tr class="separator:ae22f62fe05e46b39ed5dafe77cb50a43"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3d3db79034ea9e8cadb2f3d319e38199" id="r_a3d3db79034ea9e8cadb2f3d319e38199"><td class="memItemLeft" align="right" valign="top"><a id="a3d3db79034ea9e8cadb2f3d319e38199" name="a3d3db79034ea9e8cadb2f3d319e38199"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>fp::Real</b> = double</td></tr>
+<tr class="separator:a3d3db79034ea9e8cadb2f3d319e38199"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:a8437740a53efa02c4dd2364cca4553f3" id="r_a8437740a53efa02c4dd2364cca4553f3"><td class="memItemLeft" align="right" valign="top"><a id="a8437740a53efa02c4dd2364cca4553f3" name="a8437740a53efa02c4dd2364cca4553f3"></a>
+static Real&#160;</td><td class="memItemRight" valign="bottom"><b>fp::operator&quot;&quot;_r</b> (long double value)</td></tr>
+<tr class="separator:a8437740a53efa02c4dd2364cca4553f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a238d7b73323cd9f1319f903c3aacc149" id="r_a238d7b73323cd9f1319f903c3aacc149"><td class="memItemLeft" align="right" valign="top"><a id="a238d7b73323cd9f1319f903c3aacc149" name="a238d7b73323cd9f1319f903c3aacc149"></a>
+static Real&#160;</td><td class="memItemRight" valign="bottom"><b>fp::operator&quot;&quot;_r</b> (unsigned long long value)</td></tr>
+<tr class="separator:a238d7b73323cd9f1319f903c3aacc149"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:a8170d11440131a1381f52831ffd4f937" id="r_a8170d11440131a1381f52831ffd4f937"><td class="memItemLeft" align="right" valign="top"><a id="a8170d11440131a1381f52831ffd4f937" name="a8170d11440131a1381f52831ffd4f937"></a>
+static constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><b>fp::PI</b> = static_cast&lt;Real&gt;(3.14159265358979323846264338327950288)</td></tr>
+<tr class="separator:a8170d11440131a1381f52831ffd4f937"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This file contains the concepts that are costomly defined for the flippy class templates. </p>
