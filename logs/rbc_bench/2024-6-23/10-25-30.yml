@@ -1,0 +1,19 @@
+BENCHMARK VERSION: 5
+config: {"K_A":1000,"K_V":100,"N_membrane_update":2,"benchmark_version":5,"kappa":10,"l_min":2,"log_dir":"../../../logs/rbc_bench/","max_mc_steps":300000.0,"n_triang":8,"red_vol":0.6,"save_dir":"../../../demo_out/rbc_bench/","save_name":"data","seed":12,"verlet_update_frequency":0.5}
+all_attempted_bead_moves: 243600000
+expensive_moves: 139155999
+rejected_moves_stochastic: 31851951
+all_attempted_flips: 243600000
+expensive_flips: 228826854
+rejected_flip_stochastic: 14773146
+total_simulation_time: 1  m (112  s)
+mps: 2.15821e+06
+emps: 1.23287e+06
+fps: 2.15821e+06
+efps: 2.02733e+06
+total_allocations: 93665
+total_de_allocations: 93663
+leaks: 1
+allocated_size: 7084727
+COMMENTS: |
+ 
