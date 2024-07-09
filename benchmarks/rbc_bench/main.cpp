@@ -33,27 +33,23 @@ void operator delete(void* memory, std::size_t) noexcept{
 
 
 struct EnergyParameters{fp::Real kappa, K_V, K_A, V_t, A_t;};
-using Triangulation = fp::Triangulation<fp::SPHERICAL_TRIANGULATION>;
-using MCU = fp::MonteCarloUpdater<EnergyParameters, std::mt19937, fp::SPHERICAL_TRIANGULATION>;
+using Triangulation = fp::Triangulation;
+using MCU = fp::MonteCarloUpdater<EnergyParameters, std::mt19937>;
 
 // This is the energy function that is used by flippy's built-in updater to decide if a move was energetically favorable or not
 fp::Real surface_energy(fp::Node const& node,
-                        fp::Triangulation<fp::SPHERICAL_TRIANGULATION> const& trg,
+                        fp::Triangulation const& trg,
                         EnergyParameters const& prms,
-                        std::vector<fp::Index>const& changed_neighbourhood
+                        std::vector<fp::Index>const& changed_neighborhood
                       ){
     fp::Real V = trg.global_geometry().volume;
     fp::Real A = trg.global_geometry().area;
     fp::Real dV = V-prms.V_t;
     fp::Real dA = A-prms.A_t;
 
-    fp::Real E_bending = fp::node_unit_bending_energy(node.id, trg.nodes());
-    for (fp::Index changed_node_id: changed_neighbourhood) {
-        E_bending += fp::node_unit_bending_energy(changed_node_id, trg.nodes());
-    }
+    fp::Real E_bending = fp::changed_neighborhood_bending_energy(node, trg.nodes(), changed_neighborhood);
 
-    fp::Real energy = prms.kappa*E_bending+
-                    prms.K_V*dV*dV/prms.V_t + prms.K_A*dA*dA/prms.A_t;
+    fp::Real energy = prms.kappa*E_bending + prms.K_V*dV*dV/prms.V_t + prms.K_A*dA*dA/prms.A_t;
     return energy;
 }
 
@@ -102,8 +98,36 @@ int main(int /*argc*/, char** argv) {
         fp::Json data_init = guv.make_egg_data();
         fp::json_dump(save_dir+"test_run_init", data_init);
 
+        auto globals_saver = [&](Triangulation const& trg){
+            std::unordered_map<std::string, std::string> out;
+
+            out["volume"] = std::to_string(trg.global_geometry().volume);
+            out["area"] = std::to_string(trg.global_geometry().area);
+            out["volume_rel"] = std::to_string(trg.global_geometry().volume/Vt);
+            out["area_rel"] = std::to_string(trg.global_geometry().area/At);
+            return out;
+        };
+
+        auto stream_particle = [&](fp::Node const& node, fp::Triangulation const&){
+            std::string s{"1"};
+            fp::vec3<fp::Real> pos = node.pos;
+            static const std::string empty{" "};
+            s += empty+std::to_string(pos.x)
+                +empty+std::to_string(pos.y)
+                +empty+std::to_string(pos.z)
+                +empty+std::to_string(node.curvature_vec.norm())
+                +"\n";
+            return s;
+        };
+        std::vector<fp::experimental::xyzProperty> properties{
+            fp::experimental::xyzProperty{.name="species", .xyz_type=fp::experimental::S, .column_count=1 },
+            fp::experimental::xyzProperty{.name="pos",     .xyz_type=fp::experimental::R, .column_count=3 },
+            fp::experimental::xyzProperty{.name="curv",    .xyz_type=fp::experimental::R, .column_count=1 }
+        };
+        auto xyz_saver = fp::experimental::xyzDataSaver(save_dir+"data.xyz", properties, stream_particle);
         std::vector<fp::Index> shuffled_ids;
         shuffled_ids.reserve(guv.size());
+
 
         //create a vector that contains all node ids. We can shuffle this vector in each MC step to iterate randomly through the nodes
         for (auto const &node: guv.nodes()) {
@@ -118,6 +142,7 @@ int main(int /*argc*/, char** argv) {
         fp::Real A0 = guv.global_geometry().area;
         auto displ_updater = fp::DynamicDisplacementUpdater(linear_displ, adaptation_magnitude, probability_target);
         auto logger = FlippyBenchmarkLogger<MCU>::start_benchmark(mc_updater, guv);
+
 
         for (int mc_step = 0; mc_step < max_mc_steps; ++mc_step) {
             auto t = static_cast<fp::Real>(mc_step);
@@ -134,7 +159,6 @@ int main(int /*argc*/, char** argv) {
             }
             fp::Real pt = fp::linear_adaptation(t, 0.7f*t_max, 0.9f*t_max, probability_target, 0.2f);
             displ_updater.reset_target_acceptance_probability(pt);
-
             // then we shuffle the bead_ids
             std::shuffle(shuffled_ids.begin(), shuffled_ids.end(), rng);
             // then we loop through all of
@@ -142,7 +166,16 @@ int main(int /*argc*/, char** argv) {
                 // them again and try to flip their bonds
                 mc_updater.flip_MC_updater(guv[node_id]);
             }
+            if(mc_step%1000==0){ xyz_saver.save_current_state_in_memory(guv, globals_saver); }
+            if(mc_step%10000==0){
+                xyz_saver.save_current_state_in_memory(guv, globals_saver);
+                xyz_saver.flush_data_to_file();
+            }
         }
+
+        xyz_saver.save_current_state_in_memory(guv, globals_saver);
+        xyz_saver.flush_data_to_file();
+
         std::string log_file_path = logger.log(config["log_dir"], config);
 
         const char* log_file_char = log_file_path.c_str();

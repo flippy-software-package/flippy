@@ -6,7 +6,7 @@
 
 template <typename U>
 concept Updater = requires(U u,
-                           fp::Triangulation<fp::SPHERICAL_TRIANGULATION> triangulation,
+                           fp::Triangulation triangulation,
                            fp::Node node, fp::Index nn_id,
                            fp::vec3<fp::Real> displacement,
                            unsigned
@@ -30,15 +30,15 @@ concept Updater = requires(U u,
 template <Updater Updater>
 class FlippyBenchmarkLogger {
   Updater const& mcu_;
-  fp::Triangulation<fp::SPHERICAL_TRIANGULATION> const& triangulation_;
+  fp::Triangulation const& triangulation_;
   cutils::Timer timer{};
 
 FlippyBenchmarkLogger(Updater const& mcu,
-                      fp::Triangulation<fp::SPHERICAL_TRIANGULATION> const& triangulation
+                      fp::Triangulation const& triangulation
                         ): mcu_(mcu), triangulation_(triangulation) {};
 
 public:
-  static FlippyBenchmarkLogger start_benchmark(Updater const& mcu, fp::Triangulation<fp::SPHERICAL_TRIANGULATION> const& triangulation) {
+  static FlippyBenchmarkLogger start_benchmark(Updater const& mcu, fp::Triangulation const& triangulation) {
     FlippyBenchmarkLogger logger(mcu, triangulation);
 
     PRINT("each of ", triangulation.size(), " beads will be attempted to be moved: ",

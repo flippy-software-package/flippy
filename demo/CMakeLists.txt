@@ -1,4 +1,3 @@
 cmake_minimum_required(VERSION 3.16)
 
 add_subdirectory(biconcave_shapes_MC)
-add_subdirectory(planar_membrane_sheet_fluctuation_MC)

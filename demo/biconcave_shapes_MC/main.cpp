@@ -11,7 +11,7 @@ struct EnergyParameters{fp::Real kappa, K_V, K_A, V_t, A_t;};
 
 // This is the energy function that is used by flippy's built-in updater to decide if a move was energetically favorable or not
 fp::Real surface_energy(fp::Node const& node,
-                    fp::Triangulation<fp::SPHERICAL_TRIANGULATION> const& trg,
+                    fp::Triangulation const& trg,
                     EnergyParameters const& p,
                     std::vector<fp::Index> const& changed_neighbourhood){
     fp::Real V = trg.global_geometry().volume;
@@ -48,8 +48,8 @@ int main(){
     std::mt19937 rng(random_number_generator_seed()); // create a random number generator and seed it with the current time
 
     // All the flippy magic is happening on the following two lines
-    fp::Triangulation<fp::SPHERICAL_TRIANGULATION> guv(n_triang, R, r_Verlet);
-    fp::MonteCarloUpdater<EnergyParameters, std::mt19937, fp::SPHERICAL_TRIANGULATION>
+    fp::Triangulation guv(n_triang, R, r_Verlet);
+    fp::MonteCarloUpdater<EnergyParameters, std::mt19937>
     mc_updater(guv, prms, surface_energy, rng, l_min, l_max);
 
     fp::vec3<fp::Real> displ{}; // declaring a 3d vector (using flippy's built in vec3 type) for later use as a random

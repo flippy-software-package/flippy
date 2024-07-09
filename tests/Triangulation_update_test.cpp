@@ -20,7 +20,7 @@ using namespace fp;
 //    tr.make_verlet_list();
 //}
 
-bool euler_number_is_2(Triangulation<SPHERICAL_TRIANGULATION>const& triangulation)
+bool euler_number_is_2(Triangulation const& triangulation)
 {
     /**
      * General euler formula for flat polyhedra: `V - E + F = 2`
@@ -46,7 +46,7 @@ SCENARIO("Random bond flips do not destroy the topology"){
         constexpr Real verlet_radius = 0.f;
         constexpr Real r_init = 13.f;
         constexpr Index test_repetitions = 10;
-        Triangulation<SPHERICAL_TRIANGULATION> tr(subriang_level, r_init, verlet_radius);
+        Triangulation tr(subriang_level, r_init, verlet_radius);
         auto rg = Catch::Generators::RandomIntegerGenerator<Index>(0, tr.size(), Catch::Generators::Detail::getSeed());
 
         THEN("Euler Number is 2"){

@@ -305,142 +305,8 @@ struct Nodes
 
     // getters and setters
 
-    // Position block
     //unit-tested
-    [[nodiscard]] const vec3<Real>& pos(Index node_id) const
-    {
-        /**
-     * @param node_id @NodeIDStub
-     * @return Constant reference to the 3D vector of the node position, Node::pos.
-     */
-        return data[node_id].pos;
-    }   //!< Given a node id, return the constant reference to the node position.
-    //unit-tested
-    void set_pos(Index node_id, vec3<Real> const& new_pos){
-    /**
-     * @param node_id @NodeIDStub This node needs to be moved.
-     * @param new_pos new position of the node to which the node needs to be moved.
-     */
-        data[node_id].pos=new_pos;
-    }   //!< Sets the position of the requested node to a given position.
-    void set_pos(Index node_id, vec3<Real> && new_pos){
-    /**
-     * @param node_id @NodeIDStub This node needs to be moved.
-     * @param new_pos new position of the node to which the node needs to be moved.
-     */
-        data[node_id].pos=new_pos;
-    }   //!< \overload
-    void displace(Index node_id, vec3<Real>const& displacement){
-    /**
-    * @param node_id @NodeIDStub This node needs to be moved.
-    * @param displacement The displacement vector that will be added to the position vector of the node.
-    */
-        data[node_id].pos+=displacement;
-    }   //!< Changes the position of the requested node by a given displacement.
-    void displace(Index node_id, vec3<Real>&& displacement)
-    {
-    /**
-     * @param node_id @NodeIDStub This node needs to be moved.
-     * @param displacement The displacement vector that will be added to the position vector of the node.
-     */
-        data[node_id].pos+=displacement;
-    }   //!< \overload
 
-    // Curvature vector block
-    [[nodiscard]] const vec3<Real>& curvature_vec(Index node_id) const {
-    /**
-     * @param node_id @NodeIDStub
-     * @return Constant reference to the 3D vector of the node curvature, Node::curvature_vec.
-     */
-        return data[node_id].curvature_vec;
-    } //!< Given a node id, return the constant reference to the node curvature vector.
-    void set_curvature_vec(Index node_id, vec3<Real> const& new_cv) {
-    /**
-     * @param node_id @NodeIDStub
-     * @param new_cv Constant lvalue reference to the new 3d curvature vector Node::curvature_vec.
-     */
-        data[node_id].curvature_vec=new_cv;
-    } //!< Given a node id and a new curvature vector, reset the node's current curvature vector.
-    void set_curvature_vec(Index node_id, vec3<Real> && new_cv) {
-    /**
-     * @param node_id @NodeIDStub
-     * @param new_cv rvalue reference to the new 3d curvature vector Node::curvature_vec.
-     */
-        data[node_id].curvature_vec=new_cv;
-    } //!< @overload
-
-    // Area block
-    [[nodiscard]] Real area(Index node_id)const{
-    /**
-     * @param node_id @NodeIDStub
-     * @return Area associated with the node, Node::area.
-     */
-        return data[node_id].area;
-    } //!< Given a node id, return node associated area.
-    void set_area(Index node_id, Real new_area){
-    /**
-     * @param node_id @NodeIDStub
-     * @param new_area Value for the new node associated area Node::area.
-     *
-     */
-        data[node_id].area = new_area;
-    }    //!< Given a node id and a new area value, reset the current value of the node area.
-
-    // Volume block
-    [[nodiscard]] Real volume(Index node_id)const{
-    /**
-     * @param node_id @NodeIDStub
-     * @return Area associated to the node, Node::volume.
-     */
-        return data[node_id].volume;
-    }    //!< Given a node id, return node associated volume.
-    void set_volume(Index node_id, Real new_volume){
-    /**
-     * @param node_id @NodeIDStub
-     * @param new_volume Value for the new node associated volume Node::volume.
-     *
-     */
-        data[node_id].volume = new_volume;
-    }   //!< Given a node id and a new volume value, reset the current value of the node volume.
-
-    // nn_id[s] block
-    //unit-tested
-    [[nodiscard]] const auto& nn_ids(Index node_id)const{
-    /**
-     * @param node_id @NodeIDStub
-     * @return Constant reference to the std::vector containing next neighbour ids of the node, Node::nn_ids.
-     */
-        return data[node_id].nn_ids;
-    } //!< Given a node id, return the constant reference to the nn_ids std::vector.
-    //unit-tested
-    void set_nn_ids(Index node_id, std::vector<Index>const& new_nn_ids){
-    /**
-     * @param node_id @NodeIDStub
-     * @param new_nn_ids const reference to the standard vector containing new values of nn_ids
-     * @warning This function does not check the provided `new_nn_ids` vector on correctness.
-     * If the content is wrong in any way (order is wrong or contained ids are not actual next neighbors of the node),
-     * then the update will cause problems with the proper function of flippy later!
-     */
-        data[node_id].nn_ids = new_nn_ids;
-    } //!< For a Node specified by `node_id`, overwrite the entire Node::nn_ids vector.
-    //unit-tested
-    [[nodiscard]] Index nn_id(Index node_id, Index loc_nn_index)const{
-    /**
-     * @param node_id @NodeIDStub
-     * @param loc_nn_index @LocNNIndexStub
-     * @return The global id of the next neighbor that was stored at the position `loc_nn_index` in the Node::nn_ids vector of the node with the id of `node_id`.
-     */
-        return data[node_id].nn_ids[loc_nn_index];
-    }   //!< Given a node id and the local index in the Node::nn_ids vector, returns the next neighbour id.
-    //unit-tested
-    void set_nn_id(Index node_id, Index loc_nn_index, Index nn_id){
-    /**
-     * @param node_id @NodeIDStub
-     * @param loc_nn_index @LocNNIndexStub
-     * @param nn_id @NNIDStub
-     */
-        data[node_id].nn_ids[loc_nn_index]=nn_id;
-    } //!< For a node specified by `node_id`, resets the value of the requested `nn_id`.
     void emplace_nn_id(Index node_id, Index to_emplace_nn_id, Index loc_nn_index){
     /**
      * This function is a wrapper around Node::emplace_nn_id(Index , vec3<Real> const& , Index).
@@ -448,27 +314,9 @@ struct Nodes
      * @param to_emplace_nn_id @NNIDStub
      * @param loc_nn_index @LocNNIndexStub
      */
-        data[node_id].emplace_nn_id(to_emplace_nn_id, pos(to_emplace_nn_id), loc_nn_index);
+        data[node_id].emplace_nn_id(to_emplace_nn_id, data[to_emplace_nn_id].pos, loc_nn_index);
     } //!< Emplace a the id of a new node in the Node::nn_ids vector, in front of the loc_idx position.
 
-    [[nodiscard]] const auto& nn_distances(Index node_id)const{
-    /**
-     * The order of Node::nn_distances is the same as that of Node::nn_ids, this is guaranteed by Triangulation::update_nn_distance_vectors(Index node_id)
-     * @param node_id @NodeIDStub
-     * @return Associated std::vector containing all vec3 distance vectors from the node to its neighbors, Node::nn_distances.
-     */
-        return data[node_id].nn_distances;
-    }   //!< Given a node id, returns the std::vector containing distance vectors to next neighbours.
-    [[nodiscard]] const auto& get_nn_distance_vector_between(Index node_id, Index nn_id) const{
-    /**
-     * This function is a wrapper around fp::Node::get_distance_vector_to(Index) const.
-     * @param node_id @NodeIDStub
-     * @param nn_id @NNIDStub
-     * @return Looks in the Node::nn_distances vector of the node (specified by node_id) for the distance to nn_id. A proper distance vector will be returned if the two nodes are neighbors. Otherwise, the program will terminate.
-     * @note @TerminationNoteStub
-     */
-        return data[node_id].get_distance_vector_to(nn_id);
-    }   //!< Given two global node ids, returns a distance vector (if the nodes are neighbors).
     void set_nn_distance(Index node_id, Index loc_nn_index, vec3<Real>&& dist){
     /**
      * @param node_id @NNIDStub
@@ -477,6 +325,7 @@ struct Nodes
      */
         data[node_id].nn_distances[loc_nn_index]=dist;
     }  //!< Overwrite the next neighbor distance with a new 3d vector.
+
     void set_nn_distance(Index node_id, Index loc_nn_index, vec3<Real> const& dist){
     /**
      * @param node_id @NNIDStub

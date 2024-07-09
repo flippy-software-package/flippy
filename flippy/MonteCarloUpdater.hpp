@@ -29,14 +29,15 @@ namespace fp {
  * @tparam triangulation_type One of the types specified by the TriangulationType enum.
  * This must match the type of triangulation provided during the class instantiation.
  */
-template<typename EnergyFunctionParameters, typename RandomNumberEngine, TriangulationType triangulation_type>
+template<typename EnergyFunctionParameters, typename RandomNumberEngine>
 class MonteCarloUpdater
 {
 private:
     static constexpr Real max_float = 3.40282347e+38f;
-    fp::Triangulation<triangulation_type>& triangulation;
+    fp::Triangulation& triangulation;
     EnergyFunctionParameters const& prms;
-    typedef std::function<Real(fp::Node const&, fp::Triangulation<triangulation_type> const&, EnergyFunctionParameters const&, std::vector<Index> const&)> EnergyFunctionType;
+    using EnergyFunctionType = std::function<Real(fp::Node const&, fp::Triangulation const&,
+            EnergyFunctionParameters const&, std::vector<Index> const&)> ;
     EnergyFunctionType energy_function;
     RandomNumberEngine& rng;
     std::uniform_real_distribution<Real> unif_distr_on_01;
@@ -58,16 +59,13 @@ public:
      * If set too high, the stability of the updater will suffer, and nonphysical shapes with self-intersecting triangulation will be common.
      * Conversely, setting this variable too low will significantly reduce the chance of a successful bond flip.
      */
-    MonteCarloUpdater(fp::Triangulation<triangulation_type>& triangulation_inp,
+    MonteCarloUpdater(fp::Triangulation& triangulation_inp,
                       EnergyFunctionParameters const& prms_inp,
                       EnergyFunctionType energy_function_inp,
                       RandomNumberEngine& rng_inp, Real min_bond_length, Real max_bond_length)
     :triangulation(triangulation_inp), prms(prms_inp), energy_function(energy_function_inp), rng(rng_inp),
     unif_distr_on_01(std::uniform_real_distribution<Real>(0, 1)),
-    min_bond_length_square(min_bond_length*min_bond_length), max_bond_length_square(max_bond_length*max_bond_length)
-    {
-
-    }
+    min_bond_length_square(min_bond_length*min_bond_length), max_bond_length_square(max_bond_length*max_bond_length) { }
 
     //! Implementation of the Metropolis algorithm.
     /**

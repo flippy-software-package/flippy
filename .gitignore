@@ -18,3 +18,4 @@ doxygen_warnings.log
 make_doxygen_html.sh
 make_single_header_flippy.sh
 /actions-runner/_work
+/demo/planar_membrane_sheet_fluctuation_MC/

@@ -71,7 +71,7 @@ namespace fp{
 
     };
 
-    [[maybe_unused]] [[nodiscard]] static Real node_curvature_squared(Index node_id, Nodes const& nodes){
+    [[maybe_unused]] [[nodiscard]] static Real node_curvature_squared(Node const& node){
         //! `unit_bending_energy` corresponds to the [Helfrich bending energy](https://en.wikipedia.org/wiki/Elasticity_of_cell_membranes) with bending rigidity 1 and gaussian bending stiffness 0.
         /**
          * \f[
@@ -84,13 +84,13 @@ namespace fp{
          * with  \f$ \vec{K} \f$ denoting the Node::curvature_vector.
          * @see Node::curvature_vec Triangulation::update_bulk_node_geometry(Index)
          */
-        const vec3<Real> K = nodes.curvature_vec(node_id);
+        const vec3<Real> K = node.curvature_vec;
         const Real C2  = K.norm_square();///(static_cast<Real>(4.f)*A*A);
 
         return C2;
     }
 
-    [[maybe_unused]] [[nodiscard]] static Real node_unit_bending_energy(Index node_id, Nodes const& nodes){
+    [[maybe_unused]] [[nodiscard]] static Real node_unit_bending_energy(Node const& node){
         //! `unit_bending_energy` corresponds to the [Helfrich bending energy](https://en.wikipedia.org/wiki/Elasticity_of_cell_membranes) with bending rigidity 1 and gaussian bending stiffness 0.
         /**
          * \f[
@@ -103,13 +103,56 @@ namespace fp{
          * with  \f$ \vec{K} \f$ denoting the Node::curvature_vector.
          * @see Node::curvature_vec Triangulation::update_bulk_node_geometry(Index)
          */
-        const vec3<Real> K = nodes.curvature_vec(node_id);
-        const Real A = nodes.area(node_id);
+        const vec3<Real> K = node.curvature_vec;
+        const Real A = node.area;
         const Real e  = static_cast<Real>(0.5)*A*K.norm_square();
 
         return e;
     }
 
+    [[maybe_unused]] [[nodiscard]] static Real changed_neighborhood_bending_energy(Node const& node,
+                                                                                   fp::Nodes const& nodes,
+                                                                                   std::vector<Index>const& changed_neighborhood) {
+        fp::Real eb = fp::node_unit_bending_energy(node);
+
+        for (auto node_id: changed_neighborhood) { eb += fp::node_unit_bending_energy(nodes[node_id]); }
+        return eb;
+    }
+
+    namespace TrgMath{
+
+
+        [[maybe_unused]] static Real cot_between_vectors(vec3<Real> const& v1, vec3<Real> const& v2)
+        {
+            return v1.dot(v2)/(v1.cross(v2).norm());
+        };
+
+//
+//        /**
+//         * given a node `i` and its neighbor `j`, they will share two common neighbor nodes, `p` and `m`.
+//         * This function finds the angles at `p` & `m` opposite of `i-j` link.
+//         * This function implements the cot(alpha_ij) + cot(beta_ij) from fig. (6c) from [.
+//         * The order of these neighbors does not matter for the correct sign of the angles.
+//         * @param node_id @NodeIDStub
+//         * @param nn_id @NNIDStub
+//         * @param cnn_0 common neighbor node 0
+//         * @param cnn_1 common neighbor node 1
+//         * @return cot(alpha_ij_jm1) + cot(alpha_ij_jp1)
+//         */
+//        static Real cot_alphas_sum(Node const& node, Node const& nn, Node const& cnn_0, Node const& cnn_1)
+//        {
+//
+//            vec3<Real> l0_ = node.pos - cnn_0.pos;
+//            vec3<Real> l1_ = nn.pos - cnn_0.pos;
+//
+//            Real cot_sum = cot_between_vectors(l0_, l1_);
+//            l0_ = node.pos - cnn_1.pos;
+//            l1_ = nn.pos - cnn_1.pos;
+//
+//            cot_sum += cot_between_vectors(l0_, l1_);
+//            return cot_sum;
+//        }
+    }
 }
 
 

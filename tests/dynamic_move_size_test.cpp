@@ -10,23 +10,20 @@ using Catch::Matchers::WithinAbs;
 }
 
 struct EnergyParameters{fp::Real kappa, K_V, K_A, V_t, A_t;};
-using Triangulation = fp::Triangulation<fp::SPHERICAL_TRIANGULATION>;
-using MCU = fp::MonteCarloUpdater<EnergyParameters, std::mt19937, fp::SPHERICAL_TRIANGULATION>;
+using Triangulation = fp::Triangulation;
+using MCU = fp::MonteCarloUpdater<EnergyParameters, std::mt19937>;
 
 // This is the energy function that is used by flippy's built-in updater to decide if a move was energetically favorable or not
 fp::Real surface_energy([[maybe_unused]]fp::Node const& node,
-                    fp::Triangulation<fp::SPHERICAL_TRIANGULATION> const& trg,
+                    fp::Triangulation const& trg,
                     EnergyParameters const& prms,
                     std::vector<fp::Index>const& changed_neighborhood){
     fp::Real V = trg.global_geometry().volume;
     fp::Real A = trg.global_geometry().area;
     fp::Real dV = V-prms.V_t;
     fp::Real dA = A-prms.A_t;
-    fp::Real eb = fp::node_unit_bending_energy(node.id, trg.nodes());
 
-    for(auto node_id: changed_neighborhood){
-        eb += fp::node_unit_bending_energy(node_id, trg.nodes());
-    }
+    fp::Real eb = fp::changed_neighborhood_bending_energy(node, trg.nodes(), changed_neighborhood);
 
     fp::Real energy = prms.kappa*eb +
                   prms.K_V*dV*dV/prms.V_t + prms.K_A*dA*dA/prms.A_t;
