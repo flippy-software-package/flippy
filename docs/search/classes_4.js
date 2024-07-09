@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['montecarloupdater_0',['MonteCarloUpdater',['../classfp_1_1_monte_carlo_updater.html',1,'fp']]]
+  ['jsondatasaver_0',['jsonDataSaver',['../classfp_1_1experimental_1_1json_data_saver.html',1,'fp::experimental']]]
 ];

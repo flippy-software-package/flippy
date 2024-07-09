@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['stlnode_0',['stlNode',['../structfp_1_1implementation_1_1stl_node.html',1,'fp::implementation']]],
-  ['stlserializer_1',['stlSerializer',['../classfp_1_1implementation_1_1stl_serializer.html',1,'fp::implementation']]],
-  ['stltriangle_2',['stlTriangle',['../classfp_1_1implementation_1_1stl_triangle.html',1,'fp::implementation']]]
+  ['rawstlsolid_0',['rawSTLSolid',['../structfp_1_1implementation_1_1raw_s_t_l_solid.html',1,'fp::implementation']]],
+  ['rawstltriangle_1',['rawSTLTriangle',['../structfp_1_1implementation_1_1raw_s_t_l_triangle.html',1,'fp::implementation']]]
 ];

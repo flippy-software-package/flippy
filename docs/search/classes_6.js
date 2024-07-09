@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['rawstlsolid_0',['rawSTLSolid',['../structfp_1_1implementation_1_1raw_s_t_l_solid.html',1,'fp::implementation']]],
-  ['rawstltriangle_1',['rawSTLTriangle',['../structfp_1_1implementation_1_1raw_s_t_l_triangle.html',1,'fp::implementation']]]
+  ['neighbors_0',['Neighbors',['../structfp_1_1_neighbors.html',1,'fp']]],
+  ['node_1',['Node',['../structfp_1_1_node.html',1,'fp']]],
+  ['nodes_2',['Nodes',['../structfp_1_1_nodes.html',1,'fp']]]
 ];
