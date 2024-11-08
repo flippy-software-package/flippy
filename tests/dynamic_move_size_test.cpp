@@ -92,10 +92,9 @@ TEST_CASE("spherical triangulation, with initially broken symmetry (stretched to
 
     SECTION("always accept: ") {
         fp::Real probability_target = 1.f;
-        fp::Real adaptation_magnitude = 0.1f;
         std::optional<fp::Real> e_diff = 0;
 
-        auto displ_updater = fp::DynamicDisplacementUpdater(linear_displ, adaptation_magnitude, probability_target);
+        auto displ_updater = fp::DynamicDisplacementUpdater(linear_displ, probability_target);
 
         for (int mc_step = 0; mc_step < max_mc_steps; ++mc_step) {
             displ_distr = displ_updater.new_displ_distr();
@@ -113,10 +112,9 @@ TEST_CASE("spherical triangulation, with initially broken symmetry (stretched to
 
     SECTION("always reject: ") {
         fp::Real probability_target = 0.f;
-        fp::Real adaptation_magnitude = 0.1f;
         std::optional<fp::Real> e_diff = 0;
 
-        auto displ_updater = fp::DynamicDisplacementUpdater(linear_displ, adaptation_magnitude, probability_target);
+        auto displ_updater = fp::DynamicDisplacementUpdater(linear_displ, probability_target);
 
         for (int mc_step = 0; mc_step < max_mc_steps; ++mc_step) {
             displ_distr = displ_updater.new_displ_distr();
@@ -133,10 +131,9 @@ TEST_CASE("spherical triangulation, with initially broken symmetry (stretched to
 
     SECTION("fifty fifty: ") {
         fp::Real probability_target = 0.5f;
-        fp::Real adaptation_magnitude = 0.1f;
         std::optional<fp::Real> e_diff = 0;
 
-        auto displ_updater = fp::DynamicDisplacementUpdater(linear_displ, adaptation_magnitude, probability_target);
+        auto displ_updater = fp::DynamicDisplacementUpdater(linear_displ, probability_target);
 
         for (int mc_step = 0; mc_step < max_mc_steps; ++mc_step) {
             displ_distr = displ_updater.new_displ_distr();
@@ -154,10 +151,9 @@ TEST_CASE("spherical triangulation, with initially broken symmetry (stretched to
 
     SECTION("sixty percent accept: ") {
         fp::Real probability_target = 0.6f;
-        fp::Real adaptation_magnitude = 0.1f;
         std::optional<fp::Real> e_diff = 0;
 
-        auto displ_updater = fp::DynamicDisplacementUpdater(linear_displ, adaptation_magnitude, probability_target);
+        auto displ_updater = fp::DynamicDisplacementUpdater(linear_displ, probability_target);
 
         for (int mc_step = 0; mc_step < max_mc_steps; ++mc_step) {
             displ_distr = displ_updater.new_displ_distr();

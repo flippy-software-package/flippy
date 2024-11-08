@@ -35,7 +35,6 @@ namespace fp{
 
     class DynamicDisplacementUpdater{
         Real d0_;
-        Real delta_d_;
         Real p_target_;
         Real p_accum_{static_cast<Real>(0.f)};
         Real p_count_{static_cast<Real>(1.f)};
@@ -43,15 +42,15 @@ namespace fp{
         Real prob(std::optional<Real> e_diff, Real kBT){ return (e_diff.has_value()?std::min(std::exp(e_diff.value()/kBT),1_r):0_r); }
 
     public:
-        DynamicDisplacementUpdater(Real initial_displacement, Real displacement_adaptation_step_size, Real p_target)
-        : d0_(initial_displacement), delta_d_(displacement_adaptation_step_size), p_target_(p_target) { }
+        DynamicDisplacementUpdater(Real initial_displacement, Real p_target)
+        : d0_(initial_displacement), p_target_(p_target) { }
 
         Real new_displacement_magnitude(){
             Real p = p_accum_/p_count_;
             p_accum_ = static_cast<Real>(0.f);
             p_count_ = static_cast<Real>(1.f);
             Real dp = p - p_target_;
-            d0_ = d0_ + 0.5f*dp*delta_d_*d0_;
+            d0_ = d0_ + dp*d0_;
             return d0_;
         }
 
@@ -62,7 +61,7 @@ namespace fp{
 
         void probability_aggregator(std::optional<Real> e_diff, Real kBt){
             p_accum_ += prob(e_diff, kBt);
-            p_count_ += static_cast<Real>(1.);
+            p_count_ += 1_r;
         }
 
         void reset_target_acceptance_probability(Real p_target){ p_target_ = p_target; }
