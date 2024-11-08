@@ -31,7 +31,7 @@ namespace fp{
     template<class T> concept indexing_number = std::is_unsigned_v<T> && std::is_integral_v<T>;
 /**@}*/
 
-    using Index = unsigned int;
+    using Index = std::size_t;
     using Real = double;
 
 
@@ -62,10 +62,10 @@ namespace fp{
         implementation::BeginAndEndCopyConstructibleAndDestructible<C>;
 
 
-    static Real operator"" _r(long double value) {
+    [[maybe_unused]] static Real operator"" _r(long double value) {
         return static_cast<Real>(value);
     }
-    static Real operator"" _r(unsigned long long value) {
+    [[maybe_unused]] static Real operator"" _r(unsigned long long value) {
         return static_cast<Real>(value);
     }
 
