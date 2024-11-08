@@ -103,7 +103,7 @@ TEST_CASE("spherical triangulation, with initially broken symmetry (stretched to
                 e_diff = mc_updater.move_MC_updater(guv[node_id], displ);
                 displ_updater.probability_aggregator(e_diff, mc_updater.kBT());
             }
-            std::shuffle(shuffled_ids.begin(), shuffled_ids.end(), rng);
+            std::ranges::shuffle(shuffled_ids, rng);
             for (auto node_id: shuffled_ids) { mc_updater.flip_MC_updater(guv[node_id]); }
         }
         CHECK_THAT(measured_porob(mc_updater), kinda_rel_close(probability_target));
@@ -123,7 +123,7 @@ TEST_CASE("spherical triangulation, with initially broken symmetry (stretched to
                 e_diff = mc_updater.move_MC_updater(guv[node_id], displ);
                 displ_updater.probability_aggregator(e_diff, mc_updater.kBT());
             }
-            std::shuffle(shuffled_ids.begin(), shuffled_ids.end(), rng);
+            std::ranges::shuffle(shuffled_ids, rng);
             for (auto node_id: shuffled_ids) { mc_updater.flip_MC_updater(guv[node_id]); }
         }
         CHECK_THAT(measured_porob(mc_updater), kinda_abs_close(probability_target));
@@ -142,7 +142,7 @@ TEST_CASE("spherical triangulation, with initially broken symmetry (stretched to
                 e_diff = mc_updater.move_MC_updater(guv[node_id], displ);
                 displ_updater.probability_aggregator(e_diff, mc_updater.kBT());
             }
-            std::shuffle(shuffled_ids.begin(), shuffled_ids.end(), rng);
+            std::ranges::shuffle(shuffled_ids, rng);
             for (auto node_id: shuffled_ids) { mc_updater.flip_MC_updater(guv[node_id]); }
         }
         CHECK_THAT(measured_porob(mc_updater), kinda_rel_close(probability_target));
@@ -162,7 +162,7 @@ TEST_CASE("spherical triangulation, with initially broken symmetry (stretched to
                 e_diff = mc_updater.move_MC_updater(guv[node_id], displ);
                 displ_updater.probability_aggregator(e_diff, mc_updater.kBT());
             }
-            std::shuffle(shuffled_ids.begin(), shuffled_ids.end(), rng);
+            std::ranges::shuffle(shuffled_ids, rng);
             for (auto node_id: shuffled_ids) { mc_updater.flip_MC_updater(guv[node_id]); }
         }
         CHECK_THAT(measured_porob(mc_updater), kinda_rel_close(probability_target));
