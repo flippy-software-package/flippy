@@ -84,17 +84,19 @@ namespace fp::experimental{
         void reset_memory() override { data_.clear(); }
 
         void save_current_state_in_memory(Triangulation const & triangulation,
-                                          GlobalsMakerFuncType const& globals_maker ) {
+                                          std::optional<GlobalsMakerFuncType> const& globals_maker = {} ) {
             size_string = std::to_string(triangulation.size());
             data_.append(size_string);
             data_.append("\n");
             std::string prop{properties_string};
-            prop.reserve(500);
-            for(auto & [key, val]: globals_maker(triangulation)){
-                prop.append(" ");
-                prop.append(key);
-                prop.append("=");
-                prop.append(val);
+            if(globals_maker.has_value()) {
+                prop.reserve(200);
+                for (auto &[key, val]: globals_maker.value()(triangulation)) {
+                    prop.append(" ");
+                    prop.append(key);
+                    prop.append("=");
+                    prop.append(val);
+                }
             }
             data_.append(prop);
             data_.append("\n");
@@ -130,7 +132,7 @@ namespace fp::experimental{
 
         void reset_memory() override { data.clear(); }
 
-        void save_current_state_in_memory(std::vector<double>const& values_inp){
+        void save_current_state_in_memory(std::vector<double>const& values_inp) {
             if(!header_written){
                 data.append(header).append("\n");
                 header_written = true;
@@ -144,9 +146,7 @@ namespace fp::experimental{
 
         void stream_data_to_file() override { file << data; }
 
-        ~csvGlobalsSaver(){
-            file.close();
-        }
+        ~csvGlobalsSaver(){ file.close(); }
     };
 
 }
