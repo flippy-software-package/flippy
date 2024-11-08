@@ -70,7 +70,6 @@ namespace fp::experimental{
                 properties_string.append(property.name + ":" + xyz_to_string(property.xyz_type) + ":" + std::to_string(property.column_count) + ":");
             }
             properties_string.pop_back();
-            properties_string.append("\n");
         }
     public:
 
