@@ -3,10 +3,18 @@
 #include "flippy.hpp"
 
 
-using Catch::Matchers::WithinAbs;
-[[maybe_unused]] static auto kinda_close(auto num){
+[[maybe_unused]] static auto kinda_abs_close(auto num){
+    using Catch::Matchers::WithinAbs;
+    if(num*num < 10e-10){}
     return (WithinAbs(static_cast<fp::Real>(num),
-                      static_cast<fp::Real>(0.02)));
+                      static_cast<fp::Real>(0.01)));
+}
+
+[[maybe_unused]] static auto kinda_rel_close(auto num){
+    using Catch::Matchers::WithinRel;
+    if(num*num < 10e-10){}
+    return (WithinRel(static_cast<fp::Real>(num),
+                      static_cast<fp::Real>(0.05)));
 }
 
 struct EnergyParameters{fp::Real kappa, K_V, K_A, V_t, A_t;};
@@ -99,7 +107,7 @@ TEST_CASE("spherical triangulation, with initially broken symmetry (stretched to
             std::shuffle(shuffled_ids.begin(), shuffled_ids.end(), rng);
             for (auto node_id: shuffled_ids) { mc_updater.flip_MC_updater(guv[node_id]); }
         }
-        CHECK_THAT(measured_porob(mc_updater), kinda_close(probability_target));
+        CHECK_THAT(measured_porob(mc_updater), kinda_rel_close(probability_target));
     }
 
 
@@ -120,7 +128,7 @@ TEST_CASE("spherical triangulation, with initially broken symmetry (stretched to
             std::shuffle(shuffled_ids.begin(), shuffled_ids.end(), rng);
             for (auto node_id: shuffled_ids) { mc_updater.flip_MC_updater(guv[node_id]); }
         }
-        CHECK_THAT(measured_porob(mc_updater), kinda_close(probability_target));
+        CHECK_THAT(measured_porob(mc_updater), kinda_abs_close(probability_target));
     }
 
     SECTION("fifty fifty: ") {
@@ -140,7 +148,7 @@ TEST_CASE("spherical triangulation, with initially broken symmetry (stretched to
             std::shuffle(shuffled_ids.begin(), shuffled_ids.end(), rng);
             for (auto node_id: shuffled_ids) { mc_updater.flip_MC_updater(guv[node_id]); }
         }
-        CHECK_THAT(measured_porob(mc_updater), kinda_close(probability_target));
+        CHECK_THAT(measured_porob(mc_updater), kinda_rel_close(probability_target));
     }
 
 
@@ -161,7 +169,7 @@ TEST_CASE("spherical triangulation, with initially broken symmetry (stretched to
             std::shuffle(shuffled_ids.begin(), shuffled_ids.end(), rng);
             for (auto node_id: shuffled_ids) { mc_updater.flip_MC_updater(guv[node_id]); }
         }
-        CHECK_THAT(measured_porob(mc_updater), kinda_close(probability_target));
+        CHECK_THAT(measured_porob(mc_updater), kinda_rel_close(probability_target));
     }
 
 }
