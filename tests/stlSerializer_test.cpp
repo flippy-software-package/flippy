@@ -1,12 +1,10 @@
-#include <catch2/catch_test_macros.hpp>
-#include <catch2/catch_approx.hpp>
 #include "flippy.hpp"
+#include <catch2/catch_approx.hpp>
+#include <catch2/catch_test_macros.hpp>
 
 const std::string ASSETS_PATH{TEST_ASSET_PATH};
 
-
-TEST_CASE("testing stlSerializer")
-{
+TEST_CASE("testing stlSerializer") {
 
     std::filesystem::path stl_solids{ASSETS_PATH};
 
@@ -24,12 +22,11 @@ TEST_CASE("testing stlSerializer")
         auto trg = fp::Triangulation::experimental_load_sphere_from_stl(stl_solid_path, 1.);
 
         CHECK(trg.size() == 1082);
-        double V = trg.global_geometry().volume;
-        double A = trg.global_geometry().area;
-        double Rv = std::pow(3. * V / (4. * M_PI), 1./3.);
+        double V  = trg.global_geometry().volume;
+        double A  = trg.global_geometry().area;
+        double Rv = std::pow(3. * V / (4. * M_PI), 1. / 3.);
         double Ra = std::sqrt(A / (4. * M_PI));
         CHECK(Rv == Catch::Approx(Ra).epsilon(0.01));
     }
-
-
 }
+

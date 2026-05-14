@@ -1,21 +1,23 @@
-#ifndef FLIPPY_UTILS_H
-#define FLIPPY_UTILS_H
+#ifndef FLIPPY_UTILITIES_UTILS_HPP
+#define FLIPPY_UTILITIES_UTILS_HPP
 /** @file
  *  @brief This file contains helper functions that are used throughout flippy, but are not specific to any given class.
  */
 
-#include <iostream>
-#include <fstream>
-#include <utility>
+#include <external/json.hpp>
 #include <filesystem>
+#include <fstream>
+#include <iostream>
 #include <type_traits>
+#include <utility>
 
 namespace fp {
 /**
  * @GlobalsStub
  * @{
  */
-//! shortening of the nlohmann::json namespace, which is an [external open source library](https://github.com/nlohmann/json) bundled by flippy.
+//! shortening of the nlohmann::json namespace, which is an [external open source
+//! library](https://github.com/nlohmann/json) bundled by flippy.
 using Json = nlohmann::json;
 
 /**
@@ -23,8 +25,7 @@ using Json = nlohmann::json;
  * @param file_name @FileNameOrPathFileNameStub
  * @param data json data object that is supposed to be stored.
  */
-static inline void json_dump(std::string const& file_name, const Json& data)
-{
+static inline void json_dump(const std::string &file_name, const Json &data) {
     std::ofstream o(file_name + ".json");
     o << data.dump();
     o.close();
@@ -40,13 +41,12 @@ static inline void json_dump(std::string const& file_name, const Json& data)
  * @warning This function will stream any file into the json object.
  * If the provided file is not a valid json file this will cause runtime errors.
  */
-static Json inline json_read(std::string file_name)
-{
+static Json inline json_read(std::string file_name) {
     auto pos_json = file_name.find_last_of(".json");
-    auto not_json = (file_name.size() - 1!=pos_json);
+    auto not_json = (file_name.size() - 1 != pos_json);
     if (not_json) { file_name = file_name + ".json"; }
     std::ifstream o(file_name);
-    Json data;
+    Json          data;
     o >> data;
     o.close();
     return data;
@@ -60,10 +60,9 @@ static Json inline json_read(std::string file_name)
  * @param el the value of the element that we want to check for.
  * @return The function returns `true` if `el` is contained in vector `v` (at least once), otherwise it returns `false`.
  */
-template<typename T>
-[[maybe_unused]] static bool is_member(std::vector<T> const& v, T const& el){
-    return (std::find(v.begin(),v.end(), el) != v.end());
+template <typename T> [[maybe_unused]] static bool is_member(const std::vector<T> &v, const T &el) {
+    return (std::find(v.begin(), v.end(), el) != v.end());
 }
- /**@}*/
-}
-#endif
+/**@}*/
+} // namespace fp
+#endif // FLIPPY_UTILITIES_UTILS_HPP
