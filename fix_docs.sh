@@ -1,8 +1,6 @@
 #!/bin/bash
 
 npx embedme ./README.md || exit 1
-
-./make_single_header_flippy.sh || exit 1
 bash make_doxygen_html.sh
 
 
