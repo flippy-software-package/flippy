@@ -1,5 +1,6 @@
 .DS_Store
 .directory
+toolchain.cmake
 actions-runner/*
 actions-runner/_work
 actions-runner
@@ -7,6 +8,12 @@ assets/flippy.psd
 cmake-build*
 .idea
 .run
+compile_commands.json
+build-*
+build/
+cmakerc
+logs/
+.clangd
 demo_out
 flippy/flippy.hpp-e
 discarded
