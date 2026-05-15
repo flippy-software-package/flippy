@@ -1,10 +1,11 @@
 name: clang on linux test suite
 
 on:
-  push:
-   branches:
-     - master
-     - dev
+  pull_request:
+    types: [opened, reopened, synchronize]
+  merge_group:
+    types: [checks_requested]
+  workflow_call:
 
 jobs:
   test:
@@ -12,15 +13,14 @@ jobs:
       steps:
         - name: Checkout repository
           uses: actions/checkout@v3
-        - name: install clang-15
-          run: sudo apt install clang-15
+        - name: install clang-18
+          run: sudo apt install clang-18
+        - name: install Ninja
+          run: sudo apt install Ninja
+        - name: install Cmake
+          run: sudo apt install cmake
         - name: test
           run: |
-            echo 'testing'
-            cd tests/
-            bash create_cmake_dir
-            cd cmake-build-default
-            cmake -D CMAKE_CXX_COMPILER=clang++-15 ..
-            cmake --build .
-            ./flippy_test
+            cmake -G Ninja -B build -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=clang++-18
+            cmake --build build -j 6 --target tests/all
             echo "done testing"
