@@ -1,14 +1,11 @@
 [![coverage report](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/gdadunashvili/2e1b636e9ff08fb7d0d5a8168bcf5613/raw/)](https://github.com/flippy-software-package/flippy/actions/workflows/coverage.yml)
-![msvc pipeline status](https://github.com/flippy-software-package/flippy/actions/workflows/msvc_on_windows_test.yml/badge.svg)
-![gcc pipeline status](https://github.com/flippy-software-package/flippy/actions/workflows/gcc_on_linux_test.yml/badge.svg)
-![clang on linux pipeline status](https://github.com/flippy-software-package/flippy/actions/workflows/clang_on_linux_test.yml/badge.svg)
-![AppleClang pipeline status](https://github.com/flippy-software-package/flippy/actions/workflows/macos_test.yml/badge.svg)
 [![release version](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/flippy-software-package/flippy/master/VERSION.json&query=$.*&color=blue&label=version)](https://github.com/flippy-software-package/flippy/releases)
 [![licence](https://img.shields.io/badge/licence-MIT-green)](https://github.com/flippy-software-package/flippy/blob/master/LICENSE)
 [![EMail](https://img.shields.io/badge/EMail-D14836?logo=Mail.ru&logoColor=white&logoWidth=20)](mailto:flippy@mailbox.org)
-# *flippy*
+# *flippy v1.0*
+This is a frozen stable branch of flippy 1.0.
 
-<img src="assets/flippy.png" alt="flippy" width="300"/> 
+<img src="assets/flippy.png" alt="flippy" width="300"/>
 
 c++ package for dynamically triangulated membrane simulations.
 
@@ -19,11 +16,11 @@ c++ package for dynamically triangulated membrane simulations.
 | <img src="https://user-images.githubusercontent.com/25377791/158394047-84c564da-0f73-480c-988d-bd5c05111bc5.gif" alt="guv splitting" width="300" height="300"> |              <img src="https://user-images.githubusercontent.com/25377791/158395743-2a1de438-4c8b-43a6-8f41-9f989cd9128a.gif" alt="guv splitting tiny" width="300" height="300">              |
 
 # Support
-*flippy* is still in active development but has the first stable release. And a full public [API documentation](https://flippy-software-package.github.io/flippy). I am actively working on flippy and welcome pull requests and bug reports. 
+*flippy* is still in active development but has the first stable release. And a full public [API documentation](https://flippy-software-package.github.io/flippy). I am actively working on flippy and welcome pull requests and bug reports.
 I will also consider feature requests, but in that case, please provide a use case.
 ### for questions about general usage
 please use the support email [![EMail](https://img.shields.io/badge/EMail-D14836?logo=Mail.ru&logoColor=white&logoWidth=20)](mailto:flippy@mailbox.org).
-### for bugfixes 
+### for bugfixes
 please create an [issue](https://github.com/flippy-software-package/flippy/issues).
 ### for feature requests
 again the [issues](https://github.com/flippy-software-package/flippy/issues) page can be used, but be aware that new features will be slow to come.
@@ -35,7 +32,7 @@ again the [issues](https://github.com/flippy-software-package/flippy/issues) pag
 Or, if you prefer using a single header file, you can download the [flippy.hpp](https://raw.githubusercontent.com/flippy-software-package/flippy/master/single_header_flippy/flippy.hpp) header from the `single_header_flippy` folder.
 
 # Documentation
-*flippy*'s public API is fully [documented](https://flippy-software-package.github.io/flippy). However, if you have never used *flippy* before, you might want to start with the demo projects. These are located in sub-folders of the [`demo`](https://github.com/flippy-software-package/flippy/tree/master/demo) folder. Each sub-folder contains a readme like this one, explaining how to set up a project and what to expect. 
+*flippy*'s public API is fully [documented](https://flippy-software-package.github.io/flippy). However, if you have never used *flippy* before, you might want to start with the demo projects. These are located in sub-folders of the [`demo`](https://github.com/flippy-software-package/flippy/tree/master/demo) folder. Each sub-folder contains a readme like this one, explaining how to set up a project and what to expect.
 
 Automatically generated code [documentation](https://github.com/flippy-software-package/flippy/wiki/Documentation) over on the [wiki](https://github.com/flippy-software-package/flippy/wiki).
 # Citing flippy
@@ -143,7 +140,7 @@ int main(){
 
 # Versioning
 
-Current version [![release version](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/flippy-software-package/flippy/master/VERSION.json&query=$.*&color=blue&label=version)](https://github.com/flippy-software-package/flippy/releases) is the first stable release. No API-breaking changes are expected in the near future, and if they occur, they will be preceded by deprecation warnings in previous versions. 
+Current version [![release version](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/flippy-software-package/flippy/master/VERSION.json&query=$.*&color=blue&label=version)](https://github.com/flippy-software-package/flippy/releases) is the first stable release. No API-breaking changes are expected in the near future, and if they occur, they will be preceded by deprecation warnings in previous versions.
 
 *flippy*'s version numbers follow [Semantic Versioning](https://semver.org/) guidelines.
 
@@ -155,7 +152,7 @@ Current version [![release version](https://img.shields.io/badge/dynamic/json?ur
 - removed `debug_utils` from *flippy*. This functionality was unrelated to membrane simulations and simply offered additional printing and timing capabilities.
 - Printing and timing utilities were removed from the `utils.hpp` header since these tools are unrelated to membrane simulations and should not be maintained together with flippy.
     These utilities can now be found in their own [repository](https://github.com/gdadunashvili/code_utils).
-- restricted `fp::indexing_number` concept to only positive integers. 
+- restricted `fp::indexing_number` concept to only positive integers.
 ### new features
 - none
 ### bugfixes
