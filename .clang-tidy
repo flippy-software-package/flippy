@@ -3,13 +3,15 @@ Checks: >
   clang-analyzer-*,
   cert-*,
   cppcoreguidelines-*,
+  -cppcoreguidelines-avoid-magic-numbers,
   bugprone-*,
   google-*,
   misc-*,
   performance-*,
   readability-*,
+  -readability-magic-numbers,
+  -readability-math-missing-parentheses,
   modernize-*,
   -modernize-use-trailing-return-type,
   -readability-identifier-length,
   -misc-non-private-member-variables-in-classes
-

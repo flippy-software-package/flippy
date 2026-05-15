@@ -36,7 +36,9 @@ set(FLIPPY_TEST_SOURCES
     Triangulation_update_test.cpp
     stlSerializer_test.cpp
     sim_utils_test.cpp
-    dynamic_move_size_test.cpp)
+    dynamic_move_size_test.cpp
+    xyzDataIO_test.cpp
+    local_update_energy_test.cpp)
 
 foreach(test_source ${FLIPPY_TEST_SOURCES})
   get_filename_component(test_name ${test_source} NAME_WE)

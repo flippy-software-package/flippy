@@ -1,6 +1,0 @@
-#! /bin/bash
-cmakeDir=cmake-build-default
-if [ -d $cmakeDir ]; then
-  rm -r $cmakeDir
-fi
-mkdir $cmakeDir
