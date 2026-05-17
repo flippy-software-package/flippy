@@ -8,6 +8,8 @@
 [![EMail](https://img.shields.io/badge/EMail-D14836?logo=Mail.ru&logoColor=white&logoWidth=20)](mailto:flippy@mailbox.org)
 # *flippy*
 
+**This is development branch of flippy. The stable v1.0 branchcan be found [here](https://github.com/flippy-software-package/flippy/tree/master).**
+
 <img src="assets/flippy.png" alt="flippy" width="300"/>
 
 c++ package for dynamically triangulated membrane simulations.
