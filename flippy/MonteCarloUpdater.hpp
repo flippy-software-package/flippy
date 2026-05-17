@@ -73,7 +73,7 @@ namespace fp {
  * This must match the type of triangulation provided during the class instantiation.
  */
 template <typename EnergyFunctionParameters, typename RandomNumberEngine> class MonteCarloUpdater {
-    private:
+private:
     static constexpr Real           max_float = 3.40282347e+38f;
     fp::Triangulation              &triangulation;
     const EnergyFunctionParameters &prms;
@@ -89,7 +89,7 @@ template <typename EnergyFunctionParameters, typename RandomNumberEngine> class 
     unsigned long                        move_attempt{0}, bond_length_move_rejection{0}, move_back{0};
     unsigned long                        flip_attempt{0}, bond_length_flip_rejection{0}, flip_back{0};
 
-    public:
+public:
     /**
      * @param triangulation_inp Reference to the triangulation that will be updated.
      * @param prms_inp The instance of the struct that contains the parameters of the system energy.
@@ -313,7 +313,7 @@ template <typename EnergyFunctionParameters, typename RandomNumberEngine> class 
         return kBT_;
     }
     //! @getterFunctionStub
-    [[nodiscard]] unsigned long move_attempt_count() const {
+    [[nodiscard]] std::uint64_t move_attempt_count() const {
         /**
          * Every time a move is attempted, a private internal state variable `move_attempt` is incremented by
          * move_MC_updater(). This variable can be used for diagnostics or statistical tracking, but its state does not
@@ -324,7 +324,7 @@ template <typename EnergyFunctionParameters, typename RandomNumberEngine> class 
         return move_attempt;
     }
     //! @getterFunctionStub
-    [[nodiscard]] unsigned long bond_length_move_rejection_count() const {
+    [[nodiscard]] std::uint64_t bond_length_move_rejection_count() const {
         /**
          * Moves that cause nodes to overlap with their Verlet list neighbors or move them too far away from any of
          * their next neighbors are rejected. Every time such rejection happens, a private internal state variable
@@ -340,7 +340,7 @@ template <typename EnergyFunctionParameters, typename RandomNumberEngine> class 
         return bond_length_move_rejection;
     }
     //! @getterFunctionStub
-    [[nodiscard]] unsigned long move_back_count() const {
+    [[nodiscard]] std::uint64_t move_back_count() const {
         /**
          * Every time a move is rejected because the energy requirement was not satisfied, a private internal state
          * variable `move_back` is incremented by move_MC_updater(). This variable does not track the rejections
@@ -352,7 +352,7 @@ template <typename EnergyFunctionParameters, typename RandomNumberEngine> class 
         return move_back;
     }
     //!@getterFunctionStub
-    [[nodiscard]] unsigned long flip_attempt_count() const {
+    [[nodiscard]] std::uint64_t flip_attempt_count() const {
         /**
          * Every time a flip is attempted, a private internal state variable `flip_attempt` is incremented by
          * flip_MC_updater() and flip_MC_updater(fp::Node const& node, Index index_in_nn_ids). This variable can be used
@@ -362,7 +362,7 @@ template <typename EnergyFunctionParameters, typename RandomNumberEngine> class 
         return flip_attempt;
     }
     //! @getterFunctionStub
-    [[nodiscard]] unsigned long bond_length_flip_rejection_count() const {
+    [[nodiscard]] std::uint64_t bond_length_flip_rejection_count() const {
         /**
          * If a flip would turn a valid bond into a bond that is too long, the flip is rejected, a private internal
          * state variable `bond_length_flip_rejection` is incremented by flip_MC_updater() and flip_MC_updater(fp::Node
@@ -376,7 +376,7 @@ template <typename EnergyFunctionParameters, typename RandomNumberEngine> class 
         return bond_length_flip_rejection;
     }
     //! @getterFunctionStub
-    [[nodiscard]] unsigned long flip_back_count() const {
+    [[nodiscard]] std::uint64_t flip_back_count() const {
         /**
          * Every time a flip is rejected because the energy requirement was not satisfied, a private internal state
          * variable `flip_back` is incremented by flip_MC_updater() and flip_MC_updater(fp::Node const& node, Index
