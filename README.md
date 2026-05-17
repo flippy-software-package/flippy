@@ -104,7 +104,7 @@ int main() {
     fp::Real l_min = 2;
     fp::Real R =
         l_min /
-        (2 * sin(asin(1. / (2 * sin(2. * M_PI / 5.))) / (n_triang + 1.))); // estimate of a typical bond length in the
+        (2 * sin(asin(1. / (2 * sin(2. * fp::PI / 5.))) / (n_triang + 1.))); // estimate of a typical bond length in the
     // initial triangulation and then create a sphere such that the initial bond length is close to minimal. This
     // formula is derived from the equidistant sub-triangulation of an icosahedron, where geodesic distances are used as
     // a distance measure.
@@ -179,52 +179,6 @@ int main() {
 }
 
 ```
-
-# Versioning
-
-Current version [![release version](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/flippy-software-package/flippy/master/VERSION.json&query=$.*&color=blue&label=version)](https://github.com/flippy-software-package/flippy/releases) is the first stable release. No API-breaking changes are expected in the near future, and if they occur, they will be preceded by deprecation warnings in previous versions.
-
-*flippy*'s version numbers follow [Semantic Versioning](https://semver.org/) guidelines.
-
-## changes in [![release version](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/flippy-software-package/flippy/master/VERSION.json&query=$.*&color=blue&label=version)](https://github.com/flippy-software-package/flippy/releases)
-
-### breaking changes
-- renamed `global_geometry.dA_K2` and `node.scaled_curvature_energy` to `unit_bending_energy`
-    - `unit_bending_energy` also differs from `scaled_curvature_energy` by a factor of `0.5`
-- removed `debug_utils` from *flippy*. This functionality was unrelated to membrane simulations and simply offered additional printing and timing capabilities.
-- Printing and timing utilities were removed from the `utils.hpp` header since these tools are unrelated to membrane simulations and should not be maintained together with flippy.
-    These utilities can now be found in their own [repository](https://github.com/gdadunashvili/code_utils).
-- restricted `fp::IndexingNumber` concept to only positive integers.
-### new features
-- none
-### bugfixes
-- removed the default constructor from `MonteCarloUpdater` since it was implicitly deleted anyway.
-- changed update counters types in `MonteCarloUpdater` too long instead of Index to avoid integer overflow.
-- double-check if the `stdlib` defines M_PI and define it if not.
-- count of moves and flips is saved in an `unsigned long` variable by the `MonteCarloUpdater` to avoid overflow for even very long simulations.
-
-## well-tested part of the API
-
-- spherical triangulation
-- vec3
-- nodes
-- debug utils/utils
-- MonteCarloUpdater
-
-## new and poorly tested
-
-- planar triangulation
-
-## coming soon
-
-- tubular triangulation
-
-## could be implemented at some point
-
-- solid bodies
-    - other objects that the triangulations could interact with
-- force-based updater
-    - a utility class like MonteCarloUpdater, which uses force balance functions to update node positions
 
 # license
 
