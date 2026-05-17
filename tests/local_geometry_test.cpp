@@ -1,3 +1,4 @@
+#include "custom_concepts.hpp"
 #include <catch2/catch_approx.hpp>
 #include <catch2/catch_test_macros.hpp>
 
@@ -143,7 +144,7 @@ TEST_CASE("Ellipse geometry test") {
     Real   V_Ellipse        = static_cast<Real>(x_stretch * 4_r * fp::PI * R * R * R / 3_r);
     auto   V_Ellipse_target = Catch::Approx(V_Ellipse).epsilon(ACCEPTABLE_ERROR);
     double e                = std::sqrt(1. - 1. / (x_stretch * x_stretch));
-    auto   A_Ellipse        = static_cast<Real>(2. * M_PI * R * R * (1 + (x_stretch / e) * std::asin(e)));
+    auto   A_Ellipse        = static_cast<Real>(2. * fp::PI * R * R * (1 + (x_stretch / e) * std::asin(e)));
     auto   A_Ellipse_target = Catch::Approx(A_Ellipse).epsilon(ACCEPTABLE_ERROR);
 
     SECTION("internally calculated global geometry") {
@@ -323,4 +324,3 @@ TEST_CASE("Hyperqueeze geometry test") {
         CHECK(brick.global_geometry().volume == V_square);
     }
 }
-

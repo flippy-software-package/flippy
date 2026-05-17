@@ -329,11 +329,11 @@ struct Geometry {
  */
 
 class Triangulation {
-    private:
+private:
     explicit Triangulation(Real verlet_radius_inp) : verlet_radius(verlet_radius_inp) {}
     Triangulation() = default;
 
-    public:
+public:
     /**
      * @brief Factory function that can re-initiate a triangulation from the stored data.
      *
@@ -1005,9 +1005,9 @@ class Triangulation {
 // gToDo: this paradigm has to change. Private functions can probably become static helpers that can be tested
 // separately
 #ifdef TESTING_FLIPPY_TRIANGULATION_ndh6jclc0qnp274b
-    public:
+public:
 #else
-    private:
+private:
 #endif
     Real     R_initial{};
     Nodes    nodes_;
@@ -1130,8 +1130,8 @@ class Triangulation {
     [[nodiscard]] std::array<Index, 2> two_common_neighbours(Index node_id_0, Index node_id_1) const {
         static const Index   vln = std::numeric_limits<Index>::max();
         std::array<Index, 2> res{vln, vln};
-        // todo safe remove const& in the loop
-        for (auto *res_p = res.begin(); const auto &n0_nn_id : nodes_[node_id_0].nn_ids) {
+        // gToDo: reevaluate this algorithm
+        for (auto res_p = res.begin(); const auto &n0_nn_id : nodes_[node_id_0].nn_ids) {
             if (res_p == res.end()) { break; }
             if (is_member(nodes_[node_id_1].nn_ids, n0_nn_id)) {
                 *res_p = n0_nn_id;
@@ -1163,7 +1163,7 @@ class Triangulation {
                 .j_p_1 = Neighbors::plus_one(local_nn_id, nn_number)};
     }
 
-    public:
+public:
     // unit tested
     Neighbors previous_and_next_neighbour_global_ids(Index node_id, Index nn_id) const {
         /**
@@ -1182,7 +1182,7 @@ class Triangulation {
         return {.j_m_1 = nn_ids_view[neighbors.j_m_1], .j_p_1 = nn_ids_view[neighbors.j_p_1]};
     }
 
-    private:
+private:
     void update_global_geometry(const Geometry &lg_old, const Geometry &lg_new) { global_geometry_ += lg_new - lg_old; }
 
     // Todo unittest

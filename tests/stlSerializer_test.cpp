@@ -24,9 +24,8 @@ TEST_CASE("testing stlSerializer") {
         CHECK(trg.size() == 1082);
         double V  = trg.global_geometry().volume;
         double A  = trg.global_geometry().area;
-        double Rv = std::pow(3. * V / (4. * M_PI), 1. / 3.);
-        double Ra = std::sqrt(A / (4. * M_PI));
+        double Rv = std::pow(3. * V / (4. * fp::PI), 1. / 3.);
+        double Ra = std::sqrt(A / (4. * fp::PI));
         CHECK(Rv == Catch::Approx(Ra).epsilon(0.01));
     }
 }
-

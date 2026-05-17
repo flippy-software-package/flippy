@@ -1,3 +1,4 @@
+#include <sstream>
 #if ALLOCATIONTRACKING
 
 #include <cstdint>
@@ -200,18 +201,18 @@ int main(int /*argc*/, char **argv) {
 
 #if ALLOCATIONTRACKING
     AM.leaks = AM.allocation - AM.de_allocation;
-    std::printf("total allocations: %5ld | total de_allocations: %5ld | leaks      %5ld\n",
-                AM.allocation,
-                AM.de_allocation,
-                AM.leaks);
-    std::printf("allocated size:    %5lo\n", AM.allocated_size);
 
-    std::ofstream log(LOG_FILE, std::ios_base::app);
-    log << "total_allocations: " << AM.allocation << '\n'
-        << "total_de_allocations: " << AM.de_allocation << '\n'
-        << "leaks: " << AM.leaks << '\n'
-        << "allocated_size: " << AM.allocated_size << '\n'
-        << "COMMENTS: |\n \n";
+    std::stringstream stream;
+    std::ofstream     log(LOG_FILE, std::ios_base::app);
+    stream << "total_allocations: " << AM.allocation << '\n'
+           << "total_de_allocations: " << AM.de_allocation << '\n'
+           << "leaks: " << AM.leaks << '\n'
+           << "allocated_size: " << AM.allocated_size << '\n'
+           << "COMMENTS: |\n \n";
+
+    log << stream.str();
+    std::cout << stream.str();
+
 #endif
     return 0;
 }

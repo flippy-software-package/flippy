@@ -43,7 +43,7 @@ int main() {
     // estimate of a typical bond length in the initial triangulation and then create a sphere such that the initial
     // bond length is close to minimal. This formula is derived from the equidistant sub-triangulation of an
     // icosahedron, where geodesic distances are used as a distance measure.
-    fp::Real R = l_min / (2 * sin(asin(1_r / (2_r * sin(2_r * M_PI / 5_r))) / static_cast<fp::Real>(n_triang + 1)));
+    fp::Real R = fp::min_radius_with_non_overlapping_beads(l_min, n_triang);
 
     fp::Real l_max    = 1.8 * l_min; // if you make l_max closer to l_min bond_flip acceptance rate will go down
     fp::Real r_Verlet = 2 * l_max;
