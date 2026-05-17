@@ -40,6 +40,18 @@ set(FLIPPY_COMPILE_OPTIONS
     # gToDo: remove this after fixing catch2 dependency
     -Wno-c2y-extensions)
 
+if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+  if(CMAKE_CXX_COMPILER_VERSION VERSION_LESS 22.0)
+    message(FATAL_ERROR "Clang version must be >= 22.0")
+  endif()
+endif()
+
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+  if(CMAKE_CXX_COMPILER_VERSION VERSION_LESS 13.0)
+    message(FATAL_ERROR "GCC version must be >= 13.0")
+  endif()
+endif()
+
 set(CMAKE_CXX_STANDARD 26)
 set(CXX_STANDARD_REQUIRED ON)
 
