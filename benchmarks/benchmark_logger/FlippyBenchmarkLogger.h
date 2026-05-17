@@ -2,6 +2,7 @@
 #define NODES_HPP_FLIPPYBENCHMARKLOGGER_H
 #include <code_utils.hpp>
 #include <concepts>
+#include <cstdint>
 #include <flippy.hpp>
 
 template <typename U>
@@ -11,20 +12,18 @@ concept Updater = requires(U                  u,
                            fp::Node           node,
                            fp::Index          nn_id,
                            fp::vec3<fp::Real> displacement,
-                           unsigned long long z,
+                           std::uint64_t      z,
                            std::ostream      &os) {
-    //  { U(triangulation, node) } -> std::same_as<U>;
-
     { u.move_MC_updater(node, displacement) } -> std::same_as<std::optional<fp::Real>>;
     { u.flip_MC_updater(node, nn_id) } -> std::same_as<void>;
 
-    { u.move_attempt_count() } -> std::same_as<unsigned long>;
-    { u.bond_length_move_rejection_count() } -> std::same_as<unsigned long>;
-    { u.move_back_count() } -> std::same_as<unsigned long>;
+    { u.move_attempt_count() } -> std::same_as<std::uint64_t>;
+    { u.bond_length_move_rejection_count() } -> std::same_as<std::uint64_t>;
+    { u.move_back_count() } -> std::same_as<std::uint64_t>;
 
-    { u.flip_attempt_count() } -> std::same_as<unsigned long>;
-    { u.bond_length_flip_rejection_count() } -> std::same_as<unsigned long>;
-    { u.flip_back_count() } -> std::same_as<unsigned long>;
+    { u.flip_attempt_count() } -> std::same_as<std::uint64_t>;
+    { u.bond_length_flip_rejection_count() } -> std::same_as<std::uint64_t>;
+    { u.flip_back_count() } -> std::same_as<std::uint64_t>;
 };
 
 template <Updater Updater> class FlippyBenchmarkLogger {
@@ -35,7 +34,7 @@ template <Updater Updater> class FlippyBenchmarkLogger {
     FlippyBenchmarkLogger(const Updater &mcu, const fp::Triangulation &triangulation)
         : mcu_(mcu), triangulation_(triangulation) {};
 
-    public:
+public:
     static FlippyBenchmarkLogger start_benchmark(const Updater &mcu, const fp::Triangulation &triangulation) {
         FlippyBenchmarkLogger logger(mcu, triangulation);
 
@@ -65,18 +64,17 @@ template <Updater Updater> class FlippyBenchmarkLogger {
               static_cast<long double>(mcu_.flip_back_count() + mcu_.bond_length_flip_rejection_count()) /
                   static_cast<long double>(mcu_.flip_attempt_count()));
 
-        long double time_in_seconds = ((long double)elapsed_time.diff_ns) * 1.e-9l;
-        long double moves_ps        = static_cast<long double>(attempt) / static_cast<long double>(time_in_seconds);
-        long double e_moves_ps =
-            static_cast<long double>(bond_length_legal_move) / static_cast<long double>(time_in_seconds);
-        long double flips_ps = static_cast<long double>(attempt_flip) / static_cast<long double>(time_in_seconds);
-        long double e_flips_ps =
-            static_cast<long double>(topologically_successful_flip) / static_cast<long double>(time_in_seconds);
+        auto time_in_seconds = static_cast<long double>(elapsed_time.diff_ns * 1.e-9L);
+        auto moves_ps        = static_cast<long double>(attempt) / time_in_seconds;
+        auto e_moves_ps      = static_cast<long double>(bond_length_legal_move) / time_in_seconds;
+        auto flips_ps        = static_cast<long double>(attempt_flip) / time_in_seconds;
+        auto e_flips_ps      = static_cast<long double>(topologically_successful_flip) / time_in_seconds;
 
         auto              now      = std::chrono::system_clock::now();
         std::time_t       now_time = std::chrono::system_clock::to_time_t(now);
         std::tm          *time     = std::localtime(&now_time);
-        std::stringstream date, time_stamp;
+        std::stringstream date;
+        std::stringstream time_stamp;
         date << 1900 + time->tm_year << "-" << time->tm_mon + 1 << "-" << time->tm_mday;
         time_stamp << time->tm_hour << "-" << time->tm_min << "-" << time->tm_sec;
 

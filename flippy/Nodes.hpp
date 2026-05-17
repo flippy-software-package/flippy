@@ -1,3 +1,45 @@
+/*
+ *```txt
+ *
+ *  .d888 888 d8b
+ * d88P"  888 Y8P
+ * 888    888
+ * 888888 888 888 88888b.  88888b.  888  888
+ * 888    888 888 888 "88b 888 "88b 888  888     simulating package for
+ * 888    888 888 888  888 888  888 888  888     dynamically triangulated
+ * 888    888 888 888 d88P 888 d88P Y88b 888     surfaces
+ * 888    888 888 88888P"  88888P"   "Y88888
+ *                888      888           888
+ *                888      888      Y8b d88P
+ *                888      888       "Y88P"
+ *
+ * https://github.com/flippy-software-package/flippy
+ *
+ *
+ * MIT License
+ *
+ * Copyright (c) 2021 George Dadunashvili
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ *```
+ */
+
 #ifndef FLIPPY_NODES_HPP
 #define FLIPPY_NODES_HPP
 /**
@@ -242,10 +284,10 @@ struct Nodes {
         std::vector<Index> nn_ids_temp, verlet_list_temp;
         data.resize((node_dict.size()));
         for (const auto &node : node_dict.items()) {
-            const auto              &node_id    = node.key();
-            fp::indexing_number auto node_index = static_cast<Index>(std::stol(node_id));
-            const auto              &raw_pos    = node.value()["pos"];
-            vec3<Real>               pos{(Real)raw_pos[0], (Real)raw_pos[1], (Real)raw_pos[2]};
+            const auto             &node_id    = node.key();
+            fp::IndexingNumber auto node_index = static_cast<Index>(std::stol(node_id));
+            const auto             &raw_pos    = node.value()["pos"];
+            vec3<Real>              pos{(Real)raw_pos[0], (Real)raw_pos[1], (Real)raw_pos[2]};
 
             const auto &raw_curv = node.value()["curvature_vec"];
             vec3<Real>  curvature_vec{(Real)raw_curv[0], (Real)raw_curv[1], (Real)raw_curv[2]};

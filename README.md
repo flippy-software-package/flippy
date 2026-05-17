@@ -192,7 +192,7 @@ Current version [![release version](https://img.shields.io/badge/dynamic/json?ur
 - removed `debug_utils` from *flippy*. This functionality was unrelated to membrane simulations and simply offered additional printing and timing capabilities.
 - Printing and timing utilities were removed from the `utils.hpp` header since these tools are unrelated to membrane simulations and should not be maintained together with flippy.
     These utilities can now be found in their own [repository](https://github.com/gdadunashvili/code_utils).
-- restricted `fp::indexing_number` concept to only positive integers.
+- restricted `fp::IndexingNumber` concept to only positive integers.
 ### new features
 - none
 ### bugfixes

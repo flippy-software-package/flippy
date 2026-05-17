@@ -36,6 +36,8 @@ void operator delete(void *memory, std::size_t) noexcept {
 #include <FlippyBenchmarkLogger.h>
 #include <flippy.hpp>
 
+namespace {
+using fp::operator""_r;
 struct EnergyParameters {
     fp::Real kappa, K_V, K_A, V_t, A_t;
 };
@@ -58,6 +60,7 @@ fp::Real surface_energy(const fp::Node               &node,
     fp::Real energy = prms.kappa * E_bending + prms.K_V * dV * dV / prms.V_t + prms.K_A * dA * dA / prms.A_t;
     return energy;
 }
+} // namespace
 
 int main(int /*argc*/, char **argv) {
     char LOG_FILE[300]{};
@@ -95,7 +98,7 @@ int main(int /*argc*/, char **argv) {
         // create a random number generator and seed it with the current time
         std::mt19937 rng(random_number_generator_seed());
 
-        auto guv        = Triangulation(n_triang, R, r_Verlet);
+        auto guv        = Triangulation::make_spherical_triangulation(n_triang, R, r_Verlet);
         auto mc_updater = MCU(guv, prms, surface_energy, rng, l_min, l_max);
 
         fp::vec3<fp::Real>                       displ{};
@@ -142,29 +145,28 @@ int main(int /*argc*/, char **argv) {
             shuffled_ids.push_back(node.id);
         }
 
-        fp::Real                probability_target   = 0.5f;
-        fp::Real                adaptation_magnitude = 0.1f;
-        std::optional<fp::Real> e_diff               = 0;
+        auto                    probability_target = 0.5_r;
+        std::optional<fp::Real> e_diff             = 0_r;
 
         fp::Real V0            = guv.global_geometry().volume;
         fp::Real A0            = guv.global_geometry().area;
-        auto     displ_updater = fp::DynamicDisplacementUpdater(linear_displ, adaptation_magnitude, probability_target);
+        auto     displ_updater = fp::DynamicDisplacementUpdater(linear_displ, probability_target);
         auto     logger        = FlippyBenchmarkLogger<MCU>::start_benchmark(mc_updater, guv);
 
         for (int mc_step = 0; mc_step < max_mc_steps; ++mc_step) {
             auto t      = static_cast<fp::Real>(mc_step);
             auto t_max  = static_cast<fp::Real>(max_mc_steps);
-            prms.V_t    = fp::linear_adaptation(t, 0.f, 0.3f * t_max, V0, Vt);
-            prms.A_t    = fp::linear_adaptation(t, 0.f, 0.3f * t_max, A0, At);
-            fp::Real kT = fp::linear_adaptation(t, 0.7f * t_max, 0.9f * t_max, 1.f, 0.1f);
+            prms.V_t    = fp::linear_adaptation(t, 0_r, 0.3_r * t_max, V0, Vt);
+            prms.A_t    = fp::linear_adaptation(t, 0_r, 0.3_r * t_max, A0, At);
+            fp::Real kT = fp::linear_adaptation(t, 0.7_r * t_max, 0.9_r * t_max, 1_r, 0.1_r);
             mc_updater.reset_kBT(kT);
             displ_distr = displ_updater.new_displ_distr();
             for (fp::Index node_id : shuffled_ids) {
-                displ  = {displ_distr(rng), displ_distr(rng), displ_distr(rng)};
+                displ  = {.x = displ_distr(rng), .y = displ_distr(rng), .z = displ_distr(rng)};
                 e_diff = mc_updater.move_MC_updater(guv[node_id], displ);
                 displ_updater.probability_aggregator(e_diff, mc_updater.kBT());
             }
-            fp::Real pt = fp::linear_adaptation(t, 0.7f * t_max, 0.9f * t_max, probability_target, 0.2f);
+            fp::Real pt = fp::linear_adaptation(t, 0.7_r * t_max, 0.9_r * t_max, probability_target, 0.2_r);
             displ_updater.reset_target_acceptance_probability(pt);
             // then we shuffle the bead_ids
             std::shuffle(shuffled_ids.begin(), shuffled_ids.end(), rng);

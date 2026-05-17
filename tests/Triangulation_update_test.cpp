@@ -9,17 +9,6 @@
 
 using namespace fp;
 
-// template <floating_point_number Real, indexing_number Index>
-// void rescale_triangulation(Real R, Triangulation<Real,Index, SPHERICAL_TRIANGULATION>& tr)
-//{
-//     tr.R_initial=R;
-//     tr.scale_all_nodes_to_R_init();
-//     tr.orient_surface_of_a_sphere();
-//     tr.initiate_distance_vectors(); //Todo if this is done before orient surface we can save time
-//     tr.make_global_geometry();
-//     tr.make_verlet_list();
-// }
-
 bool euler_number_is_2(const Triangulation &triangulation) {
     /**
      * General euler formula for flat polyhedra: `V - E + F = 2`
@@ -43,10 +32,11 @@ bool euler_number_is_2(const Triangulation &triangulation) {
 SCENARIO("Random bond flips do not destroy the topology") {
     GIVEN("A a spherical triangulation") {
         constexpr Index subriang_level   = 10;
-        constexpr Real  verlet_radius    = 0.f;
-        constexpr Real  r_init           = 13.f;
+        constexpr auto  verlet_radius    = 0_r;
+        constexpr auto  r_init           = 13_r;
         constexpr Index test_repetitions = 10;
-        Triangulation   tr(subriang_level, r_init, verlet_radius);
+
+        auto tr = Triangulation::make_spherical_triangulation(subriang_level, r_init, verlet_radius);
         auto rg = Catch::Generators::RandomIntegerGenerator<Index>(0, tr.size(), Catch::Generators::Detail::getSeed());
 
         THEN("Euler Number is 2") { CHECK(euler_number_is_2(tr)); }

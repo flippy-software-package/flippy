@@ -1,10 +1,6 @@
-cmake_minimum_required(VERSION 3.16)
-project(flippy_rbc_benchmark)
-set(CMAKE_CXX_STANDARD 20)
-#set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_BUILD_TYPE Release)
-set(CMAKE_CXX_FLAGS_RELEASE "-O3")
-set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g -fno-omit-frame-pointer")
+
+set(benchmark_name flippy_rbc_benchmark)
 
 add_definitions(-DLOGGING_ON=1)
 add_definitions(-DPRINTING_ON=1)
@@ -13,5 +9,7 @@ add_definitions(-DALLOCATIONTRACKING=1)
 include_directories(../benchmark_logger)
 include_directories(../external)
 include_directories(../../flippy)
-add_executable(${PROJECT_NAME} main.cpp)
-target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic -Wshadow -Wconversion -Werror -ffast-math)
+
+add_executable(${benchmark_name} main.cpp)
+
+target_compile_options(${benchmark_name} PRIVATE ${FLIPPY_COMPILE_OPTIONS})

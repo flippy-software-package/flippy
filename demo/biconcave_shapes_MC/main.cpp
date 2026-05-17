@@ -3,8 +3,11 @@
 #include <random>   // needed for random displacement generation and node index shuffling
 #include <vector>   // need for std::vector
 
-fp::Real sphere_vol(fp::Real R) { return fp::Real(4. / 3.) * fp::PI * R * R * R; }
-fp::Real sphere_area(fp::Real R) { return fp::Real(4.) * fp::PI * R * R; }
+namespace {
+using fp::operator""_r;
+
+fp::Real sphere_vol(fp::Real R) { return (4_r / 3_r) * fp::PI * R * R * R; }
+fp::Real sphere_area(fp::Real R) { return 4_r * fp::PI * R * R; }
 
 struct EnergyParameters {
     fp::Real kappa, K_V, K_A, V_t, A_t;
@@ -22,35 +25,36 @@ fp::Real surface_energy(const fp::Node               &node,
     fp::Real dA        = A - p.A_t;
     fp::Real E_bending = fp::node_unit_bending_energy(node);
     for (fp::Index changed_node_id : changed_neighbourhood) {
-        E_bending += fp::node_unit_bending_energy(node);
+        E_bending += fp::node_unit_bending_energy(trg[changed_node_id]);
     }
 
     fp::Real energy = (p.kappa * E_bending) + (p.K_V * dV * dV / p.V_t) + (p.K_A * dA * dA / p.A_t);
     return energy;
 }
 
-#include "../benchmarks/external/code_utils.hpp" //ToDo Remove before prod
+} // namespace
 
 int main() {
-    cutils::Timer t;
-    int           n_triang =
-        7; // triangulation iteration number of nodes N_node=12+30*n+20*n*(n-1)/2 where n is the same as n_trng
-    fp::Real l_min = 2;
-    fp::Real R =
-        l_min /
-        (2 * sin(asin(1. / (2 * sin(2. * M_PI / 5.))) / (n_triang + 1.))); // estimate of a typical bond length in the
-    // initial triangulation and then create a sphere such that the initial bond length is close to minimal. This
-    // formula is derived from the equidistant sub-triangulation of an icosahedron, where geodesic distances are used as
-    // a distance measure.
-    fp::Real         l_max    = 1.8 * l_min; // if you make l_max closer to l_min bond_flip acceptance rate will go down
-    fp::Real         r_Verlet = 2 * l_max;
-    fp::Real         red_vol  = 0.6;
-    EnergyParameters prms{.kappa = 10 /*kBT*/,
-                          .K_V   = 100 /*kBT/area*/,
-                          .K_A   = 1000 /*kBT/volume*/,
+    // triangulation iteration number of nodes N_node=12+30*n+20*n*(n-1)/2 where n is the same as n_trng
+    //
+    fp::Index n_triang = 7;
+    fp::Real  l_min    = 2_r;
+
+    // estimate of a typical bond length in the initial triangulation and then create a sphere such that the initial
+    // bond length is close to minimal. This formula is derived from the equidistant sub-triangulation of an
+    // icosahedron, where geodesic distances are used as a distance measure.
+    fp::Real R = l_min / (2 * sin(asin(1_r / (2_r * sin(2_r * M_PI / 5_r))) / static_cast<fp::Real>(n_triang + 1)));
+
+    fp::Real l_max    = 1.8 * l_min; // if you make l_max closer to l_min bond_flip acceptance rate will go down
+    fp::Real r_Verlet = 2 * l_max;
+    fp::Real red_vol  = 0.6;
+
+    EnergyParameters prms{.kappa = 10_r /*kBT*/,
+                          .K_V   = 100_r /*kBT/area*/,
+                          .K_A   = 1000_r /*kBT/volume*/,
                           .V_t   = red_vol * sphere_vol(R),
                           .A_t   = sphere_area(R)};
-    fp::Real linear_displ = l_min / 18.; // side length of a voxel from which the displacement of the node is drawn
+    fp::Real linear_displ = l_min / 18_r; // side length of a voxel from which the displacement of the node is drawn
     int max_mc_steps = 2e5; // max number of iteration steps (depending on the strength of your CPU, this should take
                             // anywhere from a couple of seconds to a couple of minutes
 
@@ -59,7 +63,7 @@ int main() {
         random_number_generator_seed()); // create a random number generator and seed it with the current time
 
     // All the flippy magic is happening on the following two lines
-    fp::Triangulation                                     guv(n_triang, R, r_Verlet);
+    auto guv = fp::Triangulation::make_spherical_triangulation(n_triang, R, r_Verlet);
     fp::MonteCarloUpdater<EnergyParameters, std::mt19937> mc_updater(guv, prms, surface_energy, rng, l_min, l_max);
 
     fp::vec3<fp::Real> displ{}; // declaring a 3d vector (using flippy's built in vec3 type) for later use as a random
@@ -74,7 +78,7 @@ int main() {
     fp::json_dump("test_run_init",
                   data_init); // ATTENTION!!! this file will be saved in the same folder as the executable
 
-    std::vector<unsigned int> shuffled_ids;
+    std::vector<fp::Index> shuffled_ids;
     shuffled_ids.reserve(guv.size());
     for (const auto &node : guv.nodes()) {
         shuffled_ids.push_back(node.id);
@@ -82,13 +86,12 @@ int main() {
       // through the nodes
 
     for (int mc_step = 0; mc_step < max_mc_steps; ++mc_step) {
-        for (unsigned int node_id : shuffled_ids) { // we first loop through all the beads and move them
-            displ = {displ_distr(rng), displ_distr(rng), displ_distr(rng)};
+        for (fp::Index node_id : shuffled_ids) { // we first loop through all the beads and move them
+            displ = {.x = displ_distr(rng), .y = displ_distr(rng), .z = displ_distr(rng)};
             mc_updater.move_MC_updater(guv[node_id], displ); // guv[node_id] returns the node which has id=node_id
         }
         std::shuffle(shuffled_ids.begin(), shuffled_ids.end(), rng); // then we shuffle the bead_ids
-        for (unsigned int node_id :
-             shuffled_ids) { // then we loop through all of them again and try to flip their bonds
+        for (fp::Index node_id : shuffled_ids) { // then we loop through all of them again and try to flip their bonds
             mc_updater.flip_MC_updater(guv[node_id]);
         }
     }
@@ -97,12 +100,12 @@ int main() {
     // because of the energy or the bond length constraint. We can use this to print simple statistics here. For
     // example, this will help us decide if our displacement size is too large.
     std::cout << "percentage of failed moves: "
-              << (mc_updater.move_back_count() + mc_updater.bond_length_move_rejection_count()) /
-                     ((fp::Real)mc_updater.move_attempt_count())
+              << static_cast<fp::Real>(mc_updater.move_back_count() + mc_updater.bond_length_move_rejection_count()) /
+                     static_cast<fp::Real>(mc_updater.move_attempt_count())
               << '\n';
     std::cout << "percentage of failed flips: "
-              << (mc_updater.flip_back_count() + mc_updater.bond_length_flip_rejection_count()) /
-                     ((fp::Real)mc_updater.flip_attempt_count())
+              << static_cast<fp::Real>(mc_updater.flip_back_count() + mc_updater.bond_length_flip_rejection_count()) /
+                     static_cast<fp::Real>(mc_updater.flip_attempt_count())
               << '\n';
 
     fp::Json data_final = guv.make_egg_data();
