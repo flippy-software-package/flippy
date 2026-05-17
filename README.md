@@ -1,4 +1,4 @@
-[![coverage report](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/gdadunashvili/2e1b636e9ff08fb7d0d5a8168bcf5613/raw/)](https://github.com/flippy-software-package/flippy/actions/workflows/coverage.yml)
+[![codecov](https://codecov.io/github/flippy-software-package/flippy/graph/badge.svg?token=TMDZWP40A9)](https://codecov.io/github/flippy-software-package/flippy)
 ![msvc pipeline status](https://github.com/flippy-software-package/flippy/actions/workflows/msvc_on_windows_test.yml/badge.svg)
 ![gcc pipeline status](https://github.com/flippy-software-package/flippy/actions/workflows/gcc_on_linux_test.yml/badge.svg)
 ![clang on linux pipeline status](https://github.com/flippy-software-package/flippy/actions/workflows/clang_on_linux_test.yml/badge.svg)
