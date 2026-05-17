@@ -5,6 +5,7 @@ Checks: >
   cppcoreguidelines-*,
   -cppcoreguidelines-avoid-magic-numbers,
   bugprone-*,
+  -bugprone-easily-swappable-parameters,
   google-*,
   misc-*,
   performance-*,
