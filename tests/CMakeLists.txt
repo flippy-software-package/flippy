@@ -32,6 +32,7 @@ set(FLIPPY_TEST_SOURCES
     vec3_test.cpp
     local_geometry_test.cpp
     Triangulation_test.cpp
+    MonteCarloUpdater_test.cpp
     # Triangulator_test.cpp
     Triangulation_update_test.cpp
     stlSerializer_test.cpp
