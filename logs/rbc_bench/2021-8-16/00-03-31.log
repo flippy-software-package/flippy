@@ -1,0 +1,14 @@
+all_attempted_bead_moves: 133224000
+expensive_moves: 121035235
+rejected_moves_stochastic: 22616099
+all_attempted_flips: 128100000
+expensive_flips: 19101374
+rejected_flip_stochastic: 5643612
+total_simulation_time: 12  m (722  s)
+mps: 184403
+emps: 167532
+fps: 177311
+efps: 26439.3
+
+COMMENTS
+this runs with default vec3 implementation

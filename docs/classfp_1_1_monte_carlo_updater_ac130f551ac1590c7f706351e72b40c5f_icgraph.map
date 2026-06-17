@@ -1,0 +1,5 @@
+<map id="fp::MonteCarloUpdater::kBT" name="fp::MonteCarloUpdater::kBT">
+<area shape="rect" id="Node000001" title="A getter function that returns a value of a state variable." alt="" coords="208,13,395,38"/>
+<area shape="rect" id="Node000002" href="$classfp_1_1_monte_carlo_updater.html#a73273eb46dc52825fb2a7eed413de565" title="Reset the temperature of the Monte Carlo updater, at which the Boltzmann weights are evaluated." alt="" coords="5,5,160,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="194,28,160,28,160,23,194,23"/>
+</map>

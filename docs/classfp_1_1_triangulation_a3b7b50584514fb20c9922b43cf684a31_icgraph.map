@@ -1,0 +1,16 @@
+<map id="fp::Triangulation::update_bulk_node_geometry" name="fp::Triangulation::update_bulk_node_geometry">
+<area shape="rect" id="Node000001" title="Update the geometric quantities associated with the given node." alt="" coords="605,69,793,109"/>
+<area shape="rect" id="Node000002" href="$classfp_1_1_triangulation.html#a05812c9b913aadc99b3bf7a126316467" title="Initiates the global geometry of the triangulation." alt="" coords="390,5,546,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="613,68,540,48,542,43,614,63"/>
+<area shape="rect" id="Node000003" href="$classfp_1_1_triangulation.html#af804d75575d1eeb9e02d8c0e97a94004" title="Calculates and updates the geometric quantities of the diamond configuration of nodes associated with..." alt="" coords="379,69,557,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="592,92,557,92,557,87,592,87"/>
+<area shape="rect" id="Node000007" href="$classfp_1_1_triangulation.html#ac1d5244fb8525f776d0adad0b9a0f666" title="Updates the geometric quantities of the center node and its next neighbor nodes." alt="" coords="379,133,557,173"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="614,116,542,136,540,131,613,110"/>
+<area shape="rect" id="Node000004" href="$classfp_1_1_triangulation.html#af9b5579bc1812246b7cf96a5c208d7bc" title="Securely flip the bond inside a quadrilateral formed by the nodes given by node_id,..." alt="" coords="208,37,331,77"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="365,75,331,70,331,65,366,70"/>
+<area shape="rect" id="Node000006" href="$classfp_1_1_triangulation.html#a2b6043010d90086720ac6b2b2e1a9cfa" title="Un&#45;flip a bond that was just flipped." alt="" coords="208,101,331,141"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="366,109,331,114,331,109,365,103"/>
+<area shape="rect" id="Node000005" href="$classfp_1_1_monte_carlo_updater.html#abab166d4505421306c99986145f0c183" title="Attempt a flip Monte Carlo Step." alt="" coords="5,69,160,109"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="195,73,161,79,160,73,194,68"/>
+<area shape="poly" id="edge6_Node000006_Node000005" title=" " alt="" coords="194,111,160,105,161,100,195,106"/>
+</map>

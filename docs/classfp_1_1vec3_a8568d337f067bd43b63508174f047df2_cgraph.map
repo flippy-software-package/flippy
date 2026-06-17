@@ -1,0 +1,5 @@
+<map id="fp::vec3::norm" name="fp::vec3::norm">
+<area shape="rect" id="Node000001" title="Returns the norm of the vector." alt="" coords="5,5,112,31"/>
+<area shape="rect" id="Node000002" href="$classfp_1_1vec3.html#a3097ff5c62f8bb0da1c5e87fb9384da9" title="Calculate dot product with another vector." alt="" coords="160,5,255,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="112,15,146,15,146,21,112,21"/>
+</map>

@@ -9,7 +9,7 @@
  * 888    888 888 888  888 888  888 888  888     dynamically triangulated
  * 888    888 888 888 d88P 888 d88P Y88b 888     surfaces
  * 888    888 888 88888P"  88888P"   "Y88888
- *                888      888           888     version 1.0.0
+ *                888      888           888     version 1.1.0
  *                888      888      Y8b d88P
  *                888      888       "Y88P"
  *
@@ -40,20 +40,22 @@
  *```
  */
 
-
 /**
  * @file
- * @brief This header file exists for convenience. Including this header will automatically include all parts of flippy in the project.
+ * @brief This header file exists for convenience. Including this header will automatically include all parts of flippy
+ * in the project.
  */
 #ifndef FLIPPY_FLIPPY_HPP
 #define FLIPPY_FLIPPY_HPP
 
-#include "external/json.hpp"
-#include "custom_concepts.hpp"
-#include "vec3.hpp"
-#include "utilities/utils.hpp"
+#include "MonteCarloUpdater.hpp"
 #include "Nodes.hpp"
 #include "Triangulation.hpp"
-#include "MonteCarloUpdater.hpp"
+#include "custom_concepts.hpp"
+#include "external/json.hpp"
+#include "utilities/DataIO.hpp"
+#include "utilities/sim_utils.hpp"
+#include "utilities/utils.hpp"
+#include "vec3.hpp"
 
-#endif //FLIPPY_FLIPPY_HPP
+#endif // FLIPPY_FLIPPY_HPP

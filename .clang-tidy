@@ -1,0 +1,15 @@
+Checks: >
+  -*,
+  clang-analyzer-*,
+  cert-*,
+  cppcoreguidelines-*,
+  bugprone-*,
+  google-*,
+  misc-*,
+  performance-*,
+  readability-*,
+  modernize-*,
+  -modernize-use-trailing-return-type,
+  -readability-identifier-length,
+  -misc-non-private-member-variables-in-classes
+

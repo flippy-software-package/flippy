@@ -1,0 +1,34 @@
+<map id="fp::Triangulation::flip_bond" name="fp::Triangulation::flip_bond">
+<area shape="rect" id="Node000001" title="Securely flip the bond inside a quadrilateral formed by the nodes given by node_id,..." alt="" coords="5,137,128,177"/>
+<area shape="rect" id="Node000002" href="$classfp_1_1_triangulation.html#a21cb71c7c23dd3ab2cbbc9a1e9ea5c90" title="Aggregates the geometric quantities of the diamond configuration of nodes associated with a bond flip..." alt="" coords="178,37,369,77"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="94,134,132,110,175,86,191,79,193,84,177,91,134,114,97,139"/>
+<area shape="rect" id="Node000003" href="$classfp_1_1_triangulation.html#a7f32f7136f2123610cbd3ef798329eb8" title=" " alt="" coords="201,101,345,141"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="128,143,187,133,188,138,129,149"/>
+<area shape="rect" id="Node000008" href="$classfp_1_1_triangulation.html#ac9a4311a2afb3a41d08bf1216e0c52eb" title=" " alt="" coords="176,165,371,220"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="129,165,163,171,162,176,128,170"/>
+<area shape="rect" id="Node000009" href="$classfp_1_1_triangulation.html#af804d75575d1eeb9e02d8c0e97a94004" title="Calculates and updates the geometric quantities of the diamond configuration of nodes associated with..." alt="" coords="184,254,363,294"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="96,175,177,229,211,246,208,251,175,234,93,179"/>
+<area shape="rect" id="Node000004" href="$classfp_1_1_triangulation.html#a3ba929020c70e27f53acf961f8e88cb2" title="Adds a new node to the next neighbor list of a given node and calculates their mutual distance." alt="" coords="451,85,574,125"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="345,113,437,107,438,112,346,119"/>
+<area shape="rect" id="Node000005" href="$structfp_1_1_nodes.html#a9244b582d9d23771c04ef519a4014edf" title="Returns an iterator to the beginning of the underlying data member that contains the collection of th..." alt="" coords="675,5,794,31"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="556,82,654,41,677,33,679,38,656,46,558,87"/>
+<area shape="rect" id="Node000006" href="$structfp_1_1_nodes.html#a30ea8ac2096ede34251f77fbea6be2d2" title="Emplace a the id of a new node in the Node::nn_ids vector, in front of the loc_idx position." alt="" coords="667,55,803,95"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="574,94,653,83,653,89,575,99"/>
+<area shape="rect" id="Node000007" href="$structfp_1_1_nodes.html#adfa27f36d1528e84e9b56f4f94f534dd" title="Returns an iterator to the end of the underlying data member that contains the collection of the node..." alt="" coords="681,120,789,145"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="575,110,667,122,667,127,574,115"/>
+<area shape="rect" id="Node000010" href="$classfp_1_1_triangulation.html#a3b7b50584514fb20c9922b43cf684a31" title="Update the geometric quantities associated with the given node." alt="" coords="419,271,607,311"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="363,278,405,281,405,286,363,283"/>
+<area shape="rect" id="Node000011" href="$classfp_1_1vec3.html#ae64d6fa0ceec87d5a26cac17560f1d7c" title="Calculate cross product between two vectors." alt="" coords="680,169,789,195"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="542,269,593,237,654,205,674,197,676,202,656,210,595,242,545,274"/>
+<area shape="rect" id="Node000012" href="$classfp_1_1_triangulation.html#add5f9a26549294b8b94c623056a58b0d" title="The node&#45;associated area inside a triangle." alt="" coords="673,219,796,259"/>
+<area shape="poly" id="edge11_Node000010_Node000012" title=" " alt="" coords="598,269,659,254,661,259,599,274"/>
+<area shape="rect" id="Node000014" href="$classfp_1_1vec3.html#a8568d337f067bd43b63508174f047df2" title="Returns the norm of the vector." alt="" coords="681,284,788,309"/>
+<area shape="poly" id="edge13_Node000010_Node000014" title=" " alt="" coords="607,291,667,292,667,298,607,296"/>
+<area shape="rect" id="Node000015" href="$structfp_1_1_neighbors.html#aa5cd15f625ae3e2e92e5361f1c8d20bd" title=" " alt="" coords="655,333,815,359"/>
+<area shape="poly" id="edge15_Node000010_Node000015" title=" " alt="" coords="595,309,670,327,668,333,594,314"/>
+<area shape="rect" id="Node000016" href="$structfp_1_1_nodes.html#a6eca1b76638e0a84bbd2bf4a031da3ab" title="Size of the Nodes data member." alt="" coords="679,383,790,408"/>
+<area shape="poly" id="edge16_Node000010_Node000016" title=" " alt="" coords="547,309,598,339,656,368,677,376,675,381,654,372,595,343,545,314"/>
+<area shape="rect" id="Node000013" href="$classfp_1_1vec3.html#a3097ff5c62f8bb0da1c5e87fb9384da9" title="Calculate dot product with another vector." alt="" coords="863,256,957,281"/>
+<area shape="poly" id="edge12_Node000012_Node000013" title=" " alt="" coords="797,247,849,256,848,261,796,252"/>
+<area shape="poly" id="edge14_Node000014_Node000013" title=" " alt="" coords="788,286,849,276,850,281,789,291"/>
+</map>

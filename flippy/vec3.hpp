@@ -6,24 +6,23 @@
  * mathematical operations like cross and dot products as member methods.
  */
 
-
-#include <ostream>
-#include <iostream>
-#include <cmath>
 #include "custom_concepts.hpp"
+#include <cmath>
+#include <iostream>
+#include <ostream>
 
-
-namespace fp{
+namespace fp {
 
 /**
  * \brief Internal implementation of a 3D vector.
  *
  * !!! vec3 does not throw !!! This means that if you ask vec3 to divide a vector by 0 or more realistically if you
  * normalize a zero length vector vec3 will not check for the division by zero and will return a nan result!
- * Since vec3 is used everywhere in flippy, including in very expensive calculations, I decided to omit the security check
- * for the sake of speed.
+ * Since vec3 is used everywhere in flippy, including in very expensive calculations, I decided to omit the security
+ * check for the sake of speed.
  *
- * To keep the external dependencies low, flippy implements it's own 3D vector class with basic functionality like dot product and cross product
+ * To keep the external dependencies low, flippy implements it's own 3D vector class with basic functionality like dot
+ * product and cross product
  *
  * Example:
  * ```c++
@@ -38,11 +37,9 @@ namespace fp{
  * @tparam Real @RealStub
  */
 
-template<floating_point_number Real>
-class vec3
-{
-public:
-
+template <floating_point_number Real> class vec3 {
+    public:
+    // vec3(Real x, Real y, Real z) : x(std::move(x)), y(std::move(y)), z(std::move(z)) {}
     Real x; //!< The x component of the vector.
     Real y; //!< The y component of the vector.
     Real z; //!< The z component of the vector.
@@ -57,8 +54,7 @@ public:
      * ```
      * @param v add this vector elementwise to the vector that is calling the *add* method.
      */
-    void add(vec3<Real> const& v)
-    {
+    void add(const vec3<Real> &v) {
         x += v.x;
         y += v.y;
         z += v.z;
@@ -74,8 +70,7 @@ public:
      * ```
      * @param v subtract this vector elementwise from the vector that is calling the *subtract* method.
      */
-    void subtract(vec3<Real> const& v)
-    {
+    void subtract(const vec3<Real> &v) {
         x -= v.x;
         y -= v.y;
         z -= v.z;
@@ -85,11 +80,10 @@ public:
      * This function scales the vector in-place by the provided number `s`.
      * @param s multiplicative prefactor.
      */
-    void scale(Real s)
-    {
-        x = s*x;
-        y = s*y;
-        z = s*z;
+    void scale(Real s) {
+        x = s * x;
+        y = s * y;
+        z = s * z;
     }
 
     //! Calculate dot product with another vector.
@@ -103,16 +97,16 @@ public:
      * @param v the other vec3 vector
      * @return result of the dot product between the original vector and `v`.
      */
-    Real dot(vec3<Real> const& v) const
-    {
-        Real res = x*v.x + y*v.y + z*v.z;
+    Real dot(const vec3<Real> &v) const {
+        Real res = x * v.x + y * v.y + z * v.z;
         return res;
     }
 
     //! Always returns 3.
     /**
      * This function always returns 3 since vec3 can only have three elements.
-     * It was implemented for completeness, to make it more easy for vec3 to be used as a drop-in replacement for other vector types.
+     * It was implemented for completeness, to make it more easy for vec3 to be used as a drop-in replacement for other
+     * vector types.
      * @return Size (number of elements) of vec3.
      */
     [[nodiscard]] constexpr std::size_t size() const { return 3; }
@@ -130,12 +124,11 @@ public:
      * @param b second vector of the cross product
      * @return result of the cross product between the original vector and `v`.
      */
-    static inline vec3<Real> cross(vec3<Real> const& a, vec3<Real> const& b)
-    {
+    static inline vec3<Real> cross(const vec3<Real> &a, const vec3<Real> &b) {
         vec3<Real> res;
-        res.x = a.y*b.z - a.z*b.y;
-        res.y = a.z*b.x - a.x*b.z;
-        res.z = a.x*b.y - a.y*b.x;
+        res.x = a.y * b.z - a.z * b.y;
+        res.y = a.z * b.x - a.x * b.z;
+        res.z = a.x * b.y - a.y * b.x;
         return res;
     }
 
@@ -150,7 +143,7 @@ public:
      * @param other the other vec3 vector.
      * @return result of the cross product between the original vector and `other`.
      */
-    vec3<Real> cross(vec3<Real> const& other) const { return cross(*this, other); }
+    vec3<Real> cross(const vec3<Real> &other) const { return cross(*this, other); }
 
     //! Returns the norm of the vector.
     /**
@@ -181,14 +174,13 @@ public:
      * for you and will just return nan!
      * @return Reference to the normalized vector.
      */
-    vec3<Real>const& normalize(){
-        *this= *this/this->norm();
+    const vec3<Real> &normalize() {
+        *this = *this / this->norm();
         return *this;
     }
 
     //! Streaming operator for easy printing of the vector.
-    friend std::ostream& operator<<(std::ostream& os, const vec3<Real>& obj)
-    {
+    friend std::ostream &operator<<(std::ostream &os, const vec3<Real> &obj) {
         os << "{" << obj.x << ',' << obj.y << ',' << obj.z << '}';
         return os;
     }
@@ -198,8 +190,7 @@ public:
      * @param other  vec3 on the right hand side of the comparison operator.
      * @return `true` if all elements of the compared vectors are equal and to `false` otherwise.
      */
-    bool operator==(vec3<Real> const& other) const =default;
-
+    bool operator==(const vec3<Real> &other) const = default;
 
     //! Overloaded operator defined in terms of vec2::add.
     /**
@@ -208,9 +199,8 @@ public:
      * @param rhs right hand side oif the `+` operator
      * @return equivalent to a new copy of `lhs.add(rhs)`.
      */
-    friend vec3<Real> operator+(vec3<Real> lhs, vec3<Real> const& rhs)
-    {
-        lhs+=rhs;
+    friend vec3<Real> operator+(vec3<Real> lhs, const vec3<Real> &rhs) {
+        lhs += rhs;
         return lhs;
     }
 
@@ -220,10 +210,7 @@ public:
      * @param lhs left hand side of the `+=` operator
      * @param rhs right hand side oif the `+=` operator
      */
-    friend void operator+=(vec3<Real>& lhs, vec3<Real> const& rhs)
-    {
-        lhs.add(rhs);
-    }
+    friend void operator+=(vec3<Real> &lhs, const vec3<Real> &rhs) { lhs.add(rhs); }
 
     //! Overloaded operator defined in terms of vec3::subtract.
     /**
@@ -232,9 +219,8 @@ public:
      * @param rhs right hand side oif the `-` operator
      * @return equivalent to a new copy of `lhs.subtract(rhs)`.
      */
-    friend vec3<Real> operator-(vec3<Real> lhs, vec3<Real> const& rhs)
-    {
-        lhs-=rhs;
+    friend vec3<Real> operator-(vec3<Real> lhs, const vec3<Real> &rhs) {
+        lhs -= rhs;
         return lhs;
     }
 
@@ -244,10 +230,7 @@ public:
      * @param lhs left hand side of the `-=` operator
      * @param rhs right hand side oif the `-=` operator
      */
-    friend void operator-=(vec3<Real>& lhs, vec3<Real> const& rhs)
-    {
-        lhs.subtract(rhs);
-    }
+    friend void operator-=(vec3<Real> &lhs, const vec3<Real> &rhs) { lhs.subtract(rhs); }
 
     //! Overloaded operator defined in terms of vec3::scale.
     /**
@@ -256,8 +239,7 @@ public:
      * @param rhs right hand side oif the `*` operator
      * @return equivalent to a new copy of `rhs.scale(lhs)`.
      */
-    friend vec3<Real> operator*(Real const& lhs, vec3<Real> rhs)
-    {
+    friend vec3<Real> operator*(const Real &lhs, vec3<Real> rhs) {
         rhs.scale(lhs);
         return rhs;
     }
@@ -269,8 +251,7 @@ public:
      * @param rhs right hand side oif the `*` operator
      * @return equivalent to a new copy of `lhs.scale(rhs)`.
      */
-    friend vec3<Real> operator*(vec3<Real> lhs, Real const& rhs)
-    {
+    friend vec3<Real> operator*(vec3<Real> lhs, const Real &rhs) {
         lhs.scale(rhs);
         return lhs;
     }
@@ -282,9 +263,7 @@ public:
      * @param rhs right hand side oif the `/=` operator
      * @warning for performance reasons, this function will not check for zero division!
      */
-    friend void operator/=(vec3<Real>& lhs, Real const& rhs){
-        lhs.scale((Real)1/rhs);
-    }
+    friend void operator/=(vec3<Real> &lhs, const Real &rhs) { lhs.scale(static_cast<Real>(1.) / rhs); }
 
     //! Overloaded operator defined in terms of vec3::scale.
     /**
@@ -294,9 +273,8 @@ public:
      * @return equivalent to a new copu of `lhs.scale(1/rhs)`.
      * @warning for performance reasons, this function will not check for zero division!
      */
-    friend vec3<Real> operator/(vec3<Real> lhs, Real const& rhs)
-    {
-        lhs/=rhs;
+    friend vec3<Real> operator/(vec3<Real> lhs, const Real &rhs) {
+        lhs /= rhs;
         return lhs;
     }
 
@@ -308,15 +286,18 @@ public:
      *
      * @note: The use of the subscription operator might be slower than the direct access of the data member.
      */
-    template<typename Index>
-    requires std::is_integral_v<Index>
-    Real& operator[](Index idx)
-    {
+    template <typename Index>
+        requires std::is_integral_v<Index>
+    Real &operator[](Index idx) {
         switch (idx) {
-            case 0:return x;
-            case 1:return y;
-            case 2:return z;
-            default:std::cerr << idx << "is out of range for as vec3 index";
+        case 0:
+            return x;
+        case 1:
+            return y;
+        case 2:
+            return z;
+        default:
+            std::cerr << idx << "is out of range for as vec3 index";
             exit(12);
         }
     }
@@ -325,20 +306,24 @@ public:
     /**
      * @tparam Index automatically deduced type of the index.
      * @param idx can only be 0 1 or 2. Any other number will cause the program to exit with an error.
-     * @return for a vec3 v: v[1] returns a constant reference to v.x, v[2] returns a constant reference to v.y and v[3] returns a constant reference to v.z.
+     * @return for a vec3 v: v[1] returns a constant reference to v.x, v[2] returns a constant reference to v.y and v[3]
+     * returns a constant reference to v.z.
      *
      * @note: The use of the subscription operator might be slower than the direct access of the data member.
      */
-    template<typename Index>
-    requires std::is_integral_v<Index>
-    const Real& operator[](Index idx) const
-    {
+    template <typename Index>
+        requires std::is_integral_v<Index>
+    auto operator[](Index idx) const -> const Real & {
         switch (idx) {
-            case 0:return x;
-            case 1:return y;
-            case 2:return z;
-            default:std::cerr << idx << "is out of range for as vec3 index";
-                exit(12);
+        case 0:
+            return x;
+        case 1:
+            return y;
+        case 2:
+            return z;
+        default:
+            std::cerr << idx << "is out of range for as vec3 index";
+            exit(12);
         }
     }
 
@@ -348,29 +333,13 @@ public:
      * @param v original vector.
      * @return A copy of -v the vector v itself stays unaffected.
      */
-    friend vec3<Real> operator-(vec3<Real> v)
-    {
+    friend vec3<Real> operator-(vec3<Real> v) {
         v.x = -v.x;
         v.y = -v.y;
         v.z = -v.z;
         return v;
     }
-
-    //! Unary minus operator for rvalues.
-    /**
-     *
-     * @param v an rvalue vec3 vector.
-     * @return The rvalue vector `v` is moved into the function and `-v` is returned.
-     */
-    friend vec3<Real> operator-(vec3<Real>&& v)
-    {
-        v.x = -v.x;
-        v.y = -v.y;
-        v.z = -v.z;
-        return v;
-    }
-
 };
-}
+} // namespace fp
 
-#endif //FLIPPY_VEC3_HPP
+#endif // FLIPPY_VEC3_HPP

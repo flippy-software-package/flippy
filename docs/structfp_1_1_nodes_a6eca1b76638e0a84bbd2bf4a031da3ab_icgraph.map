@@ -1,0 +1,24 @@
+<map id="fp::Nodes::size" name="fp::Nodes::size">
+<area shape="rect" id="Node000001" title="Size of the Nodes data member." alt="" coords="841,99,952,125"/>
+<area shape="rect" id="Node000002" href="$classfp_1_1_triangulation.html#a6dc2bfefe6d120c1957bfd68fa475851" title="Calculate the area&#45;weighted average of node positions." alt="" coords="621,5,777,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="861,95,792,60,763,48,764,43,794,55,863,90"/>
+<area shape="rect" id="Node000003" href="$classfp_1_1_triangulation.html#a66275f647ea355aa64086353310a7ba9" title="Returns the number of nodes in the triangulation." alt="" coords="626,70,773,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="827,104,772,96,773,91,828,99"/>
+<area shape="rect" id="Node000004" href="$classfp_1_1_triangulation.html#a405a8a4488dfb19c2b2145ed19fefb2b" title="Adds the same 3D vector to the positions of each node of the triangulation." alt="" coords="632,120,767,160"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="828,124,767,133,766,128,827,119"/>
+<area shape="rect" id="Node000005" href="$classfp_1_1_triangulation.html#a3b7b50584514fb20c9922b43cf684a31" title="Update the geometric quantities associated with the given node." alt="" coords="605,184,793,224"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="866,134,794,174,765,186,763,182,792,170,864,130"/>
+<area shape="rect" id="Node000006" href="$classfp_1_1_triangulation.html#a05812c9b913aadc99b3bf7a126316467" title="Initiates the global geometry of the triangulation." alt="" coords="390,120,546,160"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="613,183,540,163,542,157,614,178"/>
+<area shape="rect" id="Node000007" href="$classfp_1_1_triangulation.html#af804d75575d1eeb9e02d8c0e97a94004" title="Calculates and updates the geometric quantities of the diamond configuration of nodes associated with..." alt="" coords="379,184,557,224"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="592,207,557,207,557,201,592,201"/>
+<area shape="rect" id="Node000011" href="$classfp_1_1_triangulation.html#ac1d5244fb8525f776d0adad0b9a0f666" title="Updates the geometric quantities of the center node and its next neighbor nodes." alt="" coords="379,248,557,288"/>
+<area shape="poly" id="edge11_Node000005_Node000011" title=" " alt="" coords="614,230,542,251,540,245,613,225"/>
+<area shape="rect" id="Node000008" href="$classfp_1_1_triangulation.html#af9b5579bc1812246b7cf96a5c208d7bc" title="Securely flip the bond inside a quadrilateral formed by the nodes given by node_id,..." alt="" coords="208,152,331,192"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="365,190,331,184,331,179,366,185"/>
+<area shape="rect" id="Node000010" href="$classfp_1_1_triangulation.html#a2b6043010d90086720ac6b2b2e1a9cfa" title="Un&#45;flip a bond that was just flipped." alt="" coords="208,216,331,256"/>
+<area shape="poly" id="edge9_Node000007_Node000010" title=" " alt="" coords="366,223,331,229,331,224,365,218"/>
+<area shape="rect" id="Node000009" href="$classfp_1_1_monte_carlo_updater.html#abab166d4505421306c99986145f0c183" title="Attempt a flip Monte Carlo Step." alt="" coords="5,184,160,224"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="195,187,161,193,160,188,194,182"/>
+<area shape="poly" id="edge10_Node000010_Node000009" title=" " alt="" coords="194,226,160,220,161,215,195,221"/>
+</map>

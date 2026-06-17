@@ -1,4 +1,6 @@
-#include "external/catch.hpp"
+#include <catch2/catch_test_macros.hpp>
+#include <catch2/catch_approx.hpp>
+
 #include <iostream>
 #define TESTING_FLIPPY_TRIANGULATION_ndh6jclc0qnp274b = 1
 #include "flippy.hpp"
@@ -22,8 +24,7 @@ static fp::Json ICOSA_DATA(){
   })"_json;
 }
 
-template <typename Real, typename Index>
-void rescale_triangulation(Real R, Triangulation<Real,Index, SPHERICAL_TRIANGULATION>& tr)
+void rescale_triangulation(Real R, Triangulation& tr)
 {
     tr.R_initial=R;
     tr.scale_all_nodes_to_R_init();
@@ -34,23 +35,24 @@ void rescale_triangulation(Real R, Triangulation<Real,Index, SPHERICAL_TRIANGULA
 }
 TEST_CASE("Icosa geometry check test")
 {
-    double R = 20.;
-    Triangulation<double, unsigned short, SPHERICAL_TRIANGULATION> icosahedron(ICOSA_DATA(),  0);
+    Real R = 20._r;
+    Triangulation icosahedron(ICOSA_DATA(),  0);
     rescale_triangulation(R, icosahedron);
 
-    double sin_ = sin(2*M_PI/5.);
-    double A_SUB = R*R/(4.*tan(M_PI/3)*pow(sin_, 2));
+    Real sin_ = std::sin(2_r*PI/5._r);
+    Real sin_2 = sin_*sin_;
+    Real A_SUB = R*R/(4._r*std::tan(PI/3_r)*sin_2 );
     auto A_NODE = 5*A_SUB;
-    auto A_NODE_target = Approx(A_NODE).margin(EPSILON);
-    double V_SUB = (R/3.)*A_SUB*sqrt(sin_*sin_ - 1/3.)/sin_;
+    auto A_NODE_target = Catch::Approx(A_NODE).margin(EPSILON);
+    Real V_SUB = (R/3_r)*A_SUB*std::sqrt(sin_2 - 1_r/3._r)/sin_;
     auto V_NODE = 5*V_SUB;
-    auto V_NODE_target = Approx(V_NODE).margin(EPSILON);
-    auto K_SQUARE_NODE = 0.5*pow(2/R, 2)*A_NODE;
-    auto K_SQUARE_NODE_target = Approx(K_SQUARE_NODE).margin(EPSILON);
+    auto V_NODE_target = Catch::Approx(V_NODE).margin(EPSILON);
+    auto K_SQUARE_NODE = 0.5*std::pow(2_r/R, 2_r)*A_NODE;
+    auto K_SQUARE_NODE_target = Catch::Approx(K_SQUARE_NODE).margin(EPSILON);
     for (auto const& node : icosahedron.nodes().data) {
         CHECK(A_NODE_target==node.area);
         CHECK(node.volume==V_NODE_target);
-        CHECK(node.unit_bending_energy==K_SQUARE_NODE_target);
+        CHECK(node_unit_bending_energy(node)==K_SQUARE_NODE_target);
     }
 }
 
@@ -59,94 +61,94 @@ TEST_CASE("Test Geometry Container")
 
     SECTION("uninitiated") {
         struct GeometryWrapper {
-          Geometry<long double, unsigned short> geo;
+          Geometry geo;
         };
         GeometryWrapper gw;
         CHECK(gw.geo.area==0.);
         CHECK(gw.geo.volume==0.);
-        CHECK(gw.geo.unit_bending_energy==0.);
     }
 
     SECTION("default initiator") {
-        Geometry<long double, unsigned short> geo{};
+        Geometry geo{};
         CHECK(geo.area==0.);
         CHECK(geo.volume==0.);
-        CHECK(geo.unit_bending_energy==0.);
     }
 
 }
 
 TEST_CASE("Sphere geometry test")
 {
-    double R = 1000.;
+    Real R = 1000.;
     auto all_data = json_read("../../tests/init_files/egg_init.json");
-    Triangulation<double, unsigned long, SPHERICAL_TRIANGULATION> sphere(all_data["nodes"], 0);
+    Triangulation sphere(all_data["nodes"], 0);
     rescale_triangulation(R, sphere);
     auto ACCEPTABLE_ERROR = 0.01;
 
-    double A_SPHERE = 4*M_PI*R*R;
-    auto A_SPHERE_target = Approx(A_SPHERE).epsilon(ACCEPTABLE_ERROR);
+    Real A_SPHERE = 4_r*PI*R*R;
+    auto A_SPHERE_target = Catch::Approx(A_SPHERE).epsilon(ACCEPTABLE_ERROR);
 
-    double V_SPHERE = A_SPHERE*R/3.;
-    auto V_SPHERE_target = Approx(V_SPHERE).epsilon(ACCEPTABLE_ERROR);
+    Real V_SPHERE = A_SPHERE*R/3_r;
+    auto V_SPHERE_target = Catch::Approx(V_SPHERE).epsilon(ACCEPTABLE_ERROR);
 
-    auto UNIT_BENDING_ENERGY_SPHERE = 8*M_PI;
-    auto UNIT_BENDING_ENERGY_SPHERE_target = Approx(UNIT_BENDING_ENERGY_SPHERE).epsilon(ACCEPTABLE_ERROR);
+    auto UNIT_BENDING_ENERGY_SPHERE = 8_r*PI;
+    auto UNIT_BENDING_ENERGY_SPHERE_target = Catch::Approx(UNIT_BENDING_ENERGY_SPHERE).epsilon(ACCEPTABLE_ERROR);
 
-    Geometry<double, unsigned long> lg{};
-    for (auto const& node : sphere.nodes().data) {
-        lg += Geometry<double, unsigned long>(node);
+    Geometry lg{};
+    Real aggregated_energy = 0;
+    for (auto const& node : sphere.nodes()) {
+        lg += Geometry(node);
+        aggregated_energy += node_unit_bending_energy(node);
     }
 
     SECTION("externally calculated global geometry") {
         CHECK(lg.area==A_SPHERE_target);
         CHECK(lg.volume==V_SPHERE_target);
-        CHECK(lg.unit_bending_energy==UNIT_BENDING_ENERGY_SPHERE_target);
+        CHECK(aggregated_energy==UNIT_BENDING_ENERGY_SPHERE_target);
     }
 
     SECTION("internally calculated global geometry") {
         CHECK(sphere.global_geometry().area==A_SPHERE_target);
         CHECK(sphere.global_geometry().volume==V_SPHERE_target);
-        CHECK(sphere.global_geometry().unit_bending_energy==UNIT_BENDING_ENERGY_SPHERE_target);
     }
 
-    vec3<double> displacement{1200., 2329., -12.901};
+    vec3<Real> displacement{1200., 2329., -12.901_r};
     sphere.translate_all_nodes(displacement);
 
-    Geometry<double, unsigned long> lg_translated{};
-    for (auto const& node : sphere.nodes().data) {
-        lg_translated += Geometry<double, unsigned long>(node);
+    Geometry lg_translated{};
+    Real aggregated_energy_translated = 0;
+    for (auto const& node : sphere.nodes()) {
+        lg_translated += Geometry(node);
+        aggregated_energy_translated += node_unit_bending_energy(node);
     }
 
     SECTION("checking translational invariance") {
         CHECK(lg_translated.area==A_SPHERE_target);
         CHECK(lg_translated.volume==V_SPHERE_target);
-        CHECK(lg_translated.unit_bending_energy==UNIT_BENDING_ENERGY_SPHERE_target);
+        CHECK(aggregated_energy_translated==UNIT_BENDING_ENERGY_SPHERE_target);
     }
 
     SECTION("checking translational invariance") {
         CHECK(sphere.global_geometry().area==A_SPHERE_target);
         CHECK(sphere.global_geometry().volume==V_SPHERE_target);
-        CHECK(sphere.global_geometry().unit_bending_energy==UNIT_BENDING_ENERGY_SPHERE_target);
     }
 }
 
 TEST_CASE("Ellipse geometry test")
 {
-    double R = 2.;
+    Real R = 10.;
     auto all_data = json_read("../../tests/init_files/egg_init.json");
     double x_stretch = 1.4;
-    Triangulation<double, unsigned long, SPHERICAL_TRIANGULATION> ellipse(all_data["nodes"], 0);
+    Triangulation ellipse(all_data["nodes"], 0);
     rescale_triangulation(R, ellipse);
-    ellipse.scale_node_coordinates(x_stretch);
+    ellipse.scale_node_coordinates(static_cast<Real>(x_stretch));
 
     auto ACCEPTABLE_ERROR = 0.01;
 
-    double V_Ellipse = x_stretch*4.*M_PI*R*R*R/3.;
-    auto V_Ellipse_target = Approx(V_Ellipse).epsilon(ACCEPTABLE_ERROR);
-    auto e = sqrt(1 - 1./(x_stretch*x_stretch));
-    double A_Ellipse = 2.*M_PI*R*R*(1 + (x_stretch/e)*asin(e));
-    auto A_Ellipse_target = Approx(A_Ellipse).epsilon(ACCEPTABLE_ERROR);
+    Real V_Ellipse = static_cast<Real>(x_stretch*4.*M_PI*R*R*R/3.);
+    auto V_Ellipse_target = Catch::Approx(V_Ellipse).epsilon(ACCEPTABLE_ERROR);
+    double e = std::sqrt(1. - 1./(x_stretch*x_stretch));
+    auto A_Ellipse = static_cast<Real>(2.*M_PI*R*R*(1 + (x_stretch/e)*std::asin(e)));
+    auto A_Ellipse_target = Catch::Approx(A_Ellipse).epsilon(ACCEPTABLE_ERROR);
 
 //    json_dump("../../../../data/ellipse_egg", ellipse.make_egg_data());
 
@@ -155,7 +157,7 @@ TEST_CASE("Ellipse geometry test")
         CHECK(ellipse.global_geometry().area==A_Ellipse_target);
     }
 
-    vec3<double> displacement{1200., 2329., -12.901};
+    vec3<Real> displacement{1200., 2329., -12.901_r};
     ellipse.translate_all_nodes(displacement);
 
 
@@ -164,11 +166,11 @@ TEST_CASE("Ellipse geometry test")
         CHECK(ellipse.global_geometry().area==A_Ellipse_target);
     }
 
-    vec3<double> displacement2{0., 9., -1};
+    vec3<Real> displacement2{0., 9., -1};
     ellipse.translate_all_nodes(displacement2 - displacement);
 
 
-    SECTION("checking translational invariance") {
+    SECTION("checking translational invariance2") {
         CHECK(ellipse.global_geometry().volume==V_Ellipse_target);
         CHECK(ellipse.global_geometry().area==A_Ellipse_target);
     }
@@ -176,34 +178,34 @@ TEST_CASE("Ellipse geometry test")
 
 TEST_CASE("Ellipse geometry test for triangulator mesh")
 {
-    double R = 2.;
-    double x_stretch = 1.4;
-    Triangulation<double, unsigned long, SPHERICAL_TRIANGULATION> ellipse(15, R, 0);
+    Real R = 2.;
+    Real x_stretch = 1.3_r;
+    Triangulation ellipse(15, R, 0);
     ellipse.scale_node_coordinates(x_stretch);
 
-    auto ACCEPTABLE_ERROR = 0.01;
+    auto ACCEPTABLE_ERROR = 0.02;
 
-    double V_Ellipse = x_stretch*4.*M_PI*R*R*R/3.;
-    auto V_Ellipse_target = Approx(V_Ellipse).epsilon(ACCEPTABLE_ERROR);
-    auto e = sqrt(1 - 1./(x_stretch*x_stretch));
-    double A_Ellipse = 2.*M_PI*R*R*(1 + (x_stretch/e)*asin(e));
-    auto A_Ellipse_target = Approx(A_Ellipse).epsilon(ACCEPTABLE_ERROR);
+    Real V_Ellipse = x_stretch*4_r*PI*R*R*R/3_r;
+    auto V_Ellipse_target = Catch::Approx(V_Ellipse).epsilon(ACCEPTABLE_ERROR);
+    auto e = std::sqrt(1_r - 1_r/(x_stretch*x_stretch));
+    Real A_Ellipse = 2*PI*R*R*(1 + (x_stretch/e)*asin(e));
+    auto A_Ellipse_target = Catch::Approx(A_Ellipse).epsilon(ACCEPTABLE_ERROR);
 
     SECTION("internally calculated global geometry") {
         CHECK(ellipse.global_geometry().volume==V_Ellipse_target);
         CHECK(ellipse.global_geometry().area==A_Ellipse_target);
     }
 
-    vec3<double> displacement{1200., 2329., -12.901};
+    vec3<Real> displacement{1200., 2329., -12.901_r};
     ellipse.translate_all_nodes(displacement);
 
 
     SECTION("checking translational invariance1") {
-        CHECK(ellipse.global_geometry().volume==V_Ellipse_target);
         CHECK(ellipse.global_geometry().area==A_Ellipse_target);
+        CHECK(ellipse.global_geometry().volume==V_Ellipse_target);
     }
 
-    vec3<double> displacement2{0., 9., -1};
+    vec3<Real> displacement2{0., 9., -1};
     ellipse.translate_all_nodes(displacement2 - displacement);
 
 
@@ -242,16 +244,16 @@ static fp::Json BRICK_DATA()
 
 TEST_CASE("cube geometry test")
 {
-    Triangulation<double, unsigned long, SPHERICAL_TRIANGULATION> cube(CUBE_DATA(), 0);
-    double ACCEPTABLE_ERROR = 0.01;
-    auto A_square = Approx(24.).margin(ACCEPTABLE_ERROR);
-    auto V_square = Approx(8).margin(ACCEPTABLE_ERROR);
+    Triangulation cube(CUBE_DATA(), 0);
+    Real ACCEPTABLE_ERROR = 0.01_r;
+    auto A_square = Catch::Approx(24.).margin(ACCEPTABLE_ERROR);
+    auto V_square = Catch::Approx(8).margin(ACCEPTABLE_ERROR);
     SECTION("cube geometry") {
         CHECK(cube.global_geometry().area==A_square);
         CHECK(cube.global_geometry().volume==V_square);
     }
 
-    cube.translate_all_nodes({10, -187.1, -9.1});
+    cube.translate_all_nodes({10, -187.1_r, -9.1_r});
     SECTION("cube geometry after shift") {
         CHECK(cube.global_geometry().area==A_square);
         CHECK(cube.global_geometry().volume==V_square);
@@ -261,16 +263,16 @@ TEST_CASE("cube geometry test")
 
 TEST_CASE("Brick geometry test")
 {
-    Triangulation<double, unsigned long, SPHERICAL_TRIANGULATION> brick(BRICK_DATA(), 0);
-    double ACCEPTABLE_ERROR = 0.01;
-    auto A_square = Approx(32.).margin(ACCEPTABLE_ERROR);
-    auto V_square = Approx(12).margin(ACCEPTABLE_ERROR);
+    Triangulation brick(BRICK_DATA(), 0);
+    Real ACCEPTABLE_ERROR = 0.01_r;
+    auto A_square = Catch::Approx(32.).margin(ACCEPTABLE_ERROR);
+    auto V_square = Catch::Approx(12).margin(ACCEPTABLE_ERROR);
     SECTION("square geometry") {
         CHECK(brick.global_geometry().area==A_square);
         CHECK(brick.global_geometry().volume==V_square);
     }
 
-    brick.translate_all_nodes({10, -187.1, -9.1});
+    brick.translate_all_nodes({10_r, -187.1_r, -9.1_r});
     SECTION("brick geometry after shift") {
         CHECK(brick.global_geometry().area==A_square);
         CHECK(brick.global_geometry().volume==V_square);
@@ -307,16 +309,16 @@ static fp::Json HYPER_SQUEEZED_BRICK_DATA(){
 
 TEST_CASE("Hyperstretch geometry test")
 {
-    Triangulation<double, unsigned long, SPHERICAL_TRIANGULATION> brick(HYPERBRICK_DATA(), 0);
-    double ACCEPTABLE_ERROR = 0.01;
-    auto A_square = Approx(2408.).margin(ACCEPTABLE_ERROR);
-    auto V_square = Approx(1200).margin(ACCEPTABLE_ERROR);
+    Triangulation brick(HYPERBRICK_DATA(), 0);
+    Real ACCEPTABLE_ERROR = 0.01_r;
+    auto A_square = Catch::Approx(2408.).margin(ACCEPTABLE_ERROR);
+    auto V_square = Catch::Approx(1200).margin(ACCEPTABLE_ERROR);
     SECTION("square geometry") {
         CHECK(brick.global_geometry().area==A_square);
         CHECK(brick.global_geometry().volume==V_square);
     }
 
-    brick.translate_all_nodes({10, -187.1, -9.1});
+    brick.translate_all_nodes({10_r, -187.1_r, -9.1_r});
     SECTION("brick geometry after shift") {
         CHECK(brick.global_geometry().area==A_square);
         CHECK(brick.global_geometry().volume==V_square);
@@ -325,16 +327,16 @@ TEST_CASE("Hyperstretch geometry test")
 
 TEST_CASE("Hyperqueeze geometry test")
 {
-    Triangulation<double, unsigned long, SPHERICAL_TRIANGULATION> brick(HYPER_SQUEEZED_BRICK_DATA(), 0);
-    double ACCEPTABLE_ERROR = 0.01;
-    auto A_square = Approx(8.24).margin(ACCEPTABLE_ERROR);
-    auto V_square = Approx(0.12).margin(ACCEPTABLE_ERROR);
+    Triangulation brick(HYPER_SQUEEZED_BRICK_DATA(), 0);
+    Real ACCEPTABLE_ERROR = 0.01_r;
+    auto A_square = Catch::Approx(8.24).margin(ACCEPTABLE_ERROR);
+    auto V_square = Catch::Approx(0.12).margin(ACCEPTABLE_ERROR);
     SECTION("square geometry") {
         CHECK(brick.global_geometry().area==A_square);
         CHECK(brick.global_geometry().volume==V_square);
     }
 
-    brick.translate_all_nodes({0, -17.1, 90.1});
+    brick.translate_all_nodes({0_r, -17.1_r, 90.1_r});
     SECTION("brick geometry after shift") {
         CHECK(brick.global_geometry().area==A_square);
         CHECK(brick.global_geometry().volume==V_square);

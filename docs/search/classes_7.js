@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['vec3_0',['vec3',['../classfp_1_1vec3.html',1,'fp']]]
+  ['rawstlsolid_0',['rawSTLSolid',['../structfp_1_1implementation_1_1raw_s_t_l_solid.html',1,'fp::implementation']]],
+  ['rawstltriangle_1',['rawSTLTriangle',['../structfp_1_1implementation_1_1raw_s_t_l_triangle.html',1,'fp::implementation']]]
 ];

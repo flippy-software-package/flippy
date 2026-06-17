@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['triangulation_0',['Triangulation',['../classfp_1_1_triangulation.html',1,'fp']]],
-  ['triangulation_3c_20real_2c_20index_2c_20triangulation_5ftype_20_3e_1',['Triangulation&lt; Real, Index, triangulation_type &gt;',['../classfp_1_1_triangulation.html',1,'fp']]]
+  ['neighbors_0',['Neighbors',['../structfp_1_1_neighbors.html',1,'fp']]],
+  ['node_1',['Node',['../structfp_1_1_node.html',1,'fp']]],
+  ['nodes_2',['Nodes',['../structfp_1_1_nodes.html',1,'fp']]]
 ];

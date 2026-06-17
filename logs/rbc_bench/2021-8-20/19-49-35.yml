@@ -1,0 +1,18 @@
+config: {"K_int":100.0,"N_bond_flips_per_mem_update":1,"N_membrane_update":2,"N_update":50,"N_warmup":10,"N_warmup_area":10,"N_warmup_volume":10,"R_bead":2,"R_colloid":6,"R_guv":100.0,"adhesion_scale":1.5,"area_target":1,"bead_noise":0.3,"bending_rigidity":20,"colloid_noise":0.3,"d_spawn":120,"guv_only":false,"log_dir":"../../../logs/rbc_bench/","middle_phi":1.5,"pressure":1000000.0,"reload_count":0,"save_dir":"../../../demo_out/rbc_bench/","save_egg_name":"the_egg","save_idx":71,"save_name":"data","saving_repeat":50,"seed":12,"tension":1000000.0,"verlet_update_frequency":0.5,"volume_target":0.75}
+all_attempted_bead_moves: 13322400
+expensive_moves: 12336058
+rejected_moves_stochastic: 2719226
+all_attempted_flips: 12810000
+expensive_flips: 3164648
+rejected_flip_stochastic: 1300852
+total_simulation_time: 1  m (75  s)
+mps: 177514
+emps: 164372
+fps: 170687
+efps: 42167.3
+total_allocations: 8992104
+total_de_allocations: 8992103
+leaks: 0
+allocated_size: 401939926
+COMMENTS: |
+ 

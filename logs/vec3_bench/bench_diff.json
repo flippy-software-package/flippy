@@ -1,0 +1,154 @@
+{
+      "context": {
+            "date": "2021-08-09T18:22:38+02:00",
+            "host_name": "tud1000954",
+            "executable": "/Users/georgedadunash/Documents/TUD/flippy/cmake-build-default/benchmarks/micro_benchmarks/vec3_bench/flippy_benchmark",
+            "num_cpus": 4,
+            "mhz_per_cpu": 3100,
+            "cpu_scaling_enabled": false,
+            "caches": [
+                  {
+                        "type": "Data",
+                        "level": 1,
+                        "size": 32768,
+                        "num_sharing": 2
+                  },
+                  {
+                        "type": "Instruction",
+                        "level": 1,
+                        "size": 32768,
+                        "num_sharing": 2
+                  },
+                  {
+                        "type": "Unified",
+                        "level": 2,
+                        "size": 262144,
+                        "num_sharing": 2
+                  },
+                  {
+                        "type": "Unified",
+                        "level": 3,
+                        "size": 4194304,
+                        "num_sharing": 4
+                  }
+            ],
+            "load_avg": [
+                  6.74268,
+                  4.93799,
+                  4.66064
+            ],
+            "library_build_type": "release"
+      },
+      "diffs": {
+            "unnamed creation ": {
+                  "base time": 6115.773548805147,
+                  "base std": 2442.2096537023735,
+                  "experimental time": 2218.5210908176236,
+                  "experimental std": 2442.2096537023735,
+                  "diff": 3897.252457987523,
+                  "av_noise": 2442.2096537023735,
+                  "rel change": 0.6372460371344094,
+                  "rel error": 0.6266490765043973
+            },
+            "named creation ": {
+                  "base time": 3412.971080076756,
+                  "base std": 407.7196024698918,
+                  "experimental time": 2518.65158808935,
+                  "experimental std": 407.7196024698918,
+                  "diff": 894.3194919874063,
+                  "av_noise": 407.7196024698918,
+                  "rel change": 0.2620354732004625,
+                  "rel error": 0.4558992687991567
+            },
+            "dot product ": {
+                  "base time": 3220.4717715755187,
+                  "base std": 368.6799964408899,
+                  "experimental time": 3313.9884778969804,
+                  "experimental std": 368.6799964408899,
+                  "diff": -93.5167063214617,
+                  "av_noise": 368.6799964408899,
+                  "rel change": -0.029038200907971774,
+                  "rel error": 3.942397149591221
+            },
+            "norm ": {
+                  "base time": 5002.286705254277,
+                  "base std": 1867.0473338348427,
+                  "experimental time": 2515.7602271749365,
+                  "experimental std": 1867.0473338348427,
+                  "diff": 2486.5264780793404,
+                  "av_noise": 1867.0473338348427,
+                  "rel change": 0.49707796145861755,
+                  "rel error": 0.7508656554813765
+            },
+            "norm square ": {
+                  "base time": 3444.363783240601,
+                  "base std": 133.93492451091575,
+                  "experimental time": 2445.687866893237,
+                  "experimental std": 133.93492451091575,
+                  "diff": 998.6759163473644,
+                  "av_noise": 133.93492451091575,
+                  "rel change": 0.2899449591261723,
+                  "rel error": 0.13411250068068112
+            },
+            "vector minus ": {
+                  "base time": 3756.218090468809,
+                  "base std": 177.66830943051656,
+                  "experimental time": 2639.48729586136,
+                  "experimental std": 177.66830943051656,
+                  "diff": 1116.7307946074488,
+                  "av_noise": 177.66830943051656,
+                  "rel change": 0.2973019051905133,
+                  "rel error": 0.15909681213095783
+            },
+            "vector subtract ": {
+                  "base time": 4982.693420216821,
+                  "base std": 475.0419579242184,
+                  "experimental time": 2877.625515311203,
+                  "experimental std": 475.0419579242184,
+                  "diff": 2105.0679049056184,
+                  "av_noise": 475.0419579242184,
+                  "rel change": 0.42247590356743575,
+                  "rel error": 0.22566585943246192
+            },
+            "vector add ": {
+                  "base time": 4926.03660141494,
+                  "base std": 279.49313399641636,
+                  "experimental time": 2768.282494416506,
+                  "experimental std": 279.49313399641636,
+                  "diff": 2157.7541069984345,
+                  "av_noise": 279.49313399641636,
+                  "rel change": 0.43803046578635807,
+                  "rel error": 0.12952964987526225
+            },
+            "vector compound add ": {
+                  "base time": 4732.296071597177,
+                  "base std": 392.660397788796,
+                  "experimental time": 3240.8159319517918,
+                  "experimental std": 392.660397788796,
+                  "diff": 1491.480139645385,
+                  "av_noise": 392.660397788796,
+                  "rel change": 0.3151705043556165,
+                  "rel error": 0.2632689416046499
+            },
+            "multiply left ": {
+                  "base time": 6660.194135455842,
+                  "base std": 2769.8820632416623,
+                  "experimental time": 3026.791682338247,
+                  "experimental std": 2769.8820632416623,
+                  "diff": 3633.402453117595,
+                  "av_noise": 2769.8820632416623,
+                  "rel change": 0.5455400216902109,
+                  "rel error": 0.7623383588748888
+            },
+            "multiply right ": {
+                  "base time": 7983.81777837923,
+                  "base std": 4076.0645573214897,
+                  "experimental time": 5392.651673981858,
+                  "experimental std": 4076.0645573214897,
+                  "diff": 2591.166104397372,
+                  "av_noise": 4076.0645573214897,
+                  "rel change": 0.3245522601247791,
+                  "rel error": 1.5730618544307722
+            }
+      }
+}

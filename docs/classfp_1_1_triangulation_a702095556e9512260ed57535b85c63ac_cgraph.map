@@ -1,0 +1,5 @@
+<map id="fp::Triangulation::make_egg_data" name="fp::Triangulation::make_egg_data">
+<area shape="rect" id="Node000001" title="Creates a JSON object with the data of the triangulation." alt="" coords="5,5,128,45"/>
+<area shape="rect" id="Node000002" href="$structfp_1_1_nodes.html#a098083d4c3f7ad848fb70837b7ece0f5" title="Serialize the Nodes struct to a JSON object." alt="" coords="176,13,327,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="128,23,162,23,162,28,128,28"/>
+</map>

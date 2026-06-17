@@ -1,9 +1,0 @@
-#! /bin/bash
-cmakeDir=cmake-build-default
-if [ -d $cmakeDir ]; then
-  rm -r $cmakeDir
-fi
-mkdir cmake-build-default
-cd $cmakeDir || exit
-cmake -E env CXXFLAGS="--coverage" cmake ..
-make VERBOSE=1

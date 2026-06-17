@@ -1,0 +1,43 @@
+<map id="fp::MonteCarloUpdater::flip_MC_updater" name="fp::MonteCarloUpdater::flip_MC_updater">
+<area shape="rect" id="Node000001" title="Attempt a flip Monte Carlo Step." alt="" coords="5,279,160,319"/>
+<area shape="rect" id="Node000002" href="$classfp_1_1_triangulation.html#af9b5579bc1812246b7cf96a5c208d7bc" title="Securely flip the bond inside a quadrilateral formed by the nodes given by node_id,..." alt="" coords="225,250,347,290"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="160,286,211,278,211,283,161,291"/>
+<area shape="rect" id="Node000009" href="$classfp_1_1_triangulation.html#ac9a4311a2afb3a41d08bf1216e0c52eb" title=" " alt="" coords="412,315,607,369"/>
+<area shape="poly" id="edge19_Node000001_Node000009" title=" " alt="" coords="161,304,398,328,398,334,160,310"/>
+<area shape="rect" id="Node000018" href="$classfp_1_1_monte_carlo_updater.html#af4528387b65d1058714b1f6aa0fdb90b" title="Implementation of the Metropolis algorithm." alt="" coords="208,365,364,405"/>
+<area shape="poly" id="edge18_Node000001_Node000018" title=" " alt="" coords="132,317,226,357,224,362,130,322"/>
+<area shape="rect" id="Node000019" href="$classfp_1_1_triangulation.html#a2b6043010d90086720ac6b2b2e1a9cfa" title="Un&#45;flip a bond that was just flipped." alt="" coords="225,186,347,226"/>
+<area shape="poly" id="edge20_Node000001_Node000019" title=" " alt="" coords="122,277,207,236,222,229,224,234,209,240,125,281"/>
+<area shape="rect" id="Node000003" href="$classfp_1_1_triangulation.html#a21cb71c7c23dd3ab2cbbc9a1e9ea5c90" title="Aggregates the geometric quantities of the diamond configuration of nodes associated with a bond flip..." alt="" coords="414,250,605,290"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="348,267,400,267,400,273,348,273"/>
+<area shape="rect" id="Node000004" href="$classfp_1_1_triangulation.html#a7f32f7136f2123610cbd3ef798329eb8" title=" " alt="" coords="437,122,581,162"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="343,248,362,236,377,220,385,204,394,188,410,172,423,164,426,168,414,176,398,191,390,207,381,223,366,240,346,252"/>
+<area shape="poly" id="edge8_Node000002_Node000009" title=" " alt="" coords="348,287,412,308,411,313,347,292"/>
+<area shape="rect" id="Node000010" href="$classfp_1_1_triangulation.html#af804d75575d1eeb9e02d8c0e97a94004" title="Calculates and updates the geometric quantities of the diamond configuration of nodes associated with..." alt="" coords="420,186,599,226"/>
+<area shape="poly" id="edge9_Node000002_Node000010" title=" " alt="" coords="347,250,425,227,427,232,348,255"/>
+<area shape="rect" id="Node000005" href="$classfp_1_1_triangulation.html#a3ba929020c70e27f53acf961f8e88cb2" title="Adds a new node to the next neighbor list of a given node and calculates their mutual distance." alt="" coords="687,85,810,125"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="581,128,673,114,674,119,582,133"/>
+<area shape="rect" id="Node000006" href="$structfp_1_1_nodes.html#a9244b582d9d23771c04ef519a4014edf" title="Returns an iterator to the beginning of the underlying data member that contains the collection of th..." alt="" coords="911,5,1030,31"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="792,82,890,41,913,33,915,38,892,46,794,87"/>
+<area shape="rect" id="Node000007" href="$structfp_1_1_nodes.html#a30ea8ac2096ede34251f77fbea6be2d2" title="Emplace a the id of a new node in the Node::nn_ids vector, in front of the loc_idx position." alt="" coords="903,55,1039,95"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="810,94,889,83,889,89,811,99"/>
+<area shape="rect" id="Node000008" href="$structfp_1_1_nodes.html#adfa27f36d1528e84e9b56f4f94f534dd" title="Returns an iterator to the end of the underlying data member that contains the collection of the node..." alt="" coords="917,120,1025,145"/>
+<area shape="poly" id="edge7_Node000005_Node000008" title=" " alt="" coords="811,110,903,122,903,127,810,115"/>
+<area shape="rect" id="Node000011" href="$classfp_1_1_triangulation.html#a3b7b50584514fb20c9922b43cf684a31" title="Update the geometric quantities associated with the given node." alt="" coords="655,251,843,291"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="584,224,662,245,661,250,583,229"/>
+<area shape="rect" id="Node000012" href="$classfp_1_1vec3.html#ae64d6fa0ceec87d5a26cac17560f1d7c" title="Calculate cross product between two vectors." alt="" coords="916,383,1025,408"/>
+<area shape="poly" id="edge11_Node000011_Node000012" title=" " alt="" coords="775,289,827,329,892,369,907,376,905,381,889,374,824,334,772,294"/>
+<area shape="rect" id="Node000013" href="$classfp_1_1_triangulation.html#add5f9a26549294b8b94c623056a58b0d" title="The node&#45;associated area inside a triangle." alt="" coords="909,170,1032,210"/>
+<area shape="poly" id="edge12_Node000011_Node000013" title=" " alt="" coords="803,249,902,212,904,217,805,254"/>
+<area shape="rect" id="Node000015" href="$classfp_1_1vec3.html#a8568d337f067bd43b63508174f047df2" title="Returns the norm of the vector." alt="" coords="917,235,1024,260"/>
+<area shape="poly" id="edge14_Node000011_Node000015" title=" " alt="" coords="843,259,903,252,904,257,843,264"/>
+<area shape="rect" id="Node000016" href="$structfp_1_1_neighbors.html#aa5cd15f625ae3e2e92e5361f1c8d20bd" title=" " alt="" coords="891,284,1051,309"/>
+<area shape="poly" id="edge16_Node000011_Node000016" title=" " alt="" coords="843,279,877,283,877,289,843,285"/>
+<area shape="rect" id="Node000017" href="$structfp_1_1_nodes.html#a6eca1b76638e0a84bbd2bf4a031da3ab" title="Size of the Nodes data member." alt="" coords="915,333,1026,359"/>
+<area shape="poly" id="edge17_Node000011_Node000017" title=" " alt="" coords="805,289,892,319,914,327,913,332,890,325,803,294"/>
+<area shape="rect" id="Node000014" href="$classfp_1_1vec3.html#a3097ff5c62f8bb0da1c5e87fb9384da9" title="Calculate dot product with another vector." alt="" coords="1099,207,1193,232"/>
+<area shape="poly" id="edge13_Node000013_Node000014" title=" " alt="" coords="1033,198,1085,207,1084,212,1032,203"/>
+<area shape="poly" id="edge15_Node000015_Node000014" title=" " alt="" coords="1024,236,1085,226,1086,232,1025,241"/>
+<area shape="poly" id="edge21_Node000019_Node000004" title=" " alt="" coords="347,186,425,163,427,168,348,191"/>
+<area shape="poly" id="edge22_Node000019_Node000010" title=" " alt="" coords="348,203,406,203,406,209,348,209"/>
+</map>
